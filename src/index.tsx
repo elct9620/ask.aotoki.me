@@ -1,3 +1,5 @@
+import "@abraham/reflection"
+
 import { Hono } from 'hono'
 import { renderer } from './renderer'
 import { AskMCP } from './mcp'

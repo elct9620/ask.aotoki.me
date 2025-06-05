@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@abraham/reflection':
+        specifier: ^0.13.0
+        version: 0.13.0
       '@modelcontextprotocol/sdk':
         specifier: ^1.12.1
         version: 1.12.1
@@ -20,6 +23,9 @@ importers:
       hono-agents:
         specifier: ^0.0.84
         version: 0.0.84(agents@0.0.94(@cloudflare/workers-types@4.20250605.0)(react@19.1.0))(hono@4.7.11)
+      tsyringe:
+        specifier: ^4.10.0
+        version: 4.10.0
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: ^1.2.3
@@ -35,6 +41,9 @@ importers:
         version: 4.19.1(@cloudflare/workers-types@4.20250605.0)
 
 packages:
+
+  '@abraham/reflection@0.13.0':
+    resolution: {integrity: sha512-sQYhhraGPPRP6zoqpqpSaoYL+XY5KNmQCcoB3IuQh1z1aWmkHXcxwyTxRkTJ60L2aUjrbiqIqoYkrB/1c7kjQA==}
 
   '@ai-sdk/provider-utils@2.2.8':
     resolution: {integrity: sha512-fqhG+4sCVv8x7nFzYnFo19ryhAa3w096Kmc3hWxMQfW/TubPOmt3A6tYZhl4mUfQWWQMsuSkLrtjlWuXBVSGQA==}
@@ -1281,8 +1290,15 @@ packages:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
 
+  tslib@1.14.1:
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  tsyringe@4.10.0:
+    resolution: {integrity: sha512-axr3IdNuVIxnaK5XGEUFTu3YmAQ6lllgrvqfEoR16g/HGnYY/6We4oWENtAnzK6/LpJ2ur9PAb80RBt7/U4ugw==}
+    engines: {node: '>= 6.0.0'}
 
   type-is@2.0.1:
     resolution: {integrity: sha512-OZs6gsjF4vMp32qrCbiVSkrFmXtG/AZhY3t0iAMrMBiAZyV9oALtXO8hsrHbMXF9x6L3grlFuwW2oAz7cav+Gw==}
@@ -1408,6 +1424,8 @@ packages:
     resolution: {integrity: sha512-TQSnBldh+XSGL+opiSIq0575wvDPqu09AqWe1F7JhUMKY+M91/aGlK4MhpVNO7MgYfHcVCB1ffwAUTJzllKJqg==}
 
 snapshots:
+
+  '@abraham/reflection@0.13.0': {}
 
   '@ai-sdk/provider-utils@2.2.8(zod@3.25.51)':
     dependencies:
@@ -2530,8 +2548,14 @@ snapshots:
 
   toidentifier@1.0.1: {}
 
+  tslib@1.14.1: {}
+
   tslib@2.8.1:
     optional: true
+
+  tsyringe@4.10.0:
+    dependencies:
+      tslib: 1.14.1
 
   type-is@2.0.1:
     dependencies:

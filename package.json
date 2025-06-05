@@ -11,10 +11,12 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
+    "@abraham/reflection": "^0.13.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "agents": "^0.0.94",
     "hono": "^4.7.11",
-    "hono-agents": "^0.0.84"
+    "hono-agents": "^0.0.84",
+    "tsyringe": "^4.10.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.2.3",
