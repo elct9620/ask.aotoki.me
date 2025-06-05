@@ -24,5 +24,11 @@
 				"name": "MCP_OBJECT"
 			}
 		]
-	}
+	},
+	"r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "ask-me"
+    }
+  ]
 }
