@@ -1,6 +1,7 @@
 {
   "name": "ask-me",
   "type": "module",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -9,6 +10,7 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
     "agents": "^0.0.94",
     "hono": "^4.7.11",
     "hono-agents": "^0.0.84"
