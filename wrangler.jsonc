@@ -5,6 +5,12 @@
   "main": "./src/index.tsx",
   "compatibility_date": "2025-03-10",
   "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "ask.aotoki.me",
+      "custom_domain": true
+    }
+  ],
   "migrations": [
 		{
 			"new_sqlite_classes": ["AskMCP"],
