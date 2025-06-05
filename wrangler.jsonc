@@ -39,5 +39,11 @@
         "max_batch_timeout": 30,
       }
     ]
-  }
+  },
+  "vectorize": [
+    {
+      "binding": "VECTORIZE",
+      "index_name": "ask-me"
+    }
+  ]
 }
