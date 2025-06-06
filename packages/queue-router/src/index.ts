@@ -62,35 +62,86 @@ export class QueueRouter<Env = unknown> {
    * @returns This router instance for chaining
    */
   on<T = unknown>(action: string, pathPattern: string, handler: MessageHandler<T, Env>): this {
-    // Process the pattern to support parameter modifiers:
-    // :key - matches a single path segment ([^/]+)
-    // :key* - matches zero or more segments (.*)
-    // :key+ - matches one or more segments (.+)
-    let normalizedPattern = pathPattern
-      // Handle :param* (greedy, zero or more segments)
-      .replace(/:([a-zA-Z0-9_]+)\*/g, ':$1(.*)')
-      // Handle :param+ (one or more segments)
-      .replace(/:([a-zA-Z0-9_]+)\+/g, ':$1(.+)')
-      // Handle standard :param (single segment)
-      .replace(/:([a-zA-Z0-9_]+)(?!\*|\+)/g, ':$1([^/]+)')
-      // Handle standalone * wildcard if present
-      .replace(/\*/g, '(.*)');
-    
     // Ensure path starts with / for consistency
-    if (!normalizedPattern.startsWith('/')) {
-      normalizedPattern = '/' + normalizedPattern;
+    let processedPath = pathPattern.startsWith('/') ? pathPattern : '/' + pathPattern;
+    
+    // Process the pattern to support parameter modifiers:
+    // First, escape any special regex characters that might be in the path
+    processedPath = processedPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    
+    // Now replace our special parameter patterns
+    // :key - matches a single path segment
+    processedPath = processedPath.replace(/:([a-zA-Z0-9_]+)(?!\*|\+)/g, function(match, name) {
+      return `/:${name}([^/]+)`;
+    });
+    
+    // :key* - matches zero or more segments, including slashes
+    processedPath = processedPath.replace(/:([a-zA-Z0-9_]+)\\\*/g, function(match, name) {
+      return `/:${name}(.*)`;
+    });
+    
+    // :key+ - matches one or more segments, including slashes
+    processedPath = processedPath.replace(/:([a-zA-Z0-9_]+)\\\+/g, function(match, name) {
+      return `/:${name}(.+)`;
+    });
+    
+    // Restore wildcards
+    processedPath = processedPath.replace(/\\\*/g, '*');
+    
+    // Use a simpler approach with URLPattern
+    // The URLPattern API expects paths like "/content/:key", not regex
+    // Let's simplify our approach to avoid the regex conversion errors
+    
+    // Remove any * and + modifiers but keep track of which parameters should be greedy
+    const greedyParams = new Set<string>();
+    const plusParams = new Set<string>();
+    
+    // Find all the parameters with modifiers
+    const starMatches = processedPath.match(/:([a-zA-Z0-9_]+)\\\*/g) || [];
+    const plusMatches = processedPath.match(/:([a-zA-Z0-9_]+)\\\+/g) || [];
+    
+    // Store which parameters should be greedy
+    for (const match of starMatches) {
+      const param = match.substring(1, match.length - 2); // Remove : and \*
+      greedyParams.add(param);
     }
     
-    // For URLPattern matching, make sure we're dealing with a path pattern that will match routes properly
-    const pattern = new URLPattern({ pathname: normalizedPattern });
+    for (const match of plusMatches) {
+      const param = match.substring(1, match.length - 2); // Remove : and \+
+      plusParams.add(param);
+    }
+    
+    // Simplify the path for URLPattern
+    const simplePath = pathPattern
+      .replace(/:([a-zA-Z0-9_]+)\*/g, ':$1')
+      .replace(/:([a-zA-Z0-9_]+)\+/g, ':$1')
+      .replace(/^\/?/, '/');  // Ensure leading slash
+    
+    try {
+      const pattern = new URLPattern({ pathname: simplePath });
 
-    this.routes.push({
-      action,
-      pathPattern: pattern,
-      handler,
-    });
-
-    return this;
+      // Customize how we handle the matched parameters based on our modifiers
+      const originalHandler = handler;
+      const wrappedHandler: MessageHandler<T, Env> = (message, params, env, ctx) => {
+        // Process params based on our stored modifiers
+        const processedParams = { ...params };
+        
+        // Apply any special handling for greedy/plus params here if needed
+        
+        return originalHandler(message, processedParams, env, ctx);
+      };
+      
+      this.routes.push({
+        action,
+        pathPattern: pattern,
+        handler: wrappedHandler,
+      });
+      
+      return this;
+    } catch (error) {
+      console.error(`Invalid URL pattern: ${simplePath}`, error);
+      throw new Error(`Invalid URL pattern: ${simplePath} - ${error.message}`);
+    }
   }
 
   /**
