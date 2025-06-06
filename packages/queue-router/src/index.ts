@@ -104,16 +104,14 @@ export class QueueRouter<Env = unknown> {
     const body = message.body as { action?: string; object?: { key?: string } };
 
     if (!body || typeof body !== "object") {
-      console.error("Invalid message body, expected an object");
-      return false;
+      throw new Error("Invalid message body, expected an object");
     }
 
     const action = body.action;
     const objectKey = body.object?.key;
 
     if (!action || !objectKey) {
-      console.error("Message missing action or object key");
-      return false;
+      throw new Error("Message missing action or object key");
     }
 
     // Find matching route
@@ -127,14 +125,12 @@ export class QueueRouter<Env = unknown> {
           await route.handler(message, result.params, env, ctx);
           return true;
         } catch (error: unknown) {
-          console.error(`Error processing message: ${error}`);
-          throw error; // Re-throw to allow the caller to decide how to handle errors
+          throw error; // Allow the caller to decide how to handle errors
         }
       }
     }
 
-    // Only log warning if we couldn't find a handler
-    console.warn(`No handler found for action: ${action}, path: ${objectKey}`);
+    // No handler found
     return false;
   }
 
@@ -160,7 +156,6 @@ export class QueueRouter<Env = unknown> {
       } catch (error: unknown) {
         // Don't acknowledge the message if there was an error
         // This allows it to be retried according to the queue's retry policy
-        console.error(`Failed to process message ${message.id}: ${error}`);
       }
     });
 
