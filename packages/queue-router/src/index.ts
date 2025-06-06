@@ -72,7 +72,7 @@ export class QueueRouter<Env = unknown> {
     this.routes.push({
       action,
       pathPattern: pattern,
-      handler: handler as MessageHandler<unknown, Env>,
+      handler: handler as MessageHandler<T, Env>,
     });
 
     return this;
