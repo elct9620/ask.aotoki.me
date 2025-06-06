@@ -51,7 +51,7 @@ export interface RouteDefinition<T = unknown, E = unknown> {
  * QueueRouter class for routing queue messages based on action and path.
  */
 export class QueueRouter<Env = unknown> {
-  private routes: RouteDefinition<unknown, Env>[] = [];
+  private routes: RouteDefinition<any, Env>[] = [];
 
   /**
    * Registers a handler for a specific action and path pattern.
