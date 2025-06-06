@@ -57,11 +57,13 @@ export default {
 
 ## Route Patterns
 
-The router supports different parameter patterns:
+The router uses a custom path matching implementation that supports:
 
 - `/content/:key` - Matches a single segment (e.g., `/content/image.jpg` → `key = "image.jpg"`)
 - `/content/:path*` - Matches any number of segments, including zero (e.g., `/content/images/photo.jpg` → `path = "images/photo.jpg"`)
 - `/content/:path+` - Matches one or more segments (e.g., `/content/images/photo.jpg` → `path = "images/photo.jpg"`)
+
+The implementation is lightweight and optimized for serverless environments, avoiding the limitations of the URLPattern API.
 
 ## Message Structure
 
