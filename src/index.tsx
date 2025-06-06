@@ -2,6 +2,9 @@ import "@abraham/reflection"
 
 import { Hono } from 'hono'
 import { QueueRouter } from '@ask-me/queue-router'
+
+import { handlePutObject } from './handlers/queue/putObject'
+import { handleDeleteObject } from './handlers/queue/deleteObject'
 import { renderer } from './renderer'
 import { AskMCP } from './mcp'
 
@@ -17,8 +20,6 @@ app.mount('/sse', AskMCP.serveSSE('/sse').fetch,{ replaceRequest: false })
 app.mount('/mcp', AskMCP.serve('/mcp').fetch, { replaceRequest: false })
 
 const queue = new QueueRouter<CloudflareBindings>()
-
-import { handlePutObject, handleDeleteObject } from './handlers/queue'
 
 queue.on('PutObject', '/content/:path*', handlePutObject)
 queue.on('DeleteObject', '/content/:path*', handleDeleteObject)
