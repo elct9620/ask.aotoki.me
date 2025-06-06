@@ -68,9 +68,10 @@ export class QueueRouter<Env = unknown> {
     if (!normalizedPattern.startsWith('/')) {
       normalizedPattern = '/' + normalizedPattern;
     }
-    console.log(`Registered handler for action=${action}, pattern=${normalizedPattern}`);
-
+    
+    // For URLPattern matching, make sure we're dealing with a path pattern that will match routes properly
     const pattern = new URLPattern({ pathname: normalizedPattern });
+    console.log(`Registered handler for action=${action}, pattern=${pattern.pathname}`);
 
     this.routes.push({
       action,
@@ -111,14 +112,30 @@ export class QueueRouter<Env = unknown> {
 
       // Create a URL to match against the pattern
       // We prepend a dummy origin since URLPattern works with full URLs
-      // Ensure the object key has a leading slash for proper URL path matching
-      const normalizedKey = objectKey.startsWith('/') ? objectKey : `/${objectKey}`;
-      const url = new URL(`http://dummy${normalizedKey}`);
+      // Try both with and without leading slash to be more flexible
+      let matched = false;
       
-      console.log(`Trying to match action=${action}, path=${objectKey} against pattern=${route.pathPattern}`);
-      const match = route.pathPattern.exec(url);
-
+      // Try with path as-is
+      const url1 = new URL(`http://dummy/${objectKey}`);
+      console.log(`Trying to match URL: ${url1.pathname}`);
+      let match = route.pathPattern.exec(url1);
+      
+      if (!match && objectKey.startsWith('/')) {
+        // Try without leading slash if it has one
+        const trimmedKey = objectKey.substring(1);
+        const url2 = new URL(`http://dummy/${trimmedKey}`);
+        console.log(`Trying alternative URL: ${url2.pathname}`);
+        match = route.pathPattern.exec(url2);
+      } else if (!match) {
+        // Try with leading slash if it doesn't have one
+        const url2 = new URL(`http://dummy//${objectKey}`);
+        console.log(`Trying alternative URL: ${url2.pathname}`);
+        match = route.pathPattern.exec(url2);
+      }
+      
+      console.log(`Trying to match action=${action}, path=${objectKey} against pattern=${route.pathPattern.pathname}`);
       if (match) {
+        console.log(`Match found! Params:`, match.pathname.groups);
         try {
           await route.handler(message, match.pathname.groups, env, ctx);
           return true;
