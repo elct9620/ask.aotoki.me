@@ -62,9 +62,29 @@ export class QueueRouter<Env = unknown> {
    * @returns This router instance for chaining
    */
   on<T = unknown>(action: string, pathPattern: string, handler: MessageHandler<T, Env>): this {
-    // Convert express-style path pattern to URLPattern compatible format
+    // Determine if this is a greedy path pattern that should match multiple segments
+    const isGreedyPath = pathPattern.includes('*') || 
+                         // Detect the pattern has only one or two segments (like 'content/:path')
+                         // and we want the last segment to match everything
+                         (pathPattern.split('/').length <= 3 && 
+                          pathPattern.includes(':') && 
+                          !pathPattern.includes('*'));
+
+    // Configure the right pattern based on whether we need greedy matching
+    let normalizedPattern;
+    
+    if (isGreedyPath) {
+      // For greedy paths, convert :param to :param(.*)
+      normalizedPattern = pathPattern
+        .replace(/:([a-zA-Z0-9_]+)/g, ':$1(.*)')
+        .replace(/\*/g, '(.*)');
+      console.log(`Using greedy pattern matching for ${pathPattern}`);
+    } else {
+      // For normal paths, convert :param to :param([^/]+)
+      normalizedPattern = pathPattern.replace(/:([a-zA-Z0-9_]+)/g, ':$1([^/]+)');
+    }
+    
     // Ensure path starts with / for consistency
-    let normalizedPattern = pathPattern.replace(/:([a-zA-Z0-9_]+)/g, ':$1([^/]+)');
     if (!normalizedPattern.startsWith('/')) {
       normalizedPattern = '/' + normalizedPattern;
     }
