@@ -31,24 +31,26 @@ export interface MessageBatch<T = unknown> {
 /**
  * Message handler function type.
  */
-export type MessageHandler<T = any> = (
+export type MessageHandler<T = unknown, Env = unknown> = (
   message: QueueMessage<T>,
   params: Record<string, string>,
+  env: Env,
+  ctx: ExecutionContext
 ) => void | Promise<void>;
 
 /**
  * Route definition interface.
  */
-export interface RouteDefinition<T = any> {
+export interface RouteDefinition<T = unknown, Env = unknown> {
   action: string;
   pathPattern: URLPattern;
-  handler: MessageHandler<T>;
+  handler: MessageHandler<T, Env>;
 }
 
 /**
  * QueueRouter class for routing queue messages based on action and path.
  */
-export class QueueRouter {
+export class QueueRouter<Env = unknown> {
   private routes: RouteDefinition[] = [];
 
   /**
@@ -59,7 +61,7 @@ export class QueueRouter {
    * @param handler The handler function to execute on match
    * @returns This router instance for chaining
    */
-  on<T = any>(action: string, pathPattern: string, handler: MessageHandler<T>): this {
+  on<T = unknown>(action: string, pathPattern: string, handler: MessageHandler<T, Env>): this {
     // Convert express-style path pattern to URLPattern compatible format
     const urlPatternString = pathPattern
       .replace(/:([a-zA-Z0-9_]+)/g, ':$1([^/]+)')
@@ -70,7 +72,7 @@ export class QueueRouter {
     this.routes.push({
       action,
       pathPattern: pattern,
-      handler: handler as MessageHandler,
+      handler: handler as MessageHandler<unknown, Env>,
     });
 
     return this;
@@ -80,9 +82,11 @@ export class QueueRouter {
    * Process a queue message.
    * 
    * @param message The queue message to process
+   * @param env The environment bindings
+   * @param ctx The execution context
    * @returns Promise that resolves when processing is complete
    */
-  async processMessage(message: QueueMessage): Promise<boolean> {
+  async processMessage(message: QueueMessage, env: Env, ctx: ExecutionContext): Promise<boolean> {
     const body = message.body as { action?: string; object?: { key?: string } };
     
     if (!body || typeof body !== 'object') {
@@ -109,7 +113,7 @@ export class QueueRouter {
       
       if (match) {
         try {
-          await route.handler(message, match.pathname.groups);
+          await route.handler(message, match.pathname.groups, env, ctx);
           return true;
         } catch (error) {
           console.error(`Error processing message: ${error}`);
@@ -126,12 +130,14 @@ export class QueueRouter {
    * Process a batch of queue messages.
    * 
    * @param batch The message batch to process
+   * @param env The environment bindings
+   * @param ctx The execution context
    * @returns Promise that resolves when all messages are processed
    */
-  async processBatch(batch: MessageBatch): Promise<void> {
+  async processBatch(batch: MessageBatch, env: Env, ctx: ExecutionContext): Promise<void> {
     const promises = batch.messages.map(async (message) => {
       try {
-        const handled = await this.processMessage(message);
+        const handled = await this.processMessage(message, env, ctx);
         if (handled) {
           message.ack();
         }
