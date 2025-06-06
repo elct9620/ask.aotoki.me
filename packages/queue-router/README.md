@@ -102,6 +102,21 @@ Processes a batch of queue messages.
 - `env`: The environment bindings
 - `ctx`: The execution context
 
+## Testing
+
+The package includes comprehensive tests to verify all functionality:
+
+```bash
+# Run tests
+pnpm test
+
+# Watch mode for development
+pnpm test:watch
+
+# Run tests with coverage report
+pnpm coverage
+```
+
 ## License
 
 Apache-2.0
