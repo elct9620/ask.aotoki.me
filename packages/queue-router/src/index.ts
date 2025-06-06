@@ -138,9 +138,10 @@ export class QueueRouter<Env = unknown> {
       });
       
       return this;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Invalid URL pattern: ${simplePath}`, error);
-      throw new Error(`Invalid URL pattern: ${simplePath} - ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Invalid URL pattern: ${simplePath} - ${errorMessage}`);
     }
   }
 
@@ -181,7 +182,7 @@ export class QueueRouter<Env = unknown> {
         try {
           await route.handler(message, match.pathname.groups, env, ctx);
           return true;
-        } catch (error) {
+        } catch (error: unknown) {
           console.error(`Error processing message: ${error}`);
           throw error; // Re-throw to allow the caller to decide how to handle errors
         }
@@ -208,7 +209,7 @@ export class QueueRouter<Env = unknown> {
         if (handled) {
           message.ack();
         }
-      } catch (error) {
+      } catch (error: unknown) {
         // Don't acknowledge the message if there was an error
         // This allows it to be retried according to the queue's retry policy
         console.error(`Failed to process message ${message.id}: ${error}`);
