@@ -7,5 +7,16 @@ export default defineWorkersConfig({
         wrangler: { configPath: "./wrangler.jsonc" },
       },
     },
+    coverage: {
+      provider: "istanbul",
+      reporter: ["text", "json", "html"],
+      exclude: [
+        "**/node_modules/**",
+        "**/dist/**", 
+        "**/build/**",
+        "**/*.config.{js,ts}",
+        "**/coverage/**"
+      ],
+    },
   },
 });
