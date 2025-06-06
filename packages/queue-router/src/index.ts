@@ -104,14 +104,14 @@ export class QueueRouter<Env = unknown> {
     const body = message.body as { action?: string; object?: { key?: string } };
 
     if (!body || typeof body !== "object") {
-      throw new Error("Invalid message body, expected an object");
+      return false;
     }
 
     const action = body.action;
     const objectKey = body.object?.key;
 
     if (!action || !objectKey) {
-      throw new Error("Message missing action or object key");
+      return false;
     }
 
     // Find matching route
