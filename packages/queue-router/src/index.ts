@@ -83,7 +83,6 @@ export class QueueRouter<Env = unknown> {
     
     // For URLPattern matching, make sure we're dealing with a path pattern that will match routes properly
     const pattern = new URLPattern({ pathname: normalizedPattern });
-    console.log(`Registered handler for action=${action}, pattern=${pattern.pathname}`);
 
     this.routes.push({
       action,
@@ -126,10 +125,8 @@ export class QueueRouter<Env = unknown> {
       const normalizedKey = objectKey.startsWith('/') ? objectKey : `/${objectKey}`;
       const url = new URL(`http://dummy${normalizedKey}`);
       
-      console.log(`Trying to match action=${action}, path=${objectKey} against pattern=${route.pathPattern.pathname}`);
       const match = route.pathPattern.exec(url);
       if (match) {
-        console.log(`Match found! Params:`, match.pathname.groups);
         try {
           await route.handler(message, match.pathname.groups, env, ctx);
           return true;
@@ -140,6 +137,7 @@ export class QueueRouter<Env = unknown> {
       }
     }
 
+    // Only log warning if we couldn't find a handler
     console.warn(`No handler found for action: ${action}, path: ${objectKey}`);
     return false;
   }
