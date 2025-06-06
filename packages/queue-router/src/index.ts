@@ -62,27 +62,19 @@ export class QueueRouter<Env = unknown> {
    * @returns This router instance for chaining
    */
   on<T = unknown>(action: string, pathPattern: string, handler: MessageHandler<T, Env>): this {
-    // Determine if this is a greedy path pattern that should match multiple segments
-    const isGreedyPath = pathPattern.includes('*') || 
-                         // Detect the pattern has only one or two segments (like 'content/:path')
-                         // and we want the last segment to match everything
-                         (pathPattern.split('/').length <= 3 && 
-                          pathPattern.includes(':') && 
-                          !pathPattern.includes('*'));
-
-    // Configure the right pattern based on whether we need greedy matching
-    let normalizedPattern;
-    
-    if (isGreedyPath) {
-      // For greedy paths, convert :param to :param(.*)
-      normalizedPattern = pathPattern
-        .replace(/:([a-zA-Z0-9_]+)/g, ':$1(.*)')
-        .replace(/\*/g, '(.*)');
-      console.log(`Using greedy pattern matching for ${pathPattern}`);
-    } else {
-      // For normal paths, convert :param to :param([^/]+)
-      normalizedPattern = pathPattern.replace(/:([a-zA-Z0-9_]+)/g, ':$1([^/]+)');
-    }
+    // Process the pattern to support parameter modifiers:
+    // :key - matches a single path segment ([^/]+)
+    // :key* - matches zero or more segments (.*)
+    // :key+ - matches one or more segments (.+)
+    let normalizedPattern = pathPattern
+      // Handle :param* (greedy, zero or more segments)
+      .replace(/:([a-zA-Z0-9_]+)\*/g, ':$1(.*)')
+      // Handle :param+ (one or more segments)
+      .replace(/:([a-zA-Z0-9_]+)\+/g, ':$1(.+)')
+      // Handle standard :param (single segment)
+      .replace(/:([a-zA-Z0-9_]+)(?!\*|\+)/g, ':$1([^/]+)')
+      // Handle standalone * wildcard if present
+      .replace(/\*/g, '(.*)');
     
     // Ensure path starts with / for consistency
     if (!normalizedPattern.startsWith('/')) {
@@ -130,30 +122,12 @@ export class QueueRouter<Env = unknown> {
     for (const route of this.routes) {
       if (route.action !== action) continue;
 
-      // Create a URL to match against the pattern
-      // We prepend a dummy origin since URLPattern works with full URLs
-      // Try both with and without leading slash to be more flexible
-      let matched = false;
-      
-      // Try with path as-is
-      const url1 = new URL(`http://dummy/${objectKey}`);
-      console.log(`Trying to match URL: ${url1.pathname}`);
-      let match = route.pathPattern.exec(url1);
-      
-      if (!match && objectKey.startsWith('/')) {
-        // Try without leading slash if it has one
-        const trimmedKey = objectKey.substring(1);
-        const url2 = new URL(`http://dummy/${trimmedKey}`);
-        console.log(`Trying alternative URL: ${url2.pathname}`);
-        match = route.pathPattern.exec(url2);
-      } else if (!match) {
-        // Try with leading slash if it doesn't have one
-        const url2 = new URL(`http://dummy//${objectKey}`);
-        console.log(`Trying alternative URL: ${url2.pathname}`);
-        match = route.pathPattern.exec(url2);
-      }
+      // Normalize the path for matching
+      const normalizedKey = objectKey.startsWith('/') ? objectKey : `/${objectKey}`;
+      const url = new URL(`http://dummy${normalizedKey}`);
       
       console.log(`Trying to match action=${action}, path=${objectKey} against pattern=${route.pathPattern.pathname}`);
+      const match = route.pathPattern.exec(url);
       if (match) {
         console.log(`Match found! Params:`, match.pathname.groups);
         try {

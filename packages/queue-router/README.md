@@ -5,7 +5,7 @@ A simple, pattern-based router for Cloudflare Queue events.
 ## Features
 
 - Route messages based on action and path patterns
-- Extract parameters from paths using URLPattern syntax
+- Extract parameters from paths using flexible pattern syntax
 - Strong TypeScript support with generics for message bodies and environment
 - Automatic acknowledgement of processed messages
 
@@ -42,7 +42,7 @@ router.on('PutObject', '/content/:key', async (message, params, env, ctx) => {
   await env.MY_R2.put(params.key, message.body.content);
 });
 
-router.on('DeleteObject', '/content/:key', async (message, params, env, ctx) => {
+router.on('DeleteObject', '/content/:key*', async (message, params, env, ctx) => {
   console.log(`Handling DeleteObject for ${params.key}`);
   await env.MY_R2.delete(params.key);
 });
@@ -57,10 +57,11 @@ export default {
 
 ## Route Patterns
 
-The router uses URLPattern internally, but provides an Express-like syntax for defining routes:
+The router supports different parameter patterns:
 
-- `/content/:key` - Matches paths like `/content/image.jpg` and extracts `key` as `image.jpg`
-- `/content/:folder/:filename` - Matches paths like `/content/images/photo.jpg` and extracts `folder` as `images` and `filename` as `photo.jpg`
+- `/content/:key` - Matches a single segment (e.g., `/content/image.jpg` → `key = "image.jpg"`)
+- `/content/:path*` - Matches any number of segments, including zero (e.g., `/content/images/photo.jpg` → `path = "images/photo.jpg"`)
+- `/content/:path+` - Matches one or more segments (e.g., `/content/images/photo.jpg` → `path = "images/photo.jpg"`)
 
 ## Message Structure
 
