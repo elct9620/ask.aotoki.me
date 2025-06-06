@@ -45,5 +45,9 @@
       "binding": "VECTORIZE",
       "index_name": "ask-me"
     }
-  ]
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
 }

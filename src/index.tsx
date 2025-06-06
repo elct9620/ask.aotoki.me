@@ -16,9 +16,12 @@ app.get('/', (c) => {
 app.mount('/sse', AskMCP.serveSSE('/sse').fetch,{ replaceRequest: false })
 app.mount('/mcp', AskMCP.serve('/mcp').fetch, { replaceRequest: false })
 
-const queue = new QueueRouter()
+const queue = new QueueRouter<CloudflareBindings>()
 
-queue.on('DeleteObject', 'content/:key', async () => {
+queue.on('DeleteObject', '/content/:path', async(message, params, env, ctx) => {
+  console.log(message.body)
+
+  message.ack()
 })
 
 export { AskMCP } from './mcp'
@@ -29,8 +32,6 @@ export default {
     env: CloudflareBindings,
     ctx: ExecutionContext
   ) {
-    // This is a placeholder for any queue-related logic if needed in the future.
-    // For now, we simply acknowledge all messages in the batch.
-    batch.ackAll()
+    await queue.processBatch(batch, env, ctx)
   }
 }
