@@ -1,21 +1,24 @@
-```txt
-npm install
-npm run dev
+# Ask Me
+
+A Cloudflare Workers application that routes HTTP and queue requests.
+
+## Development
+
+```bash
+pnpm install
+pnpm run dev
 ```
 
-```txt
-npm run deploy
+## Deployment
+
+```bash
+pnpm run deploy
 ```
 
-[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
+## Type Generation
 
-```txt
-npm run cf-typegen
-```
+Generate TypeScript types based on your Worker configuration:
 
-Pass the `CloudflareBindings` as generics when instantiation `Hono`:
-
-```ts
-// src/index.ts
-const app = new Hono<{ Bindings: CloudflareBindings }>();
+```bash
+pnpm run cf-typegen
 ```
