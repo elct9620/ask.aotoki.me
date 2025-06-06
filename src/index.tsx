@@ -19,7 +19,7 @@ app.mount('/mcp', AskMCP.serve('/mcp').fetch, { replaceRequest: false })
 const queue = new QueueRouter<CloudflareBindings>()
 
 queue.on('DeleteObject', '/content/:path*', async(message, params, env, ctx) => {
-  console.log(message.body)
+  console.log('Accepted DeleteObject', params, message.id, message.body)
 
   message.ack()
 })
