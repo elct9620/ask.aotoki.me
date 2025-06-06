@@ -29,6 +29,7 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "vite": "^6.3.5",
     "vite-ssr-components": "^0.2.0",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.2",
     "wrangler": "^4.19.1"
   }

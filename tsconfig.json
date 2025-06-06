@@ -10,6 +10,10 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
