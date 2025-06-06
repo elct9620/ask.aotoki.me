@@ -34,4 +34,4 @@ export default {
   ) {
     await queue.processBatch(batch, env, ctx);
   },
-};
+} satisfies ExportedHandler<CloudflareBindings>;
