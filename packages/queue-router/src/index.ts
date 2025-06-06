@@ -63,11 +63,14 @@ export class QueueRouter<Env = unknown> {
    */
   on<T = unknown>(action: string, pathPattern: string, handler: MessageHandler<T, Env>): this {
     // Convert express-style path pattern to URLPattern compatible format
-    const urlPatternString = pathPattern
-      .replace(/:([a-zA-Z0-9_]+)/g, ':$1([^/]+)')
-      .replace(/^(?!\/)/, '/'); // Ensure path starts with /
+    // Ensure path starts with / for consistency
+    let normalizedPattern = pathPattern.replace(/:([a-zA-Z0-9_]+)/g, ':$1([^/]+)');
+    if (!normalizedPattern.startsWith('/')) {
+      normalizedPattern = '/' + normalizedPattern;
+    }
+    console.log(`Registered handler for action=${action}, pattern=${normalizedPattern}`);
 
-    const pattern = new URLPattern({ pathname: urlPatternString });
+    const pattern = new URLPattern({ pathname: normalizedPattern });
 
     this.routes.push({
       action,
@@ -108,7 +111,11 @@ export class QueueRouter<Env = unknown> {
 
       // Create a URL to match against the pattern
       // We prepend a dummy origin since URLPattern works with full URLs
-      const url = new URL(`http://dummy/${objectKey}`);
+      // Ensure the object key has a leading slash for proper URL path matching
+      const normalizedKey = objectKey.startsWith('/') ? objectKey : `/${objectKey}`;
+      const url = new URL(`http://dummy${normalizedKey}`);
+      
+      console.log(`Trying to match action=${action}, path=${objectKey} against pattern=${route.pathPattern}`);
       const match = route.pathPattern.exec(url);
 
       if (match) {
