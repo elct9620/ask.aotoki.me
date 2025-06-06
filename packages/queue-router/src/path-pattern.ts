@@ -36,6 +36,11 @@ export class PathPattern {
    * @returns An object with matched status and extracted parameters
    */
   match(path: string): { matched: boolean; params: Record<string, string> } {
+    // Special case for root path
+    if (this.pattern === '/' && (path === '/' || path === '')) {
+      return { matched: true, params: {} };
+    }
+    
     // Normalize the path (ensure it starts with /)
     const normalizedPath = path.startsWith('/') ? path : '/' + path;
     const pathParts = normalizedPath.split('/').filter(Boolean);
