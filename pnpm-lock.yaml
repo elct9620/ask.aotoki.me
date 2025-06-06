@@ -33,6 +33,9 @@ importers:
       '@cloudflare/vite-plugin':
         specifier: ^1.5.0
         version: 1.5.0(rollup@4.41.2)(vite@6.3.5)(workerd@1.20250525.0)(wrangler@4.19.1(@cloudflare/workers-types@4.20250606.0))
+      '@vitest/coverage-v8':
+        specifier: ^3.2.2
+        version: 3.2.2(vitest@3.2.2)
       prettier:
         specifier: 3.5.3
         version: 3.5.3

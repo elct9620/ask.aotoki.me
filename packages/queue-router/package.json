@@ -13,7 +13,7 @@
     "dev": "tsup src/index.ts --format esm --dts --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",
