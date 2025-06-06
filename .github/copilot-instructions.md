@@ -46,7 +46,7 @@ The preferred way to test features is to use the `vitest` framework. Use `pnpm t
 
 To make BDD (Behavior-Driven Development) style tests, use the `describe` and `it` functions from `vitest`. Use `expect` for assertions.
 
-Create the step helper functions in the `tests/steps/` directory.
+Create the step helper functions in the `test/steps/` directory.
 
 ```ts
 describe('Example Feature', () => {
