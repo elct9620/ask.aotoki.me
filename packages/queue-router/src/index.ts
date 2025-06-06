@@ -86,7 +86,7 @@ export class QueueRouter<Env = unknown> {
    * @param ctx The execution context
    * @returns Promise that resolves when processing is complete
    */
-  async processMessage(message: QueueMessage, env: Env, ctx: ExecutionContext): Promise<boolean> {
+  async processMessage<MsgEnv = Env>(message: QueueMessage, env: MsgEnv, ctx: ExecutionContext): Promise<boolean> {
     const body = message.body as { action?: string; object?: { key?: string } };
     
     if (!body || typeof body !== 'object') {
@@ -134,7 +134,7 @@ export class QueueRouter<Env = unknown> {
    * @param ctx The execution context
    * @returns Promise that resolves when all messages are processed
    */
-  async processBatch(batch: MessageBatch, env: Env, ctx: ExecutionContext): Promise<void> {
+  async processBatch<BatchEnv = Env>(batch: MessageBatch, env: BatchEnv, ctx: ExecutionContext): Promise<void> {
     const promises = batch.messages.map(async (message) => {
       try {
         const handled = await this.processMessage(message, env, ctx);
