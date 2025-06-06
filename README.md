@@ -1,6 +1,6 @@
 # Ask Me
 
-A Cloudflare Workers application that routes HTTP and queue requests.
+The Agent / MCP tool for [blog.aotoki.me](https://blog.aotoki.me) which allows you to ask questions and get answers from the blog content.
 
 ## Development
 
