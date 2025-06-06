@@ -41,17 +41,17 @@ export type MessageHandler<T = unknown, Env = unknown> = (
 /**
  * Route definition interface.
  */
-export interface RouteDefinition<T = unknown, Env = unknown> {
+export interface RouteDefinition<T = unknown, E = unknown> {
   action: string;
   pathPattern: URLPattern;
-  handler: MessageHandler<T, Env>;
+  handler: MessageHandler<T, E>;
 }
 
 /**
  * QueueRouter class for routing queue messages based on action and path.
  */
 export class QueueRouter<Env = unknown> {
-  private routes: RouteDefinition[] = [];
+  private routes: RouteDefinition<unknown, Env>[] = [];
 
   /**
    * Registers a handler for a specific action and path pattern.
@@ -72,7 +72,7 @@ export class QueueRouter<Env = unknown> {
     this.routes.push({
       action,
       pathPattern: pattern,
-      handler: handler as MessageHandler<T, Env>,
+      handler,
     });
 
     return this;
