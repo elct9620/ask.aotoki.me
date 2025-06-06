@@ -3,6 +3,9 @@
  * Allows registering handlers for action/path combinations and dispatches events accordingly.
  */
 
+// URLPattern is available in Cloudflare Workers but may not be recognized by TypeScript
+// This is handled by @cloudflare/workers-types
+
 /**
  * Interface for a message from the Cloudflare Queue.
  */
