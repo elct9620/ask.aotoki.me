@@ -12,10 +12,10 @@ export default defineWorkersConfig({
       reporter: ["text", "json", "html"],
       exclude: [
         "**/node_modules/**",
-        "**/dist/**", 
+        "**/dist/**",
         "**/build/**",
         "**/*.config.{js,ts}",
-        "**/coverage/**"
+        "**/coverage/**",
       ],
     },
   },
