@@ -49,8 +49,8 @@ To make BDD (Behavior-Driven Development) style tests, use the `describe` and `i
 Create the step helper functions in the `test/steps/` directory.
 
 ```ts
-describe('Example Feature', () => {
-  it('when something happends', async (ctx) => {
+describe("Example Feature", () => {
+  it("when something happends", async (ctx) => {
     await givenSomeCondition(ctx);
     await whenSomethingHappens(ctx);
     await thenExpectSomething(ctx);

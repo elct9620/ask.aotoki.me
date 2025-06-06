@@ -9,14 +9,6 @@ export default defineWorkersConfig({
     },
     coverage: {
       provider: "istanbul",
-      reporter: ["text", "json", "html"],
-      exclude: [
-        "**/node_modules/**",
-        "**/dist/**",
-        "**/build/**",
-        "**/*.config.{js,ts}",
-        "**/coverage/**",
-      ],
     },
   },
 });

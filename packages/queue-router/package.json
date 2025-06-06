@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "description": "A router for Cloudflare Queue events",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
   "files": [
     "dist"
   ],
@@ -17,7 +16,6 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",
-    "@vitest/coverage-v8": "^3.2.2",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3",
     "vitest": "^3.2.2"

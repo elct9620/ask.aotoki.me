@@ -1,0 +1,36 @@
+{
+  "name": "ask-me",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "pnpm -r build && vite build",
+    "preview": "$npm_execpath run build && vite preview",
+    "deploy": "$npm_execpath run build && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@abraham/reflection": "^0.13.0",
+    "@ask-me/queue-router": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "agents": "^0.0.95",
+    "hono": "^4.7.11",
+    "hono-agents": "^0.0.85",
+    "tsyringe": "^4.10.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.5.0",
+    "@cloudflare/vitest-pool-workers": "^0.8.36",
+    "@vitest/coverage-istanbul": "~3.1.4",
+    "vite": "^6.3.5",
+    "vite-ssr-components": "^0.2.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "~3.1.4",
+    "wrangler": "^4.19.1"
+  }
+}
