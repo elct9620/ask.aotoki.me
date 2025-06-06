@@ -24,5 +24,7 @@ export default {
     ctx: ExecutionContext
   ) {
     // This is a placeholder for any queue-related logic if needed in the future.
+    // For now, we simply acknowledge all messages in the batch.
+    batch.ackAll()
   }
 }
