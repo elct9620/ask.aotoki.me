@@ -55,7 +55,7 @@ export class QueueRouter<Env = unknown> {
 
   /**
    * Registers a handler for a specific action and path pattern.
-   * 
+   *
    * @param action The action name to match (e.g., "PutObject")
    * @param pathPattern A path pattern string (e.g., "/content/:key")
    * @param handler The handler function to execute on match
@@ -72,7 +72,7 @@ export class QueueRouter<Env = unknown> {
     this.routes.push({
       action,
       pathPattern: pattern,
-      handler: handler as MessageHandler<unknown, Env>,
+      handler: handler as MessageHandler<{}, Env>,
     });
 
     return this;
@@ -80,7 +80,7 @@ export class QueueRouter<Env = unknown> {
 
   /**
    * Process a queue message.
-   * 
+   *
    * @param message The queue message to process
    * @param env The environment bindings
    * @param ctx The execution context
@@ -88,7 +88,7 @@ export class QueueRouter<Env = unknown> {
    */
   async processMessage(message: QueueMessage, env: Env, ctx: ExecutionContext): Promise<boolean> {
     const body = message.body as { action?: string; object?: { key?: string } };
-    
+
     if (!body || typeof body !== 'object') {
       console.error('Invalid message body, expected an object');
       return false;
@@ -105,12 +105,12 @@ export class QueueRouter<Env = unknown> {
     // Find matching route
     for (const route of this.routes) {
       if (route.action !== action) continue;
-      
+
       // Create a URL to match against the pattern
       // We prepend a dummy origin since URLPattern works with full URLs
       const url = new URL(`http://dummy/${objectKey}`);
       const match = route.pathPattern.exec(url);
-      
+
       if (match) {
         try {
           await route.handler(message, match.pathname.groups, env, ctx);
@@ -128,7 +128,7 @@ export class QueueRouter<Env = unknown> {
 
   /**
    * Process a batch of queue messages.
-   * 
+   *
    * @param batch The message batch to process
    * @param env The environment bindings
    * @param ctx The execution context

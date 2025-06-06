@@ -1,6 +1,7 @@
 import "@abraham/reflection"
 
 import { Hono } from 'hono'
+import { QueueRouter } from '@ask-me/queue-router'
 import { renderer } from './renderer'
 import { AskMCP } from './mcp'
 
@@ -14,6 +15,11 @@ app.get('/', (c) => {
 
 app.mount('/sse', AskMCP.serveSSE('/sse').fetch,{ replaceRequest: false })
 app.mount('/mcp', AskMCP.serve('/mcp').fetch, { replaceRequest: false })
+
+const queue = new QueueRouter()
+
+queue.on('DeleteObject', 'content/:key', async () => {
+})
 
 export { AskMCP } from './mcp'
 export default {
