@@ -14,15 +14,15 @@
     "@abraham/reflection": "^0.13.0",
     "@ask-me/queue-router": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.12.1",
-    "agents": "^0.0.94",
+    "agents": "^0.0.95",
     "hono": "^4.7.11",
-    "hono-agents": "^0.0.84",
+    "hono-agents": "^0.0.85",
     "tsyringe": "^4.10.0"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.2.3",
+    "@cloudflare/vite-plugin": "^1.5.0",
     "vite": "^6.3.5",
     "vite-ssr-components": "^0.2.0",
-    "wrangler": "^4.17.0"
+    "wrangler": "^4.19.1"
   }
 }
