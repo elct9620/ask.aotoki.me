@@ -8,28 +8,28 @@
   "routes": [
     {
       "pattern": "ask.aotoki.me",
-      "custom_domain": true
-    }
+      "custom_domain": true,
+    },
   ],
   "migrations": [
-		{
-			"new_sqlite_classes": ["AskMCP"],
-			"tag": "v1"
-		}
-	],
-	"durable_objects": {
-		"bindings": [
-			{
-				"class_name": "AskMCP",
-				"name": "MCP_OBJECT"
-			}
-		]
-	},
-	"r2_buckets": [
+    {
+      "new_sqlite_classes": ["AskMCP"],
+      "tag": "v1",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "AskMCP",
+        "name": "MCP_OBJECT",
+      },
+    ],
+  },
+  "r2_buckets": [
     {
       "binding": "BUCKET",
-      "bucket_name": "ask-me"
-    }
+      "bucket_name": "ask-me",
+    },
   ],
   "queues": {
     "consumers": [
@@ -37,17 +37,17 @@
         "queue": "ask-me",
         "max_batch_size": 10,
         "max_batch_timeout": 30,
-      }
-    ]
+      },
+    ],
   },
   "vectorize": [
     {
       "binding": "VECTORIZE",
-      "index_name": "ask-me"
-    }
+      "index_name": "ask-me",
+    },
   ],
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1
-  }
+    "head_sampling_rate": 1,
+  },
 }

@@ -3,7 +3,7 @@
  * Allows registering handlers for action/path combinations and dispatches events accordingly.
  */
 
-import { PathPattern } from './path-pattern';
+import { PathPattern } from "./path-pattern";
 
 /**
  * Interface for a message from the Cloudflare Queue.
@@ -34,7 +34,7 @@ export type MessageHandler<T = unknown, Env = unknown> = (
   message: QueueMessage<T>,
   params: Record<string, string>,
   env: Env,
-  ctx: ExecutionContext
+  ctx: ExecutionContext,
 ) => void | Promise<void>;
 
 /**
@@ -59,11 +59,10 @@ export interface RouteDefinition<T = unknown, E = unknown> {
 /**
  * QueueRouter class for routing queue messages based on action and path.
  */
-export { PathPattern } from './path-pattern';
+export { PathPattern } from "./path-pattern";
 
 export class QueueRouter<Env = unknown> {
   private routes: RouteDefinition<any, Env>[] = [];
-
 
   /**
    * Registers a handler for a specific action and path pattern.
@@ -73,15 +72,19 @@ export class QueueRouter<Env = unknown> {
    * @param handler The handler function to execute on match
    * @returns This router instance for chaining
    */
-  on<T = unknown>(action: string, pathPattern: string, handler: MessageHandler<T, Env>): this {
+  on<T = unknown>(
+    action: string,
+    pathPattern: string,
+    handler: MessageHandler<T, Env>,
+  ): this {
     const pattern = new PathPattern(pathPattern);
-    
+
     this.routes.push({
       action,
       pathPattern: pattern,
       handler,
     });
-    
+
     return this;
   }
 
@@ -93,11 +96,15 @@ export class QueueRouter<Env = unknown> {
    * @param ctx The execution context
    * @returns Promise that resolves when processing is complete
    */
-  async processMessage(message: QueueMessage, env: Env, ctx: ExecutionContext): Promise<boolean> {
+  async processMessage(
+    message: QueueMessage,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<boolean> {
     const body = message.body as { action?: string; object?: { key?: string } };
 
-    if (!body || typeof body !== 'object') {
-      console.error('Invalid message body, expected an object');
+    if (!body || typeof body !== "object") {
+      console.error("Invalid message body, expected an object");
       return false;
     }
 
@@ -105,7 +112,7 @@ export class QueueRouter<Env = unknown> {
     const objectKey = body.object?.key;
 
     if (!action || !objectKey) {
-      console.error('Message missing action or object key');
+      console.error("Message missing action or object key");
       return false;
     }
 
@@ -139,7 +146,11 @@ export class QueueRouter<Env = unknown> {
    * @param ctx The execution context
    * @returns Promise that resolves when all messages are processed
    */
-  async processBatch(batch: MessageBatch, env: Env, ctx: ExecutionContext): Promise<void> {
+  async processBatch(
+    batch: MessageBatch,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<void> {
     const promises = batch.messages.map(async (message) => {
       try {
         const handled = await this.processMessage(message, env, ctx);

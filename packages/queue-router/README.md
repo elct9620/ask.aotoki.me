@@ -25,7 +25,7 @@ yarn add @ask-me/queue-router
 ## Basic Usage
 
 ```typescript
-import { QueueRouter } from '@ask-me/queue-router';
+import { QueueRouter } from "@ask-me/queue-router";
 
 // Define your environment type
 interface Env {
@@ -37,21 +37,25 @@ interface Env {
 const router = new QueueRouter<Env>();
 
 // Register handlers for different actions and paths
-router.on('PutObject', '/content/:key', async (message, params, env, ctx) => {
+router.on("PutObject", "/content/:key", async (message, params, env, ctx) => {
   console.log(`Handling PutObject for ${params.key}`);
   await env.MY_R2.put(params.key, message.body.content);
 });
 
-router.on('DeleteObject', '/content/:key*', async (message, params, env, ctx) => {
-  console.log(`Handling DeleteObject for ${params.key}`);
-  await env.MY_R2.delete(params.key);
-});
+router.on(
+  "DeleteObject",
+  "/content/:key*",
+  async (message, params, env, ctx) => {
+    console.log(`Handling DeleteObject for ${params.key}`);
+    await env.MY_R2.delete(params.key);
+  },
+);
 
 // In your Worker
 export default {
   async queue(batch, env, ctx) {
     await router.processBatch(batch, env, ctx);
-  }
+  },
 };
 ```
 
@@ -71,9 +75,9 @@ The router expects messages with this structure:
 
 ```typescript
 {
-  action: string;    // e.g., "PutObject", "DeleteObject"
+  action: string; // e.g., "PutObject", "DeleteObject"
   object: {
-    key: string;     // e.g., "content/image.jpg"
+    key: string; // e.g., "content/image.jpg"
     // ... other properties
   }
   // ... other properties

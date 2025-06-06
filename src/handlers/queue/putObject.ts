@@ -1,12 +1,12 @@
-import { QueueMessage } from '@ask-me/queue-router'
+import { QueueMessage } from "@ask-me/queue-router";
 
 export async function handlePutObject(
   message: QueueMessage,
   params: Record<string, string>,
   env: CloudflareBindings,
-  ctx: ExecutionContext
+  ctx: ExecutionContext,
 ) {
-  console.log('Accepted PutObject', params, message.id, message.body)
+  console.log("Accepted PutObject", params, message.id, message.body);
 
-  message.ack()
+  message.ack();
 }
