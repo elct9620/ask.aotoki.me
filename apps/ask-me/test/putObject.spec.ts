@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { buildQueueAction, whenObjectQueue } from "./steps/queue";
-import { givenObjectWithContent } from "./steps/r2";
+import { deleteObject, givenObjectWithContent } from "./steps/r2";
 
 describe("PutObject", () => {
   const objectKey = "content/example.json";
 
-  it("is expected to add content to R2", async () => {
+  beforeAll(async () => {
     await givenObjectWithContent(objectKey, {
       id: "47e39fd5c33ab248111f009c9fe4c4ff",
       path: "posts/2021-12-19-containerize-ruby-on-rails-in-a-few-minutes.md",
@@ -19,6 +19,10 @@ describe("PutObject", () => {
       language: "en",
       content: "...",
     });
+  });
+
+  afterAll(async () => {
+    await deleteObject(objectKey);
   });
 
   it("is expected to ack queue", async () => {
