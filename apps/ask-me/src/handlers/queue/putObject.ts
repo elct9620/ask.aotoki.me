@@ -1,12 +1,19 @@
+import { RefreshDocumentVector } from "@/usecase/refreshDocumentVector";
 import { QueueMessage } from "@ask-me/queue-router";
 
 export async function handlePutObject(
   message: QueueMessage<R2Event>,
   params: Record<string, string>,
-  env: CloudflareBindings,
+  env: Env,
   ctx: ExecutionContext,
 ) {
-  console.log("Accepted PutObject", params, message.id, message.body);
+  const usecase = new RefreshDocumentVector();
 
-  message.ack();
+  try {
+    await usecase.execute(message.body.bucket, message.body.object.key);
+    message.ack();
+  } catch (error) {
+    console.error("Error handling putObject:", error);
+    message.retry();
+  }
 }
