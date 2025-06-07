@@ -6,11 +6,9 @@ export class RefreshDocumentVector {
     private readonly vectoreRepository: VectorRepository,
   ) {}
 
-  async execute(bucket: string, key: string): Promise<void> {
-    const path = `${bucket}/${key}`;
-
-    const fullVector = await this.vectorFactory.createFull(path);
-    const summaryVector = await this.vectorFactory.createSummary(path);
+  async execute(key: string): Promise<void> {
+    const fullVector = await this.vectorFactory.createFull(key);
+    const summaryVector = await this.vectorFactory.createSummary(key);
 
     await this.vectoreRepository.upsertAll([fullVector, summaryVector]);
   }

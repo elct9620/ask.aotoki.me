@@ -23,7 +23,7 @@ export async function handlePutObject(
   const usecase = new RefreshDocumentVector(vectorFactory, vectoreRepository);
 
   try {
-    await usecase.execute(message.body.bucket, message.body.object.key);
+    await usecase.execute(message.body.object.key);
     message.ack();
   } catch (error) {
     console.error("Error handling putObject:", error);

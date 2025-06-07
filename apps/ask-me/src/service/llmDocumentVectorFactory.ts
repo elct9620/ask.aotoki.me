@@ -3,8 +3,12 @@ import {
   DocumentVectorType,
   VectorDimensions,
 } from "@/entity/DocumentVector";
-import { DocumentVectorFactory } from "@/usecase/interface";
-import { injectable } from "tsyringe";
+import {
+  DocumentVectorFactory,
+  IVectorIdEncoder,
+  type VectorIdEncoder,
+} from "@/usecase/interface";
+import { inject, injectable } from "tsyringe";
 
 /**
  * Implementation of DocumentVectorFactory that will use LLMs to generate vectors
@@ -12,16 +16,21 @@ import { injectable } from "tsyringe";
  */
 @injectable()
 export class LlmDocumentVectorFactory implements DocumentVectorFactory {
+  constructor(
+    @inject(IVectorIdEncoder)
+    private readonly vectorIdEncoder: VectorIdEncoder,
+  ) {}
   /**
    * Create a full document vector containing detailed content
    *
    * @param path Path to the document
    * @returns A DocumentVector with full content
    */
-  async createFull(path: string): Promise<DocumentVector> {
+  async createFull(key: string): Promise<DocumentVector> {
+    const encodedKey = this.vectorIdEncoder.encode(key);
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
-    const vector = new DocumentVector(path, DocumentVectorType.FULL);
+    const vector = new DocumentVector(encodedKey, DocumentVectorType.FULL);
 
     // Add mock vector data (all zeros for now)
     const mockVector = new Array(VectorDimensions).fill(0);
@@ -36,10 +45,11 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
    * @param path Path to the document
    * @returns A DocumentVector with summary content
    */
-  async createSummary(path: string): Promise<DocumentVector> {
+  async createSummary(key: string): Promise<DocumentVector> {
+    const encodedKey = this.vectorIdEncoder.encode(key);
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
-    const vector = new DocumentVector(path, DocumentVectorType.SUMMARY);
+    const vector = new DocumentVector(encodedKey, DocumentVectorType.SUMMARY);
 
     // Add mock vector data (all zeros for now)
     const mockVector = new Array(VectorDimensions).fill(0);
