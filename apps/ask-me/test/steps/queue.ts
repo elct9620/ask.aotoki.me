@@ -24,7 +24,10 @@ export async function whenObjectQueue(
 
   // Prepare all messages for the queue at once
   const queueMessages = actions.map((event) => {
-    const messageId = randomBytes(16).toString("hex");
+    const messageId = event.id || randomBytes(16).toString("hex");
+    if (event.id) {
+      delete event.id; // Remove id from event to avoid duplication
+    }
 
     // Prepare message for the queue
     const queueMessage = {

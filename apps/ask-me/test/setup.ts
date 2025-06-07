@@ -1,10 +1,10 @@
 import "@abraham/reflection";
 
 import { VECTORIZE } from "@/repository/cloudflareVectorRepository";
-import { IVectorRepository } from "@/usecase/interface";
+import { BUCKET } from "@/repository/r2ArticleRepository";
+import { env } from "cloudflare:test";
 import { container } from "tsyringe";
 import { beforeEach } from "vitest";
-import { MockVectorRepository } from "./mocks/mockVectorRepository";
 
 // Register mock repositories before tests run
 beforeEach(() => {
@@ -19,8 +19,7 @@ beforeEach(() => {
     },
   });
 
-  // Register mock vector repository
-  container.register(IVectorRepository, {
-    useClass: MockVectorRepository,
+  container.register(BUCKET, {
+    useValue: env.BUCKET,
   });
 });

@@ -19,18 +19,19 @@ export async function handlePutObject(
   const vectorFactory = container.resolve<DocumentVectorFactory>(
     IDocumentVectorFactory,
   );
-  const vectoreRepository =
-    container.resolve<VectorRepository>(IVectorRepository);
-  const articleRepository =
-    container.resolve<ArticleRepository>(IArticleRepository);
-
-  const usecase = new RefreshDocumentVector(
-    vectorFactory,
-    vectoreRepository,
-    articleRepository,
-  );
 
   try {
+    const vectoreRepository =
+      container.resolve<VectorRepository>(IVectorRepository);
+    const articleRepository =
+      container.resolve<ArticleRepository>(IArticleRepository);
+
+    const usecase = new RefreshDocumentVector(
+      vectorFactory,
+      vectoreRepository,
+      articleRepository,
+    );
+
     await usecase.execute(message.body.object.key);
     message.ack();
   } catch (error) {
