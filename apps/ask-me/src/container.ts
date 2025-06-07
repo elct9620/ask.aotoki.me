@@ -38,7 +38,7 @@ container.register<OpenAIProvider>(IOpenAIProvider, {
 container.register(IEmbeddingModel, {
   useFactory: (c) => {
     const provider = c.resolve<OpenAIProvider>(IOpenAIProvider);
-    return provider("text-embedding-3-small");
+    return provider.embedding("text-embedding-3-small");
   },
 });
 container.register<LanguageModel>(ISummaryModel, {
