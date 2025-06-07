@@ -1,12 +1,14 @@
 import { VectorRepository } from "@/usecase/interface";
 import { inject, injectable } from "tsyringe";
 
+export const VECTORIZE = Symbol("VECTORIZE");
+
 /**
  * Repository implementation for Cloudflare Vectorize
  */
 @injectable()
 export class CloudflareVectorRepository implements VectorRepository {
-  constructor(@inject("VECTORIZE") private readonly vectorize: Vectorize) {}
+  constructor(@inject(VECTORIZE) private readonly vectorize: Vectorize) {}
 
   /**
    * Delete multiple vectors by their IDs
@@ -20,10 +22,9 @@ export class CloudflareVectorRepository implements VectorRepository {
 
     try {
       // Delete all vectors in a single operation
-      await this.vectorize.delete({ ids });
+      await this.vectorize.deleteByIds(ids);
     } catch (error) {
-      console.error("Error deleting vectors:", error);
-      throw new Error(`Failed to delete vectors: ${error.message}`);
+      throw new Error(`Failed to delete vectors: ${error}`);
     }
   }
 }

@@ -3,10 +3,11 @@ import "@abraham/reflection";
 import { QueueRouter } from "@ask-me/queue-router";
 import { Hono } from "hono";
 
-import { handleDeleteObject } from "./handlers/queue/deleteObject";
-import { handlePutObject } from "./handlers/queue/putObject";
-import { AskMCP } from "./mcp";
-import { renderer } from "./renderer";
+import "@/container";
+import { handleDeleteObject } from "@/handlers/queue/deleteObject";
+import { handlePutObject } from "@/handlers/queue/putObject";
+import { AskMCP } from "@/mcp";
+import { renderer } from "@/renderer";
 
 const app = new Hono();
 
@@ -19,7 +20,7 @@ app.get("/", (c) => {
 app.mount("/sse", AskMCP.serveSSE("/sse").fetch, { replaceRequest: false });
 app.mount("/mcp", AskMCP.serve("/mcp").fetch, { replaceRequest: false });
 
-const queue = new QueueRouter<CloudflareBindings>();
+const queue = new QueueRouter<Env>();
 
 queue.on("PutObject", "/content/:path*", handlePutObject);
 queue.on("DeleteObject", "/content/:path*", handleDeleteObject);
@@ -27,11 +28,7 @@ queue.on("DeleteObject", "/content/:path*", handleDeleteObject);
 export { AskMCP } from "./mcp";
 export default {
   fetch: app.fetch,
-  async queue(
-    batch: MessageBatch,
-    env: CloudflareBindings,
-    ctx: ExecutionContext,
-  ) {
+  async queue(batch: MessageBatch, env: Env, ctx: ExecutionContext) {
     await queue.processBatch(batch, env, ctx);
   },
-} satisfies ExportedHandler<CloudflareBindings>;
+} satisfies ExportedHandler<Env>;

@@ -1,3 +1,5 @@
+import "@abraham/reflection";
+
 import { VECTORIZE } from "@/repository/cloudflareVectorRepository";
 import { IVectorRepository } from "@/usecase/interface";
 import { container } from "tsyringe";

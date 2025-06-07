@@ -1,16 +1,15 @@
+import { env } from "cloudflare:workers";
 import { container } from "tsyringe";
+
 import {
   CloudflareVectorRepository,
   VECTORIZE,
-} from "./repository/cloudflareVectorRepository";
-import { IVectorRepository } from "./usecase/interface";
+} from "@/repository/cloudflareVectorRepository";
+import { IVectorRepository, VectorRepository } from "@/usecase/interface";
 
-export function setupContainer(env: Env): void {
-  // Register Cloudflare bindings
-  container.register(VECTORIZE, { useValue: env.VECTORIZE });
+container.register(VECTORIZE, { useValue: env.VECTORIZE });
 
-  // Register repositories
-  container.register<VectorRepository>(IVectorRepository, {
-    useClass: CloudflareVectorRepository,
-  });
-}
+// Register repositories
+container.register<VectorRepository>(IVectorRepository, {
+  useClass: CloudflareVectorRepository,
+});
