@@ -1,6 +1,6 @@
 import { VectorIdEncoder, VectorRepository } from "./interface";
 
-export class ClearObjectVector {
+export class ClearDocumentVector {
   constructor(
     private readonly encoder: VectorIdEncoder,
     private readonly vectorRepository: VectorRepository,
