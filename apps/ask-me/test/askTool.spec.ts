@@ -1,10 +1,10 @@
-import { expect, describe, it, vi, beforeEach } from "vitest";
-import { askToolHandler } from "@/handlers/tools/ask";
-import { container } from "tsyringe";
-import { IArticleRepository, IVectorRepository } from "@/usecase/interface";
-import { MockVectorRepository } from "./mocks/mockVectorRepository";
 import { Article, ArticleLanguage } from "@/entity/Article";
-import { DocumentVector } from "@/entity/DocumentVector";
+import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
+import { askToolHandler } from "@/handlers/tools/ask";
+import { IArticleRepository, IVectorRepository } from "@/usecase/interface";
+import { container } from "tsyringe";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { MockVectorRepository } from "./mocks/mockVectorRepository";
 
 // Mock Article Repository for testing
 class MockArticleRepository {
@@ -20,7 +20,7 @@ class MockArticleRepository {
 
   async findByIds(ids: string[]): Promise<Article[]> {
     return ids
-      .map(id => this.articles.get(id))
+      .map((id) => this.articles.get(id))
       .filter((article): article is Article => article !== null);
   }
 }
@@ -32,10 +32,10 @@ describe("AskTool Handler", () => {
   beforeEach(() => {
     // Reset container and register mocks
     container.clearInstances();
-    
+
     mockVectorRepository = new MockVectorRepository();
     mockArticleRepository = new MockArticleRepository();
-    
+
     container.register(IVectorRepository, { useValue: mockVectorRepository });
     container.register(IArticleRepository, { useValue: mockArticleRepository });
 
@@ -61,15 +61,15 @@ describe("AskTool Handler", () => {
       "article1",
       "Test Article Title",
       "This is test content for the article.",
-      ArticleLanguage.English
+      ArticleLanguage.English,
     );
     testArticle.publish("https://example.com/article1", Date.now());
-    
+
     // Add the article to our mock repository
     mockArticleRepository.addMockArticle("article1", testArticle);
-    
+
     // Setup vector repository to return a document vector pointing to our article
-    const vector = new DocumentVector("vector1", DocumentVector.Type.FULL);
+    const vector = new DocumentVector("vector1", DocumentVectorType.FULL);
     vector.setMetadata("objectKey", "article1");
     mockVectorRepository.queryResults = [vector];
 
@@ -79,16 +79,16 @@ describe("AskTool Handler", () => {
     // Verify the result
     expect(result.isError).toBe(false);
     expect(result.content).toHaveLength(1);
-    
+
     // Check that the returned article was serialized correctly
-    const content = JSON.parse(result.content[0].text);
+    const content = JSON.parse(result.content[0].text as string);
     expect(content.title).toBe("Test Article Title");
     expect(content.permalink).toBe("https://example.com/article1");
   });
 
   it("should handle errors gracefully", async () => {
     // Setup mock to throw an error
-    vi.spyOn(mockVectorRepository, 'query').mockImplementation(() => {
+    vi.spyOn(mockVectorRepository, "query").mockImplementation(() => {
       throw new Error("Test error");
     });
 
