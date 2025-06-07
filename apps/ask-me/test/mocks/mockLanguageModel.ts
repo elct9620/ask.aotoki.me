@@ -1,4 +1,14 @@
-import { LanguageModel, LanguageModelV1CallOptions, LanguageModelV1FinishReason, LanguageModelV1FunctionToolCall, LanguageModelV1LogProbs, LanguageModelV1ObjectGenerationMode, LanguageModelV1ProviderMetadata, LanguageModelV1Source, LanguageModelV1StreamPart } from "ai";
+import {
+  LanguageModel,
+  LanguageModelV1CallOptions,
+  LanguageModelV1FinishReason,
+  LanguageModelV1FunctionToolCall,
+  LanguageModelV1LogProbs,
+  LanguageModelV1ObjectGenerationMode,
+  LanguageModelV1ProviderMetadata,
+  LanguageModelV1Source,
+  LanguageModelV1StreamPart,
+} from "ai";
 import { injectable } from "tsyringe";
 
 /**
@@ -9,7 +19,8 @@ export class MockLanguageModel implements LanguageModel {
   readonly specificationVersion = "v1" as const;
   readonly provider = "mock";
   readonly modelId = "mock-language-model";
-  readonly defaultObjectGenerationMode: LanguageModelV1ObjectGenerationMode = "json";
+  readonly defaultObjectGenerationMode: LanguageModelV1ObjectGenerationMode =
+    "json";
   readonly supportsImageUrls = true;
   readonly supportsStructuredOutputs = true;
 
@@ -51,7 +62,7 @@ export class MockLanguageModel implements LanguageModel {
    * Checks if the model supports the given URL for file parts natively
    */
   supportsUrl(url: URL): boolean {
-    return url.protocol === 'https:';
+    return url.protocol === "https:";
   }
 
   /**
@@ -59,7 +70,12 @@ export class MockLanguageModel implements LanguageModel {
    */
   async doGenerate(options: LanguageModelV1CallOptions): Promise<{
     text?: string;
-    reasoning?: string | Array<{ type: 'text'; text: string; signature?: string } | { type: 'redacted'; data: string }>;
+    reasoning?:
+      | string
+      | Array<
+          | { type: "text"; text: string; signature?: string }
+          | { type: "redacted"; data: string }
+        >;
     files?: Array<{ data: string | Uint8Array; mimeType: string }>;
     toolCalls?: Array<LanguageModelV1FunctionToolCall>;
     finishReason: LanguageModelV1FinishReason;
@@ -84,16 +100,16 @@ export class MockLanguageModel implements LanguageModel {
       },
       rawResponse: {
         headers: { "x-mock": "true" },
-        body: { text: this.mockTextResponse }
+        body: { text: this.mockTextResponse },
       },
       request: {
-        body: JSON.stringify({ messages: options.messages })
+        body: JSON.stringify({ messages: options.messages }),
       },
       response: {
         id: "mock-response-id",
         timestamp: new Date(),
-        modelId: this.modelId
-      }
+        modelId: this.modelId,
+      },
     };
   }
 
@@ -109,7 +125,7 @@ export class MockLanguageModel implements LanguageModel {
   }> {
     const encoder = new TextEncoder();
     const text = this.mockTextResponse;
-    
+
     // Create a stream that yields each character of the mock text
     const stream = new ReadableStream<LanguageModelV1StreamPart>({
       start: async (controller) => {
@@ -119,58 +135,58 @@ export class MockLanguageModel implements LanguageModel {
             type: "response-metadata",
             id: "mock-response-id",
             timestamp: new Date(),
-            modelId: this.modelId
+            modelId: this.modelId,
           });
-          
+
           // Send text deltas
           for (let i = 0; i < text.length; i++) {
-            controller.enqueue({ 
-              type: "text-delta", 
-              textDelta: text[i]
+            controller.enqueue({
+              type: "text-delta",
+              textDelta: text[i],
             });
-            
+
             // Simulate some delay for realism
-            await new Promise(resolve => setTimeout(resolve, 5));
+            await new Promise((resolve) => setTimeout(resolve, 5));
           }
-          
+
           // Send tool calls if any
           for (const toolCall of this.mockToolCalls) {
             controller.enqueue({
               type: "tool-call",
-              ...toolCall
+              ...toolCall,
             });
           }
-          
+
           // Send finish
           controller.enqueue({
             type: "finish",
             finishReason: this.mockFinishReason,
-            usage: this.mockUsage
+            usage: this.mockUsage,
           });
-          
+
           controller.close();
         } catch (error) {
           controller.enqueue({
             type: "error",
-            error
+            error,
           });
           controller.close();
         }
-      }
+      },
     });
 
     return {
       stream,
       rawCall: {
         rawPrompt: options.messages,
-        rawSettings: { temperature: options.temperature ?? 0.7 }
+        rawSettings: { temperature: options.temperature ?? 0.7 },
       },
       rawResponse: {
-        headers: { "x-mock": "true" }
+        headers: { "x-mock": "true" },
       },
       request: {
-        body: JSON.stringify({ messages: options.messages })
-      }
+        body: JSON.stringify({ messages: options.messages }),
+      },
     };
   }
 }
