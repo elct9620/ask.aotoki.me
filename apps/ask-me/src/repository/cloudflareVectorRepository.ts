@@ -26,6 +26,7 @@ export class CloudflareVectorRepository implements VectorRepository {
       const upserts = vectors.map((vector) => ({
         id: vector.id,
         values: vector.vector,
+        metadata: vector.metadata,
       }));
 
       // Upsert all vectors in a single operation
