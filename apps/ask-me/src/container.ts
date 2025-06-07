@@ -1,11 +1,11 @@
 import { env } from "cloudflare:workers";
 import { container } from "tsyringe";
 
-import { BUCKET, R2ArticleRepository } from "@/repository/r2ArticleRepository";
 import {
   CloudflareVectorRepository,
   VECTORIZE,
 } from "@/repository/cloudflareVectorRepository";
+import { BUCKET, R2ArticleRepository } from "@/repository/r2ArticleRepository";
 import { LlmDocumentVectorFactory } from "@/service/llmDocumentVectorFactory";
 import { Md5VectorIdEncoder } from "@/service/md5VectorIdEncoder";
 import {
