@@ -4,7 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "lib": ["ESNext"],
-    "types": ["vite/client"],
+    "types": ["vite/client", "@types/node"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "experimentalDecorators": true,
@@ -27,6 +27,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "worker-configuration.d.ts",
+    "vite.config.ts",
     "vitest.config.ts"
   ]
 }
