@@ -15,6 +15,7 @@ export default defineWorkersProject({
         ),
       },
     ],
+    setupFiles: ["./test/setup.ts"],
     poolOptions: {
       workers: {
         singleWorker: true,
