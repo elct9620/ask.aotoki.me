@@ -43,15 +43,15 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     // Set metadata from article
     vector.setMetadata("title", article.title);
     vector.setMetadata("objectKey", article.objectKey);
-    
+
     if (article.series) {
       vector.setMetadata("series", article.series);
     }
-    
+
     if (article.publishedAt) {
       vector.setMetadata("publishedAt", article.publishedAt);
     }
-    
+
     if (article.permalink) {
       vector.setMetadata("permalink", article.permalink);
     }
@@ -81,15 +81,15 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     // Set metadata from article
     vector.setMetadata("title", article.title);
     vector.setMetadata("objectKey", article.objectKey);
-    
+
     if (article.series) {
       vector.setMetadata("series", article.series);
     }
-    
+
     if (article.publishedAt) {
       vector.setMetadata("publishedAt", article.publishedAt);
     }
-    
+
     if (article.permalink) {
       vector.setMetadata("permalink", article.permalink);
     }
