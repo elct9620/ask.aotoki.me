@@ -21,6 +21,44 @@ interface R2ArticleObject {
 export class R2ArticleRepository implements ArticleRepository {
   constructor(@inject(BUCKET) private readonly bucket: R2Bucket) {}
 
+  /**
+   * Maps R2ArticleObject data to an Article entity
+   * 
+   * @param id The object key / ID
+   * @param articleData The data from R2
+   * @returns A populated Article entity
+   */
+  private mapToArticle(id: string, articleData: R2ArticleObject): Article {
+    // Map the R2 data to our Article entity
+    const language = this.mapLanguage(articleData.language);
+    const article = new Article(
+      id, // Using objectKey as the id
+      articleData.title,
+      articleData.content,
+      language,
+    );
+
+    // Set additional properties
+    if (articleData.series) {
+      article.setSeries(articleData.series);
+    }
+
+    // Add tags
+    if (articleData.tags && Array.isArray(articleData.tags)) {
+      for (const tag of articleData.tags) {
+        article.addTag(tag);
+      }
+    }
+
+    // Set publication details if available
+    if (articleData.permalink && articleData.published_at) {
+      const timestamp = new Date(articleData.published_at).getTime();
+      article.publish(articleData.permalink, timestamp);
+    }
+    
+    return article;
+  }
+
   async findById(id: string): Promise<Article | null> {
     try {
       // Get the object from R2
@@ -32,39 +70,32 @@ export class R2ArticleRepository implements ArticleRepository {
 
       // Parse the JSON content
       const articleData = await object.json<R2ArticleObject>();
-
-      // Map the R2 data to our Article entity
-      const language = this.mapLanguage(articleData.language);
-      const article = new Article(
-        id, // Using objectKey as the id
-        articleData.title,
-        articleData.content,
-        language,
-      );
-
-      // Set additional properties
-      if (articleData.series) {
-        article.setSeries(articleData.series);
-      }
-
-      // Add tags
-      if (articleData.tags && Array.isArray(articleData.tags)) {
-        for (const tag of articleData.tags) {
-          article.addTag(tag);
-        }
-      }
-
-      // Set publication details if available
-      if (articleData.permalink && articleData.published_at) {
-        const timestamp = new Date(articleData.published_at).getTime();
-        article.publish(articleData.permalink, timestamp);
-      }
-
-      return article;
+      
+      return this.mapToArticle(id, articleData);
     } catch (error) {
       console.error(`Error fetching article ${id}:`, error);
       return null;
     }
+  }
+
+  async findByIds(ids: string[]): Promise<Article[]> {
+    // Filter out empty IDs
+    const validIds = ids.filter(id => id.trim().length > 0);
+    
+    if (validIds.length === 0) {
+      return [];
+    }
+    
+    // Create an array of promises for fetching each article
+    const articlePromises = validIds.map(async (id) => {
+      return this.findById(id);
+    });
+    
+    // Wait for all promises to resolve
+    const articles = await Promise.all(articlePromises);
+    
+    // Filter out any null results
+    return articles.filter((article): article is Article => article !== null);
   }
 
   private mapLanguage(languageCode: string): ArticleLanguage {
