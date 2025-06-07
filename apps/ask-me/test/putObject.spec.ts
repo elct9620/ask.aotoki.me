@@ -4,7 +4,7 @@ import { givenObjectWithContent } from "./steps/r2";
 
 describe("PutObject", () => {
   const objectKey = "content/example.json";
-  
+
   it("is expected to add content to R2", async () => {
     await givenObjectWithContent(objectKey, {
       id: "47e39fd5c33ab248111f009c9fe4c4ff",
@@ -20,7 +20,7 @@ describe("PutObject", () => {
       content: "...",
     });
   });
-  
+
   it("is expected to ack queue", async () => {
     const result = await whenObjectQueue(
       buildQueueAction("PutObject", objectKey, { id: "test-id" }),
