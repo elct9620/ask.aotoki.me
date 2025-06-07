@@ -50,9 +50,9 @@ export async function whenObjectQueue(
   const actions = Array.isArray(params) ? params : [params];
 
   // Prepare all messages for the queue at once
-  const queueMessages = actions.map(action => {
+  const queueMessages = actions.map((action) => {
     const messageId = randomBytes(16).toString("hex");
-    
+
     // Prepare message for the queue
     const queueMessage = {
       id: messageId,
@@ -65,24 +65,24 @@ export async function whenObjectQueue(
         },
       },
     };
-    
+
     if (action.content) {
       queueMessage.body.content = action.content;
     }
-    
+
     return queueMessage;
   });
-  
+
   // Send all messages to the queue at once
   const queueResult = await SELF.queue("ask-me", queueMessages);
-  
+
   // Create corresponding mock messages for test results
   const results = actions.map((action, index) => {
     const message = new MockQueueMessage({
       key: action.key,
       content: action.content,
     });
-    
+
     return {
       success: queueResult.outcome === "ok",
       message,
