@@ -39,6 +39,9 @@
       },
     ],
   },
+  "ai": {
+    "binding": "AI"
+  },
   "vectorize": [
     {
       "binding": "VECTORIZE",
