@@ -39,4 +39,8 @@ export class DocumentVector {
   setMetadata(key: string, value: any) {
     this._metadata[key] = value;
   }
+
+  get objectKey(): string | null {
+    return this._metadata["objectKey"];
+  }
 }
