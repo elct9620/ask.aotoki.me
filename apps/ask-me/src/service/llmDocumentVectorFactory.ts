@@ -45,7 +45,7 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
       value: article.content,
     });
 
-    vector.updateVector(embedding);
+    vector.update(embedding);
 
     return vector;
   }
@@ -73,7 +73,7 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
       value: summary,
     });
 
-    vector.updateVector(embedding);
+    vector.update(embedding);
 
     return vector;
   }

@@ -21,7 +21,7 @@ export class DocumentVector {
     return [...this._vector];
   }
 
-  updateVector(vector: number[]) {
+  update(vector: number[]) {
     if (vector && vector.length !== VectorDimensions) {
       throw new Error(
         `Vector must have exactly ${VectorDimensions} dimensions.`,
