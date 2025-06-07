@@ -1,3 +1,4 @@
+import { createOpenAI, OpenAIProvider } from "@ai-sdk/openai";
 import { env } from "cloudflare:workers";
 import { container } from "tsyringe";
 
@@ -18,9 +19,36 @@ import {
   VectorIdEncoder,
   VectorRepository,
 } from "@/usecase/interface";
+import { LanguageModel } from "ai";
+
+export const IEmbeddingModel = Symbol("IEmbeddingModel");
+export const ISummaryModel = Symbol("ISummaryModel");
+
+const IOpenAIProvider = Symbol("IOpenAIProvider");
 
 container.register(VECTORIZE, { useValue: env.VECTORIZE });
 container.register(BUCKET, { useValue: env.BUCKET });
+
+container.register(IOpenAIProvider, {
+  useFactory: async () => {
+    return createOpenAI({
+      apiKey: env.OPENAI_API_KEY,
+      baseURL: await env.AI.gateway("ask-me").getUrl("openai"),
+    });
+  },
+});
+container.register(IEmbeddingModel, {
+  useFactory: (c) => {
+    const provider = c.resolve<OpenAIProvider>(IOpenAIProvider);
+    return provider("text-embedding-3-small");
+  },
+});
+container.register<LanguageModel>(ISummaryModel, {
+  useFactory: (c) => {
+    const provider = c.resolve<OpenAIProvider>(IOpenAIProvider);
+    return provider("gpt-4.1-mini");
+  },
+});
 
 // Register repositories
 container.register<VectorRepository>(IVectorRepository, {
