@@ -9,7 +9,7 @@ import { handlePutObject } from "@/handlers/queue/putObject";
 import { AskMCP } from "@/mcp";
 import { renderer } from "@/renderer";
 
-const app = new Hono();
+const app = new Hono({ strict: false });
 
 app.use(renderer);
 
