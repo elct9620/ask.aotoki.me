@@ -25,6 +25,8 @@ export async function handleDeleteObject(
     message.ack();
   } catch (error) {
     console.error("Error processing DeleteObject:", error);
-    message.retry();
+    message.retry({
+      delaySeconds: (message.attempts + 1) * 10,
+    });
   }
 }
