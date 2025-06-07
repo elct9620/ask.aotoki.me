@@ -1,12 +1,11 @@
+import { EmbeddingModel } from "ai";
 import { injectable } from "tsyringe";
-
-export type EmbeddingModelV1Embedding = number[];
 
 /**
  * Mock implementation of EmbeddingModelV1 for testing
  */
 @injectable()
-export class MockEmbeddingModel<T = string> {
+export class MockEmbeddingModel<T> implements EmbeddingModel<T> {
   readonly specificationVersion = "v1" as const;
   readonly provider = "mock";
   readonly modelId = "mock-embedding-model";
