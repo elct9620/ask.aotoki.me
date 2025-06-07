@@ -1,3 +1,6 @@
+import { SELF } from "cloudflare:test";
+import { randomBytes } from "node:crypto";
+
 /**
  * Queue object action params interface
  */
@@ -33,9 +36,6 @@ class MockQueueMessage {
     this.retried = true;
   }
 }
-
-import { SELF } from "cloudflare:test";
-import { randomBytes } from "node:crypto";
 
 /**
  * Queue a message for testing
