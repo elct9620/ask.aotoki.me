@@ -13,12 +13,13 @@ export const VECTORIZE = Symbol("VECTORIZE");
 export class CloudflareVectorRepository implements VectorRepository {
   constructor(
     @inject(VECTORIZE) private readonly vectorize: Vectorize,
-    @inject(IEmbeddingModel) private readonly embeddingModel: EmbeddingModel<string>
+    @inject(IEmbeddingModel)
+    private readonly embeddingModel: EmbeddingModel<string>,
   ) {}
 
   /**
    * Query the vector database for similar vectors to the given query
-   * 
+   *
    * @param query Text query to search for
    * @param topK Maximum number of results to return (default: 5)
    * @returns Promise resolving to array of document vectors matching the query
@@ -28,31 +29,34 @@ export class CloudflareVectorRepository implements VectorRepository {
       // Convert query to embedding
       const { embedding } = await embed({
         model: this.embeddingModel,
-        value: query
+        value: query,
       });
 
       // Query the vector database
       const results = await this.vectorize.query({
         vector: embedding,
-        topK
+        topK,
       });
 
       // Convert results to DocumentVector objects
-      return results.matches.map(match => {
-        const vector = new DocumentVector(match.id, DocumentVector.Type.UNKNOWN);
-        
+      return results.matches.map((match) => {
+        const vector = new DocumentVector(
+          match.id,
+          DocumentVector.Type.UNKNOWN,
+        );
+
         // Add vector values if available
         if (match.values) {
           vector.update(match.values);
         }
-        
+
         // Add metadata if available
         if (match.metadata) {
           for (const [key, value] of Object.entries(match.metadata)) {
             vector.setMetadata(key, value);
           }
         }
-        
+
         return vector;
       });
     } catch (error) {
