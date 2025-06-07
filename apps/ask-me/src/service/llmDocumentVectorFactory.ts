@@ -1,5 +1,6 @@
 import { Article } from "@/entity/Article";
 import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
+import { SummaryInstruction } from "@/entity/Instruction";
 import {
   DocumentVectorFactory,
   IVectorIdEncoder,
@@ -93,7 +94,7 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
 
     const { text: summary } = await generateText({
       model: this.summaryModel,
-      system: "You are a helpful assistant that summarizes articles.",
+      system: SummaryInstruction,
       prompt: article.content,
     });
 
