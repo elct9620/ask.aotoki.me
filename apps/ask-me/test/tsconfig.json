@@ -7,5 +7,5 @@
       "@cloudflare/workers-types/experimental"
     ]
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "../src/worker-configuration.d.ts"]
+  "include": ["./**/*.ts", "./**/*.tsx", "../worker-configuration.d.ts"]
 }
