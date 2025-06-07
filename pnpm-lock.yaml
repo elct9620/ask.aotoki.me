@@ -29,6 +29,9 @@ importers:
       '@abraham/reflection':
         specifier: ^0.13.0
         version: 0.13.0
+      '@ai-sdk/openai':
+        specifier: ^1.3.22
+        version: 1.3.22(zod@3.25.56)
       '@ask-me/queue-router':
         specifier: workspace:*
         version: link:../../packages/queue-router
@@ -38,6 +41,9 @@ importers:
       agents:
         specifier: ^0.0.95
         version: 0.0.95(@cloudflare/workers-types@4.20250607.0)(react@19.1.0)
+      ai:
+        specifier: ^4.3.16
+        version: 4.3.16(react@19.1.0)(zod@3.25.56)
       ajv:
         specifier: ^6.12.6
         version: 6.12.6
@@ -101,6 +107,12 @@ packages:
 
   '@abraham/reflection@0.13.0':
     resolution: {integrity: sha512-sQYhhraGPPRP6zoqpqpSaoYL+XY5KNmQCcoB3IuQh1z1aWmkHXcxwyTxRkTJ60L2aUjrbiqIqoYkrB/1c7kjQA==}
+
+  '@ai-sdk/openai@1.3.22':
+    resolution: {integrity: sha512-QwA+2EkG0QyjVR+7h6FE7iOu2ivNqAVMm9UJZkVxxTk5OIq5fFJDTEI/zICEMuHImTTXR2JjsL6EirJ28Jc4cw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
 
   '@ai-sdk/provider-utils@2.2.8':
     resolution: {integrity: sha512-fqhG+4sCVv8x7nFzYnFo19ryhAa3w096Kmc3hWxMQfW/TubPOmt3A6tYZhl4mUfQWWQMsuSkLrtjlWuXBVSGQA==}
@@ -2084,6 +2096,12 @@ packages:
 snapshots:
 
   '@abraham/reflection@0.13.0': {}
+
+  '@ai-sdk/openai@1.3.22(zod@3.25.56)':
+    dependencies:
+      '@ai-sdk/provider': 1.1.3
+      '@ai-sdk/provider-utils': 2.2.8(zod@3.25.56)
+      zod: 3.25.56
 
   '@ai-sdk/provider-utils@2.2.8(zod@3.25.56)':
     dependencies:
