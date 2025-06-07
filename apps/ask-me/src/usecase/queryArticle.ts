@@ -19,7 +19,8 @@ export class QueryArticle {
       return [];
     }
 
-    const articles = await this.articleRepository.findByIds(articleIds);
+    const uniqueArticleIds = Array.from(new Set(articleIds));
+    const articles = await this.articleRepository.findByIds(uniqueArticleIds);
     if (articles.length === 0) {
       return [];
     }
