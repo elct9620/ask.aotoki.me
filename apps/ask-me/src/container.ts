@@ -6,8 +6,13 @@ import {
   CloudflareVectorRepository,
   VECTORIZE,
 } from "@/repository/cloudflareVectorRepository";
-import { IVectorRepository, IVectorIdEncoder, VectorRepository, VectorIdEncoder } from "@/usecase/interface";
 import { Md5VectorIdEncoder } from "@/service/md5VectorIdEncoder";
+import {
+  IVectorIdEncoder,
+  IVectorRepository,
+  VectorIdEncoder,
+  VectorRepository,
+} from "@/usecase/interface";
 
 container.register(VECTORIZE, { useValue: env.VECTORIZE });
 
