@@ -27,11 +27,11 @@ const IOpenAIProvider = Symbol("IOpenAIProvider");
 container.register(VECTORIZE, { useValue: env.VECTORIZE });
 container.register(BUCKET, { useValue: env.BUCKET });
 
-container.register(IOpenAIProvider, {
-  useFactory: async () => {
+container.register<OpenAIProvider>(IOpenAIProvider, {
+  useFactory: () => {
     return createOpenAI({
       apiKey: env.OPENAI_API_KEY,
-      baseURL: await env.AI.gateway("ask-me").getUrl("openai"),
+      baseURL: env.OPENAI_BASE_URL,
     });
   },
 });
