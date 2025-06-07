@@ -1,5 +1,4 @@
 import { env } from "cloudflare:workers";
-import "reflect-metadata"; // Required by tsyringe
 import { container } from "tsyringe";
 
 import {

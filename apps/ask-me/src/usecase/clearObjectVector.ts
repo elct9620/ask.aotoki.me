@@ -1,10 +1,14 @@
-import { VectorRepository } from "./interface";
+import { VectorIdEncoder, VectorRepository } from "./interface";
 
 export class ClearObjectVector {
-  constructor(private readonly vectorRepository: VectorRepository) {}
+  constructor(
+    private readonly encoder: VectorIdEncoder,
+    private readonly vectorRepository: VectorRepository,
+  ) {}
 
   async execute(key: string): Promise<void> {
-    const ids = [`${key}#full`, `${key}#summary`];
+    const encodedKey = this.encoder.encode(key);
+    const ids = [`${encodedKey}#full`, `${encodedKey}#summary`];
 
     await this.vectorRepository.deleteAll(ids);
   }
