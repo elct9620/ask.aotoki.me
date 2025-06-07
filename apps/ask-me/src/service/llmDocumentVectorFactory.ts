@@ -40,6 +40,22 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     // In the future, this would call an LLM to generate vectors
     const vector = new DocumentVector(encodedKey, DocumentVectorType.FULL);
 
+    // Set metadata from article
+    vector.setMetadata("title", article.title);
+    vector.setMetadata("objectKey", article.objectKey);
+    
+    if (article.series) {
+      vector.setMetadata("series", article.series);
+    }
+    
+    if (article.publishedAt) {
+      vector.setMetadata("publishedAt", article.publishedAt);
+    }
+    
+    if (article.permalink) {
+      vector.setMetadata("permalink", article.permalink);
+    }
+
     const { embedding } = await embed({
       model: this.embeddingModel,
       value: article.content,
@@ -61,6 +77,22 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
     const vector = new DocumentVector(encodedKey, DocumentVectorType.SUMMARY);
+
+    // Set metadata from article
+    vector.setMetadata("title", article.title);
+    vector.setMetadata("objectKey", article.objectKey);
+    
+    if (article.series) {
+      vector.setMetadata("series", article.series);
+    }
+    
+    if (article.publishedAt) {
+      vector.setMetadata("publishedAt", article.publishedAt);
+    }
+    
+    if (article.permalink) {
+      vector.setMetadata("permalink", article.permalink);
+    }
 
     const { text: summary } = await generateText({
       model: this.summaryModel,
