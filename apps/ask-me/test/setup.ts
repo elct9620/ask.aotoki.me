@@ -15,6 +15,7 @@ beforeEach(() => {
   container.register(VECTORIZE, {
     useValue: {
       deleteByIds: async () => Promise.resolve(),
+      upsert: async () => Promise.resolve(),
     },
   });
 

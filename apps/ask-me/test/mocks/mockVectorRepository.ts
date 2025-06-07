@@ -1,3 +1,4 @@
+import { DocumentVector } from "@/entity/DocumentVector";
 import { VectorRepository } from "@/usecase/interface";
 import { injectable } from "tsyringe";
 
@@ -7,6 +8,16 @@ import { injectable } from "tsyringe";
 @injectable()
 export class MockVectorRepository implements VectorRepository {
   deletedIds: string[] = [];
+  upsertedVectors: DocumentVector[] = [];
+
+  /**
+   * Mock implementation of upsertAll that records the vectors
+   * rather than actually upserting them
+   */
+  async upsertAll(vectors: DocumentVector[]): Promise<void> {
+    this.upsertedVectors.push(...vectors);
+    return Promise.resolve();
+  }
 
   /**
    * Mock implementation of deleteAll that records the ids
@@ -22,5 +33,6 @@ export class MockVectorRepository implements VectorRepository {
    */
   reset(): void {
     this.deletedIds = [];
+    this.upsertedVectors = [];
   }
 }
