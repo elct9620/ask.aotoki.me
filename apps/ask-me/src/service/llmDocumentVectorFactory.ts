@@ -1,14 +1,17 @@
+import { IEmbeddingModel, ISummaryModel } from "@/container";
 import { Article } from "@/entity/Article";
-import {
-  DocumentVector,
-  DocumentVectorType,
-  VectorDimensions,
-} from "@/entity/DocumentVector";
+import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
 import {
   DocumentVectorFactory,
   IVectorIdEncoder,
   type VectorIdEncoder,
 } from "@/usecase/interface";
+import {
+  embed,
+  generateText,
+  type EmbeddingModel,
+  type LanguageModel,
+} from "ai";
 import { inject, injectable } from "tsyringe";
 
 /**
@@ -20,6 +23,10 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   constructor(
     @inject(IVectorIdEncoder)
     private readonly vectorIdEncoder: VectorIdEncoder,
+    @inject(IEmbeddingModel)
+    private readonly embeddingModel: EmbeddingModel<string>,
+    @inject(ISummaryModel)
+    private readonly summaryModel: LanguageModel,
   ) {}
   /**
    * Create a full document vector containing detailed content
@@ -33,9 +40,12 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     // In the future, this would call an LLM to generate vectors
     const vector = new DocumentVector(encodedKey, DocumentVectorType.FULL);
 
-    // Add mock vector data (all zeros for now)
-    const mockVector = new Array(VectorDimensions).fill(0);
-    vector.updateVector(mockVector);
+    const { embedding } = await embed({
+      model: this.embeddingModel,
+      value: article.content,
+    });
+
+    vector.updateVector(embedding);
 
     return vector;
   }
@@ -52,9 +62,18 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     // In the future, this would call an LLM to generate vectors
     const vector = new DocumentVector(encodedKey, DocumentVectorType.SUMMARY);
 
-    // Add mock vector data (all zeros for now)
-    const mockVector = new Array(VectorDimensions).fill(0);
-    vector.updateVector(mockVector);
+    const { text: summary } = await generateText({
+      model: this.summaryModel,
+      system: "You are a helpful assistant that summarizes articles.",
+      prompt: article.content,
+    });
+
+    const { embedding } = await embed({
+      model: this.embeddingModel,
+      value: summary,
+    });
+
+    vector.updateVector(embedding);
 
     return vector;
   }
