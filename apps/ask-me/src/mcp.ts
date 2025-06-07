@@ -14,7 +14,7 @@ export class AskMCP extends McpAgent {
       AskTool.name,
       AskTool.description,
       AskTool.inputSchema,
-      askToolHandler
+      askToolHandler,
     );
   }
 }
