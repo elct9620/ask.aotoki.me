@@ -29,18 +29,12 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     private readonly summaryModel: LanguageModel,
   ) {}
   /**
-   * Create a full document vector containing detailed content
-   *
-   * @param article Article object containing the content
-   * @returns A DocumentVector with full content
+   * Add metadata from an article to a document vector
+   * 
+   * @param vector The vector to update with metadata
+   * @param article The source article for metadata
    */
-  async createFull(article: Article): Promise<DocumentVector> {
-    const encodedKey = this.vectorIdEncoder.encode(article.id);
-    // This is a placeholder implementation
-    // In the future, this would call an LLM to generate vectors
-    const vector = new DocumentVector(encodedKey, DocumentVectorType.FULL);
-
-    // Set metadata from article
+  private setVectorMetadata(vector: DocumentVector, article: Article): void {
     vector.setMetadata("title", article.title);
     vector.setMetadata("objectKey", article.objectKey);
 
@@ -55,6 +49,22 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     if (article.permalink) {
       vector.setMetadata("permalink", article.permalink);
     }
+  }
+
+  /**
+   * Create a full document vector containing detailed content
+   *
+   * @param article Article object containing the content
+   * @returns A DocumentVector with full content
+   */
+  async createFull(article: Article): Promise<DocumentVector> {
+    const encodedKey = this.vectorIdEncoder.encode(article.id);
+    // This is a placeholder implementation
+    // In the future, this would call an LLM to generate vectors
+    const vector = new DocumentVector(encodedKey, DocumentVectorType.FULL);
+
+    // Set metadata from article
+    this.setVectorMetadata(vector, article);
 
     const { embedding } = await embed({
       model: this.embeddingModel,
@@ -79,20 +89,7 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     const vector = new DocumentVector(encodedKey, DocumentVectorType.SUMMARY);
 
     // Set metadata from article
-    vector.setMetadata("title", article.title);
-    vector.setMetadata("objectKey", article.objectKey);
-
-    if (article.series) {
-      vector.setMetadata("series", article.series);
-    }
-
-    if (article.publishedAt) {
-      vector.setMetadata("publishedAt", article.publishedAt);
-    }
-
-    if (article.permalink) {
-      vector.setMetadata("permalink", article.permalink);
-    }
+    this.setVectorMetadata(vector, article);
 
     const { text: summary } = await generateText({
       model: this.summaryModel,
