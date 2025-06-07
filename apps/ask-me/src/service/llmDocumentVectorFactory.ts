@@ -1,3 +1,4 @@
+import { Article } from "@/entity/Article";
 import {
   DocumentVector,
   DocumentVectorType,
@@ -23,11 +24,11 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   /**
    * Create a full document vector containing detailed content
    *
-   * @param path Path to the document
+   * @param article Article object containing the content
    * @returns A DocumentVector with full content
    */
-  async createFull(key: string): Promise<DocumentVector> {
-    const encodedKey = this.vectorIdEncoder.encode(key);
+  async createFull(article: Article): Promise<DocumentVector> {
+    const encodedKey = this.vectorIdEncoder.encode(article.id);
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
     const vector = new DocumentVector(encodedKey, DocumentVectorType.FULL);
@@ -42,11 +43,11 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   /**
    * Create a summary document vector containing condensed content
    *
-   * @param path Path to the document
+   * @param article Article object containing the content
    * @returns A DocumentVector with summary content
    */
-  async createSummary(key: string): Promise<DocumentVector> {
-    const encodedKey = this.vectorIdEncoder.encode(key);
+  async createSummary(article: Article): Promise<DocumentVector> {
+    const encodedKey = this.vectorIdEncoder.encode(article.id);
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
     const vector = new DocumentVector(encodedKey, DocumentVectorType.SUMMARY);

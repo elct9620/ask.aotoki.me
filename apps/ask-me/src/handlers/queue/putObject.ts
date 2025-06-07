@@ -1,5 +1,7 @@
 import {
+  ArticleRepository,
   DocumentVectorFactory,
+  IArticleRepository,
   IDocumentVectorFactory,
   IVectorRepository,
   VectorRepository,
@@ -19,8 +21,14 @@ export async function handlePutObject(
   );
   const vectoreRepository =
     container.resolve<VectorRepository>(IVectorRepository);
+  const articleRepository =
+    container.resolve<ArticleRepository>(IArticleRepository);
 
-  const usecase = new RefreshDocumentVector(vectorFactory, vectoreRepository);
+  const usecase = new RefreshDocumentVector(
+    vectorFactory,
+    vectoreRepository,
+    articleRepository,
+  );
 
   try {
     await usecase.execute(message.body.object.key);
