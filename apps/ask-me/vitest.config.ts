@@ -17,7 +17,14 @@ export default defineWorkersProject({
     ],
     poolOptions: {
       workers: {
+        singleWorker: true,
         wrangler: { configPath: "./wrangler.jsonc" },
+        miniflare: {
+          compatibilityFlags: ["service_binding_extra_handlers"],
+          queueConsumers: {
+            queue: { maxBatchTimeout: 0.05 /* 50ms */ },
+          },
+        },
       },
     },
   },
