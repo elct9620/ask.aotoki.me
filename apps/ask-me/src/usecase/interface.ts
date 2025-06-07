@@ -21,6 +21,6 @@ export interface VectorIdEncoder {
 
 export const IDocumentVectorFactory = Symbol("IFullDocumentVectorFactory");
 export interface DocumentVectorFactory {
-  createFull(article: Article): Promise<DocumentVector>;
+  createFull(article: Article): Promise<DocumentVector | null>;
   createSummary(article: Article): Promise<DocumentVector>;
 }

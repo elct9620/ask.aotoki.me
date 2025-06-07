@@ -7,6 +7,7 @@ import {
   type VectorIdEncoder,
 } from "@/usecase/interface";
 import {
+  APICallError,
   embed,
   generateText,
   type EmbeddingModel,
@@ -58,7 +59,7 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
    * @param article Article object containing the content
    * @returns A DocumentVector with full content
    */
-  async createFull(article: Article): Promise<DocumentVector> {
+  async createFull(article: Article): Promise<DocumentVector | null> {
     const encodedKey = this.vectorIdEncoder.encode(article.id);
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
@@ -67,12 +68,20 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
     // Set metadata from article
     this.setVectorMetadata(vector, article);
 
-    const { embedding } = await embed({
-      model: this.embeddingModel,
-      value: article.content,
-    });
+    try {
+      const { embedding } = await embed({
+        model: this.embeddingModel,
+        value: article.content,
+      });
 
-    vector.update(embedding);
+      vector.update(embedding);
+    } catch (error) {
+      if (APICallError.isInstance(error)) {
+        return null; // Handle API call errors gracefully
+      }
+
+      throw error; // Rethrow other unexpected errors
+    }
 
     return vector;
   }

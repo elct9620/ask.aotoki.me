@@ -1,3 +1,4 @@
+import { DocumentVector } from "@/entity/DocumentVector";
 import {
   ArticleRepository,
   DocumentVectorFactory,
@@ -20,6 +21,14 @@ export class RefreshDocumentVector {
     const fullVector = await this.vectorFactory.createFull(article);
     const summaryVector = await this.vectorFactory.createSummary(article);
 
-    await this.vectoreRepository.upsertAll([fullVector, summaryVector]);
+    let vectors: DocumentVector[] = [];
+    if (fullVector) {
+      vectors.push(fullVector);
+    }
+    if (summaryVector) {
+      vectors.push(summaryVector);
+    }
+
+    await this.vectoreRepository.upsertAll(vectors);
   }
 }
