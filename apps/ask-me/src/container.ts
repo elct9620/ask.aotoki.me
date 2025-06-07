@@ -8,7 +8,7 @@ import {
 } from "@/repository/cloudflareVectorRepository";
 import { BUCKET, R2ArticleRepository } from "@/repository/r2ArticleRepository";
 import { LlmDocumentVectorFactory } from "@/service/llmDocumentVectorFactory";
-import { Md5VectorIdEncoder } from "@/service/md5VectorIdEncoder";
+import { Sha1VectorIdEncoder } from "@/service/sha1VectorIdEncoder";
 import {
   ArticleRepository,
   DocumentVectorFactory,
@@ -58,7 +58,7 @@ container.register<ArticleRepository>(IArticleRepository, {
 
 // Register services
 container.register<VectorIdEncoder>(IVectorIdEncoder, {
-  useClass: Md5VectorIdEncoder,
+  useClass: Sha1VectorIdEncoder,
 });
 container.register<DocumentVectorFactory>(IDocumentVectorFactory, {
   useClass: LlmDocumentVectorFactory,
