@@ -49,11 +49,10 @@ export async function whenObjectQueue(
   // If single action, convert to array for consistent handling
   const actions = Array.isArray(params) ? params : [params];
 
-  // Process each action and prepare messages for the queue
-  const queuePromises = actions.map(async (action) => {
-    const queueName = action.action.toLowerCase();
+  // Prepare all messages for the queue at once
+  const queueMessages = actions.map(action => {
     const messageId = randomBytes(16).toString("hex");
-
+    
     // Prepare message for the queue
     const queueMessage = {
       id: messageId,
@@ -66,29 +65,30 @@ export async function whenObjectQueue(
         },
       },
     };
-
+    
     if (action.content) {
       queueMessage.body.content = action.content;
     }
-
-    // Send to the queue
-    const queueResult = await SELF.queue("ask-me", [queueMessage]);
-
-    // Create a mock message to return consistent interface with tests
+    
+    return queueMessage;
+  });
+  
+  // Send all messages to the queue at once
+  const queueResult = await SELF.queue("ask-me", queueMessages);
+  
+  // Create corresponding mock messages for test results
+  const results = actions.map((action, index) => {
     const message = new MockQueueMessage({
       key: action.key,
       content: action.content,
     });
-
+    
     return {
       success: queueResult.outcome === "ok",
       message,
       queueResult,
     };
   });
-
-  // Wait for all queue operations to complete
-  const results = await Promise.all(queuePromises);
 
   // Return single result or array based on input
   return Array.isArray(params) ? results : results[0];
