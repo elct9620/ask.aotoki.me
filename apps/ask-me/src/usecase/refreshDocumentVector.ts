@@ -21,12 +21,11 @@ export class RefreshDocumentVector {
     const fullVector = await this.vectorFactory.createFull(article);
     const summaryVector = await this.vectorFactory.createSummary(article);
 
-    let vectors: DocumentVector[] = [];
+    let vectors: DocumentVector[] = [summaryVector];
+
+    // If the full vector is created successfully, add it to the list
     if (fullVector) {
       vectors.push(fullVector);
-    }
-    if (summaryVector) {
-      vectors.push(summaryVector);
     }
 
     await this.vectoreRepository.upsertAll(vectors);
