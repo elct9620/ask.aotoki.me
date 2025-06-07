@@ -30,7 +30,7 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   ) {}
   /**
    * Add metadata from an article to a document vector
-   * 
+   *
    * @param vector The vector to update with metadata
    * @param article The source article for metadata
    */
