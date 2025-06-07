@@ -1,13 +1,13 @@
-import { describe, it, expect } from "vitest";
-import { whenObjectQueue, buildQueueAction } from "./steps/queue";
+import { describe, expect, it } from "vitest";
+import { buildQueueAction, whenObjectQueue } from "./steps/queue";
 
 describe("Queue Tests", () => {
   describe("PutObject", () => {
     it("is expected to acknowledge the message", async () => {
       const result = await whenObjectQueue(
-        buildQueueAction("PutObject", "testKey", { content: "test content" })
+        buildQueueAction("PutObject", "testKey", { content: "test content" }),
       );
-      
+
       expect(result).toBeTruthy();
     });
   });
@@ -15,9 +15,9 @@ describe("Queue Tests", () => {
   describe("DeleteObject", () => {
     it("is expected to acknowledge the message", async () => {
       const result = await whenObjectQueue(
-        buildQueueAction("DeleteObject", "testKey")
+        buildQueueAction("DeleteObject", "testKey"),
       );
-      
+
       expect(result).toBeTruthy();
     });
   });
@@ -26,9 +26,9 @@ describe("Queue Tests", () => {
     it("should process multiple queue actions", async () => {
       const results = await whenObjectQueue([
         buildQueueAction("PutObject", "firstKey", { content: "first content" }),
-        buildQueueAction("DeleteObject", "secondKey")
+        buildQueueAction("DeleteObject", "secondKey"),
       ]);
-      
+
       expect(results).toHaveLength(2);
       expect(results[0]).toBeTruthy();
       expect(results[1]).toBeTruthy();
