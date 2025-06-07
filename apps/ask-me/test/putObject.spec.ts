@@ -7,7 +7,6 @@ describe("PutObject", () => {
       buildQueueAction("PutObject", "content/example.json"),
     );
 
-    expect(result.success).toBeTruthy();
-    expect(result.message.body.key).toBe("content/example.json");
+    expect(result.outcome).toBe("ok");
   });
 });

@@ -11,33 +11,6 @@ interface QueueObjectParams {
 }
 
 /**
- * Mock queue message for testing
- */
-class MockQueueMessage {
-  id: string;
-  timestamp: Date;
-  body: any;
-  attempts: number;
-  acked: boolean = false;
-  retried: boolean = false;
-
-  constructor(body: any) {
-    this.id = `mock-${Math.random().toString(36).substring(2, 15)}`;
-    this.timestamp = new Date();
-    this.body = body;
-    this.attempts = 1;
-  }
-
-  ack() {
-    this.acked = true;
-  }
-
-  retry() {
-    this.retried = true;
-  }
-}
-
-/**
  * Queue a message for testing
  *
  * @param params - Single action parameters or array of action parameters
@@ -50,7 +23,7 @@ export async function whenObjectQueue(
   const actions = Array.isArray(params) ? params : [params];
 
   // Prepare all messages for the queue at once
-  const queueMessages = actions.map((action) => {
+  const queueMessages = actions.map((event) => {
     const messageId = randomBytes(16).toString("hex");
 
     // Prepare message for the queue
@@ -59,39 +32,18 @@ export async function whenObjectQueue(
       timestamp: new Date(),
       attempts: 1,
       body: {
-        action: action.action,
+        action: event.action,
         object: {
-          key: action.key,
+          key: event.key,
         },
       },
     };
-
-    if (action.content) {
-      queueMessage.body.content = action.content;
-    }
 
     return queueMessage;
   });
 
   // Send all messages to the queue at once
-  const queueResult = await SELF.queue("ask-me", queueMessages);
-
-  // Create corresponding mock messages for test results
-  const results = actions.map((action, index) => {
-    const message = new MockQueueMessage({
-      key: action.key,
-      content: action.content,
-    });
-
-    return {
-      success: queueResult.outcome === "ok",
-      message,
-      queueResult,
-    };
-  });
-
-  // Return single result or array based on input
-  return Array.isArray(params) ? results : results[0];
+  return await SELF.queue("ask-me", queueMessages);
 }
 
 /**
