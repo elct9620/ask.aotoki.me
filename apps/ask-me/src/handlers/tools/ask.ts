@@ -5,6 +5,7 @@ import {
   VectorRepository,
 } from "@/usecase/interface";
 import { QueryArticle } from "@/usecase/queryArticle";
+import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { container } from "tsyringe";
 import { z } from "zod";
 
@@ -14,7 +15,9 @@ export const AskTool = {
   inputSchema: { query: z.string().min(1, "Query is required") },
 };
 
-export async function askToolHandler(input: { query: string }) {
+export async function askToolHandler(input: {
+  query: string;
+}): Promise<CallToolResult> {
   const { query } = input;
 
   try {
@@ -25,22 +28,31 @@ export async function askToolHandler(input: { query: string }) {
     const usecase = new QueryArticle(vectorRepository, articleRepository);
     const articles = await usecase.execute(query);
 
+    if (articles.length === 0) {
+      return {
+        isError: false,
+        content: [
+          { type: "text", text: "No articles found for the given query." },
+        ],
+      };
+    }
+
     return {
       isError: false,
       content: articles.map((article) => ({
-        title: article.title,
-        content: article.content,
-        permalink: article.permalink,
-        series: article.series,
-        tags: article.tags,
+        type: "text",
+        text: JSON.stringify(article),
       })),
     };
   } catch (error) {
     return {
       isError: true,
-      content: {
-        error: error instanceof Error ? error.message : error,
-      },
+      content: [
+        {
+          type: "text",
+          text: `An error occurred while processing the query: ${error instanceof Error ? error.message : String(error)}`,
+        },
+      ],
     };
   }
 }
