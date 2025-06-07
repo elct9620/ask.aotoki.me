@@ -1,5 +1,11 @@
+import { VectorRepository } from "./interface";
+
 export class ClearObjectVector {
-  async execute(bucket: string, key: string): Promise<void> {
-    // TODO: Clear the vector related to the object
+  constructor(private readonly vectorRepository: VectorRepository) {}
+
+  async execute(key: string): Promise<void> {
+    const ids = [`${key}#full`, `${key}#summary`];
+
+    await this.vectorRepository.deleteAll(ids);
   }
 }
