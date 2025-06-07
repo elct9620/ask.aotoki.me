@@ -1,4 +1,3 @@
-import { IEmbeddingModel, ISummaryModel } from "@/container";
 import { Article } from "@/entity/Article";
 import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
 import {
@@ -13,6 +12,7 @@ import {
   type LanguageModel,
 } from "ai";
 import { inject, injectable } from "tsyringe";
+import { IEmbeddingModel, ISummaryModel } from "./llm";
 
 /**
  * Implementation of DocumentVectorFactory that will use LLMs to generate vectors

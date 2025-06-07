@@ -16,11 +16,10 @@ export async function handlePutObject(
   env: Env,
   ctx: ExecutionContext,
 ) {
-  const vectorFactory = container.resolve<DocumentVectorFactory>(
-    IDocumentVectorFactory,
-  );
-
   try {
+    const vectorFactory = container.resolve<DocumentVectorFactory>(
+      IDocumentVectorFactory,
+    );
     const vectoreRepository =
       container.resolve<VectorRepository>(IVectorRepository);
     const articleRepository =

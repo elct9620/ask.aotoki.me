@@ -20,9 +20,7 @@ import {
   VectorRepository,
 } from "@/usecase/interface";
 import { LanguageModel } from "ai";
-
-export const IEmbeddingModel = Symbol("IEmbeddingModel");
-export const ISummaryModel = Symbol("ISummaryModel");
+import { IEmbeddingModel, ISummaryModel } from "./service/llm";
 
 const IOpenAIProvider = Symbol("IOpenAIProvider");
 
