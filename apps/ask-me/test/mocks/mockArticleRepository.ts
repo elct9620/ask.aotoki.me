@@ -10,7 +10,7 @@ export class MockArticleRepository {
 
   /**
    * Add a mock article to the repository
-   * 
+   *
    * @param id The article ID
    * @param article The article to add
    */
@@ -20,7 +20,7 @@ export class MockArticleRepository {
 
   /**
    * Find an article by ID
-   * 
+   *
    * @param id The article ID to find
    * @returns The found article or null
    */
@@ -30,7 +30,7 @@ export class MockArticleRepository {
 
   /**
    * Find multiple articles by their IDs
-   * 
+   *
    * @param ids Array of article IDs to find
    * @returns Array of found articles (excluding not found)
    */
