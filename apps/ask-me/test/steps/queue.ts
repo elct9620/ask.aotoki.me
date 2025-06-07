@@ -34,11 +34,11 @@ class MockQueueMessage {
   }
 }
 
+import { SELF } from "cloudflare:test";
+import { randomBytes } from "node:crypto";
+
 /**
  * Queue a message for testing
- *
- * Since Cloudflare's queue API is difficult to test directly,
- * we mock the process and directly call the handlers
  *
  * @param params - Single action parameters or array of action parameters
  * @returns Promise with queue result
@@ -49,26 +49,46 @@ export async function whenObjectQueue(
   // If single action, convert to array for consistent handling
   const actions = Array.isArray(params) ? params : [params];
 
-  // Process each action by creating mock messages
-  const results = actions.map((action) => {
-    const body = {
-      key: action.key,
+  // Process each action and prepare messages for the queue
+  const queuePromises = actions.map(async (action) => {
+    const queueName = action.action.toLowerCase();
+    const messageId = randomBytes(16).toString("hex");
+    
+    // Prepare message for the queue
+    const queueMessage = {
+      id: messageId,
+      timestamp: new Date(),
+      attempts: 1,
+      body: {
+        action: action.action,
+        object: {
+          key: action.key,
+        },
+      },
     };
-
+    
     if (action.content) {
-      body.content = action.content;
+      queueMessage.body.content = action.content;
     }
 
-    // Create a mock message
-    const message = new MockQueueMessage(body);
+    // Send to the queue
+    const queueResult = await SELF.queue("ask-me", [queueMessage]);
 
-    // In a real scenario, this would call the handler
-    // For now, we just return a successful result
+    // Create a mock message to return consistent interface with tests
+    const message = new MockQueueMessage({
+      key: action.key,
+      content: action.content,
+    });
+
     return {
-      success: true,
+      success: queueResult.outcome === "ok",
       message,
+      queueResult,
     };
   });
+
+  // Wait for all queue operations to complete
+  const results = await Promise.all(queuePromises);
 
   // Return single result or array based on input
   return Array.isArray(params) ? results : results[0];
