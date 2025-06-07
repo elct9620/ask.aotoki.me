@@ -1,3 +1,4 @@
+import { ClearObjectVector } from "@/usecase/clearObjectVector";
 import { QueueMessage } from "@ask-me/queue-router";
 
 export async function handleDeleteObject(
@@ -6,7 +7,13 @@ export async function handleDeleteObject(
   env: CloudflareBindings,
   ctx: ExecutionContext,
 ) {
-  console.log("Accepted DeleteObject", params, message.id, message.body);
+  const usecase = new ClearObjectVector();
 
-  message.ack();
+  try {
+    await usecase.execute(message.body.bucket, message.body.object.key);
+    message.ack();
+  } catch (error) {
+    console.error("Error processing DeleteObject:", error);
+    message.retry();
+  }
 }
