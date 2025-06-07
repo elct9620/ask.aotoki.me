@@ -2,6 +2,7 @@ import { DocumentVector } from "@/entity/DocumentVector";
 
 export const IVectorRepository = Symbol("IVectorRepository");
 export interface VectorRepository {
+  upsertAll(vectors: DocumentVector[]): Promise<void>;
   deleteAll(ids: string[]): Promise<void>;
 }
 
