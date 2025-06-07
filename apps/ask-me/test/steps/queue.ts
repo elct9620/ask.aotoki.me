@@ -30,11 +30,11 @@ export async function whenObjectQueue(
       const body = {
         key: action.key,
       };
-      
+
       if (action.content) {
         body.content = action.content;
       }
-      
+
       // The Cloudflare Workers queue method expects the body parameter to be an array
       // with simple, serializable values
       return await SELF.queue(queueName, [body]);
