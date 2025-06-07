@@ -4,26 +4,8 @@ import { askToolHandler } from "@/handlers/tools/ask";
 import { IArticleRepository, IVectorRepository } from "@/usecase/interface";
 import { container } from "tsyringe";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { MockArticleRepository } from "./mocks/mockArticleRepository";
 import { MockVectorRepository } from "./mocks/mockVectorRepository";
-
-// Mock Article Repository for testing
-class MockArticleRepository {
-  private articles: Map<string, Article> = new Map();
-
-  addMockArticle(id: string, article: Article): void {
-    this.articles.set(id, article);
-  }
-
-  async findById(id: string): Promise<Article | null> {
-    return this.articles.get(id) || null;
-  }
-
-  async findByIds(ids: string[]): Promise<Article[]> {
-    return ids
-      .map((id) => this.articles.get(id))
-      .filter((article): article is Article => article !== null);
-  }
-}
 
 describe("AskTool Handler", () => {
   let mockVectorRepository: MockVectorRepository;
@@ -41,6 +23,7 @@ describe("AskTool Handler", () => {
 
     // Reset mock state
     mockVectorRepository.reset();
+    mockArticleRepository.reset();
   });
 
   it("should return empty result when no articles are found", async () => {
