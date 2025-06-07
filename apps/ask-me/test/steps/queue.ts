@@ -1,5 +1,3 @@
-import { vi } from "vitest";
-
 /**
  * Queue object action params interface
  */
@@ -38,7 +36,7 @@ class MockQueueMessage {
 
 /**
  * Queue a message for testing
- * 
+ *
  * Since Cloudflare's queue API is difficult to test directly,
  * we mock the process and directly call the handlers
  *
@@ -52,7 +50,7 @@ export async function whenObjectQueue(
   const actions = Array.isArray(params) ? params : [params];
 
   // Process each action by creating mock messages
-  const results = actions.map(action => {
+  const results = actions.map((action) => {
     const body = {
       key: action.key,
     };
@@ -63,12 +61,12 @@ export async function whenObjectQueue(
 
     // Create a mock message
     const message = new MockQueueMessage(body);
-    
+
     // In a real scenario, this would call the handler
     // For now, we just return a successful result
     return {
       success: true,
-      message
+      message,
     };
   });
 
