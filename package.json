@@ -1,8 +1,8 @@
 {
   "name": "@ask-me",
-  "version": "1.0.0",
+  "private": true,
+  "type": "module",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "pnpm -r build",
     "test": "vitest run",
@@ -11,12 +11,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "packageManager": "pnpm@10.11.0",
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.36",
     "@vitest/coverage-istanbul": "~3.1.4",
-    "@vitest/coverage-v8": "~3.1.4",
     "prettier": "3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "vitest": "~3.1.4"
