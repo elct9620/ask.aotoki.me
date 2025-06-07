@@ -5,7 +5,7 @@ import { givenObjectWithContent } from "./steps/r2";
 describe("PutObject", () => {
   const objectKey = "content/example.json";
   
-  it("is expected to ack queue", async () => {
+  it("is expected to add content to R2", async () => {
     await givenObjectWithContent(objectKey, {
       id: "47e39fd5c33ab248111f009c9fe4c4ff",
       path: "posts/2021-12-19-containerize-ruby-on-rails-in-a-few-minutes.md",
@@ -19,7 +19,8 @@ describe("PutObject", () => {
       language: "en",
       content: "...",
     });
-
+  });
+  
   it("is expected to ack queue", async () => {
     const result = await whenObjectQueue(
       buildQueueAction("PutObject", objectKey, { id: "test-id" }),
