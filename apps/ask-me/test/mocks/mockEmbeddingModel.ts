@@ -7,9 +7,9 @@ export type EmbeddingModelV1Embedding = number[];
  */
 @injectable()
 export class MockEmbeddingModel<T = string> {
-  readonly specificationVersion = 'v1' as const;
-  readonly provider = 'mock';
-  readonly modelId = 'mock-embedding-model';
+  readonly specificationVersion = "v1" as const;
+  readonly provider = "mock";
+  readonly modelId = "mock-embedding-model";
   readonly maxEmbeddingsPerCall = 10;
   readonly supportsParallelCalls = true;
 
@@ -47,7 +47,7 @@ export class MockEmbeddingModel<T = string> {
     };
   }> {
     // Create mock embeddings for each input
-    const embeddings = options.values.map(value => {
+    const embeddings = options.values.map((value) => {
       const key = String(value);
       // Use stored embedding if available, otherwise generate a new one
       return this.mockEmbeddingMap.get(key) || this.generateDefaultEmbedding();
@@ -55,10 +55,15 @@ export class MockEmbeddingModel<T = string> {
 
     return {
       embeddings,
-      usage: { tokens: options.values.reduce((sum, value) => sum + String(value).length, 0) },
+      usage: {
+        tokens: options.values.reduce(
+          (sum, value) => sum + String(value).length,
+          0,
+        ),
+      },
       rawResponse: {
-        headers: { 'x-mock': 'true' }
-      }
+        headers: { "x-mock": "true" },
+      },
     };
   }
 }
