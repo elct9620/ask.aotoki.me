@@ -25,9 +25,9 @@ export async function whenObjectQueue(
   const results = await Promise.all(
     actions.map(async (action) => {
       const queueName = action.action.toLowerCase();
-      const body = { 
+      const body = {
         ...action,
-        timestamp: new Date() // Add timestamp as Date object
+        timestamp: new Date(), // Add timestamp as Date object
       };
       delete body.action; // Remove action from body as it's used for routing
 
