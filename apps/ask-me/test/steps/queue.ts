@@ -53,7 +53,7 @@ export async function whenObjectQueue(
   const queuePromises = actions.map(async (action) => {
     const queueName = action.action.toLowerCase();
     const messageId = randomBytes(16).toString("hex");
-    
+
     // Prepare message for the queue
     const queueMessage = {
       id: messageId,
@@ -66,7 +66,7 @@ export async function whenObjectQueue(
         },
       },
     };
-    
+
     if (action.content) {
       queueMessage.body.content = action.content;
     }

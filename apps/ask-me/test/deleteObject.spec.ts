@@ -4,7 +4,7 @@ import { buildQueueAction, whenObjectQueue } from "./steps/queue";
 describe("DeleteObject", () => {
   it("is expected to ack queue", async () => {
     const result = await whenObjectQueue(
-      buildQueueAction("DeleteObject", "content/example.json")
+      buildQueueAction("DeleteObject", "content/example.json"),
     );
 
     expect(result.success).toBeTruthy();
