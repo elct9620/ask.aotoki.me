@@ -31,6 +31,7 @@ export class QueryArticle {
       permalink: article.permalink,
       series: article.series,
       tags: article.tags,
+      publishedAt: article.publishedAt,
     }));
   }
 }
