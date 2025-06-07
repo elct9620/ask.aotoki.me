@@ -23,7 +23,7 @@ export class R2ArticleRepository implements ArticleRepository {
 
   /**
    * Maps R2ArticleObject data to an Article entity
-   * 
+   *
    * @param id The object key / ID
    * @param articleData The data from R2
    * @returns A populated Article entity
@@ -55,7 +55,7 @@ export class R2ArticleRepository implements ArticleRepository {
       const timestamp = new Date(articleData.published_at).getTime();
       article.publish(articleData.permalink, timestamp);
     }
-    
+
     return article;
   }
 
@@ -70,7 +70,7 @@ export class R2ArticleRepository implements ArticleRepository {
 
       // Parse the JSON content
       const articleData = await object.json<R2ArticleObject>();
-      
+
       return this.mapToArticle(id, articleData);
     } catch (error) {
       console.error(`Error fetching article ${id}:`, error);
@@ -80,20 +80,20 @@ export class R2ArticleRepository implements ArticleRepository {
 
   async findByIds(ids: string[]): Promise<Article[]> {
     // Filter out empty IDs
-    const validIds = ids.filter(id => id.trim().length > 0);
-    
+    const validIds = ids.filter((id) => id.trim().length > 0);
+
     if (validIds.length === 0) {
       return [];
     }
-    
+
     // Create an array of promises for fetching each article
     const articlePromises = validIds.map(async (id) => {
       return this.findById(id);
     });
-    
+
     // Wait for all promises to resolve
     const articles = await Promise.all(articlePromises);
-    
+
     // Filter out any null results
     return articles.filter((article): article is Article => article !== null);
   }
