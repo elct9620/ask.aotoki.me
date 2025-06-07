@@ -1,7 +1,7 @@
-import { DocumentVector } from "@/entity/DocumentVector";
+import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
 import { IEmbeddingModel } from "@/service/llm";
 import { VectorRepository } from "@/usecase/interface";
-import { embed } from "ai";
+import { embed, type EmbeddingModel } from "ai";
 import { inject, injectable } from "tsyringe";
 
 export const VECTORIZE = Symbol("VECTORIZE");
@@ -33,21 +33,21 @@ export class CloudflareVectorRepository implements VectorRepository {
       });
 
       // Query the vector database
-      const results = await this.vectorize.query({
-        vector: embedding,
+      const results = await this.vectorize.query(embedding, {
         topK,
+        returnValues: true,
+        returnMetadata: "all",
       });
 
       // Convert results to DocumentVector objects
       return results.matches.map((match) => {
-        const vector = new DocumentVector(
-          match.id,
-          DocumentVector.Type.UNKNOWN,
-        );
+        const [id, type] = match.id.split("#");
+
+        const vector = new DocumentVector(id, type as DocumentVectorType);
 
         // Add vector values if available
         if (match.values) {
-          vector.update(match.values);
+          vector.update(match.values as number[]);
         }
 
         // Add metadata if available
