@@ -18,13 +18,11 @@ export async function givenObjectWithContent(
 
 /**
  * Delete an object from the R2 bucket for cleanup
- * 
+ *
  * @param key The object key to delete from R2
  * @returns Promise that resolves when the object is deleted
  */
-export async function deleteObject(
-  key: string,
-): Promise<void> {
+export async function deleteObject(key: string): Promise<void> {
   const bucket = container.resolve<R2Bucket>(BUCKET);
   await bucket.delete(key);
 }
