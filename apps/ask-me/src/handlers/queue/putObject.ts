@@ -35,6 +35,8 @@ export async function handlePutObject(
     message.ack();
   } catch (error) {
     console.error("Error handling putObject:", error);
-    message.retry();
+    message.retry({
+      delaySeconds: (message.attempts + 1) * 10,
+    });
   }
 }
