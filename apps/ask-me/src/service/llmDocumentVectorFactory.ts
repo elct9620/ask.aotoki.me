@@ -1,4 +1,8 @@
-import { DocumentVector } from "@/entity/DocumentVector";
+import {
+  DocumentVector,
+  DocumentVectorType,
+  VectorDimensions,
+} from "@/entity/DocumentVector";
 import { DocumentVectorFactory } from "@/usecase/interface";
 import { injectable } from "tsyringe";
 
@@ -17,10 +21,10 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   async createFull(path: string): Promise<DocumentVector> {
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
-    const vector = new DocumentVector(path, DocumentVector.Type.FULL);
+    const vector = new DocumentVector(path, DocumentVectorType.FULL);
 
     // Add mock vector data (all zeros for now)
-    const mockVector = new Array(DocumentVector.Dimensions).fill(0);
+    const mockVector = new Array(VectorDimensions).fill(0);
     vector.updateVector(mockVector);
 
     return vector;
@@ -35,10 +39,10 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   async createSummary(path: string): Promise<DocumentVector> {
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
-    const vector = new DocumentVector(path, DocumentVector.Type.SUMMARY);
+    const vector = new DocumentVector(path, DocumentVectorType.SUMMARY);
 
     // Add mock vector data (all zeros for now)
-    const mockVector = new Array(DocumentVector.Dimensions).fill(0);
+    const mockVector = new Array(VectorDimensions).fill(0);
     vector.updateVector(mockVector);
 
     return vector;
