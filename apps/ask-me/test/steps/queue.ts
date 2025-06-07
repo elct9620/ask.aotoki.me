@@ -25,13 +25,18 @@ export async function whenObjectQueue(
   const results = await Promise.all(
     actions.map(async (action) => {
       const queueName = action.action.toLowerCase();
+      // For Cloudflare Workers Queue testing, we need to use a simpler structure
+      // Extract only the necessary properties
       const body = {
-        ...action,
-        timestamp: new Date(), // Add timestamp as Date object
+        key: action.key,
       };
-      delete body.action; // Remove action from body as it's used for routing
-
+      
+      if (action.content) {
+        body.content = action.content;
+      }
+      
       // The Cloudflare Workers queue method expects the body parameter to be an array
+      // with simple, serializable values
       return await SELF.queue(queueName, [body]);
     }),
   );
