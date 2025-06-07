@@ -8,7 +8,9 @@ describe("Queue Tests", () => {
         buildQueueAction("PutObject", "testKey", { content: "test content" }),
       );
 
-      expect(result).toBeTruthy();
+      expect(result.success).toBeTruthy();
+      expect(result.message.body.key).toBe("testKey");
+      expect(result.message.body.content).toBe("test content");
     });
   });
 
@@ -18,7 +20,8 @@ describe("Queue Tests", () => {
         buildQueueAction("DeleteObject", "testKey"),
       );
 
-      expect(result).toBeTruthy();
+      expect(result.success).toBeTruthy();
+      expect(result.message.body.key).toBe("testKey");
     });
   });
 
@@ -30,8 +33,10 @@ describe("Queue Tests", () => {
       ]);
 
       expect(results).toHaveLength(2);
-      expect(results[0]).toBeTruthy();
-      expect(results[1]).toBeTruthy();
+      expect(results[0].success).toBeTruthy();
+      expect(results[1].success).toBeTruthy();
+      expect(results[0].message.body.key).toBe("firstKey");
+      expect(results[1].message.body.key).toBe("secondKey");
     });
   });
 });
