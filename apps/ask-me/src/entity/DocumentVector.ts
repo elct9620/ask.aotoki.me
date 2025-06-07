@@ -7,6 +7,7 @@ export const VectorDimensions = 1536; // OpenAI's text-embedding-small model out
 
 export class DocumentVector {
   private _vector: number[] = [];
+  private _metadata: Record<string, any> = {};
 
   constructor(
     public readonly key: string,
@@ -29,5 +30,13 @@ export class DocumentVector {
     }
 
     this._vector = vector;
+  }
+
+  get metadata(): Record<string, any> {
+    return { ...this._metadata };
+  }
+
+  setMetadata(key: string, value: any) {
+    this._metadata[key] = value;
   }
 }
