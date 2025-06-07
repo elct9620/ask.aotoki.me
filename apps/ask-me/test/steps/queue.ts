@@ -28,7 +28,8 @@ export async function whenObjectQueue(
       const body = { ...action };
       delete body.action; // Remove action from body as it's used for routing
 
-      return await SELF.queue(queueName, body);
+      // The Cloudflare Workers queue method expects the body parameter to be an array
+      return await SELF.queue(queueName, [body]);
     }),
   );
 
