@@ -27,7 +27,7 @@ export class MockEmbeddingModel<T> implements EmbeddingModel<T> {
   /**
    * Generate a default mock embedding of the specified dimension
    */
-  private generateDefaultEmbedding(dimension: number = 3): number[] {
+  private generateDefaultEmbedding(dimension: number = 1536): number[] {
     return Array.from({ length: dimension }, () => Math.random());
   }
 
