@@ -1,6 +1,6 @@
 import { Article, ArticleLanguage } from "@/entity/Article";
 import { ArticleRepository } from "@/usecase/interface";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
 export const BUCKET = Symbol("BUCKET");
 
@@ -19,7 +19,7 @@ interface R2ArticleObject {
 
 @injectable()
 export class R2ArticleRepository implements ArticleRepository {
-  constructor(@injectable(BUCKET) private bucket: R2Bucket) {}
+  constructor(@inject(BUCKET) private readonly bucket: R2Bucket) {}
 
   async findById(id: string): Promise<Article | null> {
     try {

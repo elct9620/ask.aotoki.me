@@ -20,7 +20,7 @@ import {
 } from "@/usecase/interface";
 
 container.register(VECTORIZE, { useValue: env.VECTORIZE });
-container.register(BUCKET, { useValue: env.ARTICLES });
+container.register(BUCKET, { useValue: env.BUCKET });
 
 // Register repositories
 container.register<VectorRepository>(IVectorRepository, {
