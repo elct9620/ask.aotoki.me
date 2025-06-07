@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
+import { z } from "zod";
 import { version } from "../package.json";
 
 export class AskMCP extends McpAgent {
@@ -8,5 +9,17 @@ export class AskMCP extends McpAgent {
     version,
   });
 
-  async init() {}
+  async init() {
+    this.server.tool(
+      "ask",
+      "Query the article is written by Aotokitsuruya",
+      { query: z.string() },
+      async (input) => {
+        return {
+          isError: false,
+          content: [],
+        };
+      },
+    );
+  }
 }

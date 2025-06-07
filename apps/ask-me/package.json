@@ -25,7 +25,8 @@
     "ajv": "^6.12.6",
     "hono": "^4.7.11",
     "hono-agents": "^0.0.85",
-    "tsyringe": "^4.10.0"
+    "tsyringe": "^4.10.0",
+    "zod": "^3.25.56"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.5.0",

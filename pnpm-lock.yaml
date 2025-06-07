@@ -59,6 +59,9 @@ importers:
       tsyringe:
         specifier: ^4.10.0
         version: 4.10.0
+      zod:
+        specifier: ^3.25.56
+        version: 3.25.56
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: ^1.5.0
