@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { container } from "tsyringe";
 
+import { BUCKET, R2ArticleRepository } from "@/repository/r2ArticleRepository";
 import {
   CloudflareVectorRepository,
   VECTORIZE,
@@ -8,7 +9,9 @@ import {
 import { LlmDocumentVectorFactory } from "@/service/llmDocumentVectorFactory";
 import { Md5VectorIdEncoder } from "@/service/md5VectorIdEncoder";
 import {
+  ArticleRepository,
   DocumentVectorFactory,
+  IArticleRepository,
   IDocumentVectorFactory,
   IVectorIdEncoder,
   IVectorRepository,
@@ -17,10 +20,14 @@ import {
 } from "@/usecase/interface";
 
 container.register(VECTORIZE, { useValue: env.VECTORIZE });
+container.register(BUCKET, { useValue: env.ARTICLES });
 
 // Register repositories
 container.register<VectorRepository>(IVectorRepository, {
   useClass: CloudflareVectorRepository,
+});
+container.register<ArticleRepository>(IArticleRepository, {
+  useClass: R2ArticleRepository,
 });
 
 // Register services
