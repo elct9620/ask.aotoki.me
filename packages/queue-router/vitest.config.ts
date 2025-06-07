@@ -1,11 +1,7 @@
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineConfig({
+export default defineProject({
   test: {
     environment: "node",
-    coverage: {
-      provider: "istanbul",
-      reporter: ["text", "json", "html"],
-    },
   },
 });

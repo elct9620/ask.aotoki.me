@@ -1,8 +1,8 @@
-import { defineWorkersConfig } from "@cloudflare/vitest-pool-workers/config";
+import { defineWorkersProject } from "@cloudflare/vitest-pool-workers/config";
 import path from "path";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineWorkersConfig({
+export default defineWorkersProject({
   plugins: [tsconfigPaths()],
   test: {
     alias: [
@@ -19,9 +19,6 @@ export default defineWorkersConfig({
       workers: {
         wrangler: { configPath: "./wrangler.jsonc" },
       },
-    },
-    coverage: {
-      provider: "istanbul",
     },
   },
 });
