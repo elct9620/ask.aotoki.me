@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "hono/jsx";
+import { FC, useState, useRef, useEffect } from "hono/jsx";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
@@ -31,6 +31,16 @@ export const Chat: FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom whenever messages change
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSuggestedQuestion = (question: string) => {
     // Add the user message
@@ -126,6 +136,7 @@ export const Chat: FC = () => {
           ))}
 
           {isLoading && <LoadingIndicator />}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
