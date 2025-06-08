@@ -38,7 +38,7 @@ export const Chat: FC = () => {
       let timeoutId: ReturnType<typeof setTimeout> | null = null;
       return () => {
         if (timeoutId) clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => scrollToBottom(), 100);
+        timeoutId = setTimeout(() => scrollToBottom(), 10);
       };
     })(),
     [scrollToBottom],
