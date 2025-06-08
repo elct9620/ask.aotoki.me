@@ -10,7 +10,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
   onSuggestedQuestionClick,
 }) => {
   return (
-    <div className="w-80 bg-[#0f2540] text-white p-6 flex flex-col">
+    <div className="w-80 bg-[#0f2540] text-white p-6 flex flex-col max-h-screen overflow-y-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <i className="fas fa-robot text-xl"></i>
