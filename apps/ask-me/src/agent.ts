@@ -16,6 +16,7 @@ import {
 } from "ai";
 import { container } from "tsyringe";
 import { z } from "zod";
+import { ChatInstruction } from "./entity/Instruction";
 import { QueryArticle } from "./usecase/queryArticle";
 
 async function queryToolHandler({ query }: { query: string }) {
@@ -74,6 +75,7 @@ export class AskMeAgent extends AIChatAgent {
             }),
           },
           maxSteps: 10,
+          system: ChatInstruction,
           messages: this.messages,
           onFinish,
         });
