@@ -8,13 +8,14 @@ import { handleDeleteObject } from "@/handlers/queue/deleteObject";
 import { handlePutObject } from "@/handlers/queue/putObject";
 import { AskMCP } from "@/mcp";
 import { renderer } from "@/renderer";
+import { App } from "@/view/App";
 
 const app = new Hono({ strict: false });
 
 app.use(renderer);
 
 app.get("/", (c) => {
-  return c.render(<p>Working in progress...</p>);
+  return c.render(<App />);
 });
 
 app.mount("/sse", AskMCP.serveSSE("/sse").fetch, { replaceRequest: false });
