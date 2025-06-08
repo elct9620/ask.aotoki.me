@@ -23,7 +23,7 @@ export const Chat: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { setMessages } = useChat();
+  const { setMessages: sendMessage } = useChat();
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -46,26 +46,84 @@ export const Chat: FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    const res = sendMessage(content);
-    if (res && res.body) {
-      let fullText = "";
+    // Create an initial AI message with empty content
+    const aiMessageId = `ai-${Date.now()}`;
+    const initialAiMessage: Message = {
+      id: aiMessageId,
+      role: "assistant",
+      content: "",
+      timestamp: new Date(),
+      isStreaming: true,
+    };
 
+    // Add the initial empty AI message to show typing effect
+    setMessages((prev) => [...prev, initialAiMessage]);
+
+    const res = sendMessage([
+      {
+        id: userMessage.id,
+        role: userMessage.role,
+        content: userMessage.content,
+      }
+    ]);
+
+    if (res && res.body) {
       processDataStream({
         stream: res.body,
         onTextPart: (text) => {
-          fullText += text;
+          // Update the AI message content as new text arrives
+          setMessages((prev) => 
+            prev.map((msg) =>
+              msg.id === aiMessageId
+                ? { ...msg, content: msg.content + text }
+                : msg
+            )
+          );
+          
+          // Make sure to scroll to bottom as new content arrives
+          scrollToBottom();
         },
       }).then(() => {
-        const aiMessage: Message = {
-          id: `ai-${Date.now()}`,
-          role: "assistant",
-          content: fullText,
-          timestamp: new Date(),
-        };
-
-        setMessages((prev) => [...prev, aiMessage]);
+        // Mark message as no longer streaming when complete
+        setMessages((prev) => 
+          prev.map((msg) =>
+            msg.id === aiMessageId
+              ? { ...msg, isStreaming: false }
+              : msg
+          )
+        );
         setIsLoading(false);
+      }).catch(error => {
+        console.error("Error processing stream:", error);
+        setIsLoading(false);
+        
+        // Update the message to show error state
+        setMessages((prev) => 
+          prev.map((msg) =>
+            msg.id === aiMessageId
+              ? { 
+                  ...msg, 
+                  content: msg.content || "Sorry, there was an error generating a response.", 
+                  isStreaming: false,
+                  hasError: true
+                }
+              : msg
+          )
+        );
       });
+    } else {
+      setIsLoading(false);
+      // Handle case where response doesn't have a body
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `error-${Date.now()}`,
+          role: "system",
+          content: "Failed to get response from server.",
+          timestamp: new Date(),
+          hasError: true
+        }
+      ]);
     }
   };
 
