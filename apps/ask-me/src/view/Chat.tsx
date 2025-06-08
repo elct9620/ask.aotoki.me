@@ -54,7 +54,7 @@ export const Chat: FC = () => {
     }));
 
     const res = sendMessage(allMessages);
-    
+
     // Create an AI message ID for tracking
     const aiMessageId = `ai-${Date.now()}`;
     let isFirstTextPart = true;
