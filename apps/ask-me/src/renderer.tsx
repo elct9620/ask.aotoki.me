@@ -8,10 +8,6 @@ export const renderer = jsxRenderer(({ children }) => {
         <ViteClient />
         <Script src="/src/client.tsx" />
         <Link href="/src/style.css" rel="stylesheet" />
-        <Link
-          href="/node_modules/prismjs/themes/prism-twilight.css"
-          rel="stylesheet"
-        />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
