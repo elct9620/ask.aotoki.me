@@ -1,7 +1,7 @@
 "use client";
 
 import { processDataStream } from "ai";
-import { FC, useEffect, useRef, useState } from "hono/jsx/dom";
+import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
@@ -25,14 +25,26 @@ export const Chat: FC = () => {
 
   const { setMessages: sendMessage } = useChat();
 
-  // Scroll to bottom whenever messages change
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // Debounce function to limit how often scrollToBottom is called
+  const debounce = (func: Function, delay: number) => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    return (...args: any[]) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
   };
 
+  // Scroll to bottom whenever messages change
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+  
+  // Debounced version of scrollToBottom
+  const debouncedScrollToBottom = debounce(scrollToBottom, 100);
+
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    debouncedScrollToBottom();
+  }, [messages, debouncedScrollToBottom]);
 
   const handleSendMessage = (content: string) => {
     // Add the user message
