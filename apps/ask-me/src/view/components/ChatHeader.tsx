@@ -10,9 +10,9 @@ export const ChatHeader: FC = () => {
           <p className="text-gray-600">隨時為您解析蒼時弦也的觀點</p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="bg-red-100 text-red-800">
-            <div className="size-2 bg-red-500 rounded-full mr-2"></div>
-            準備中
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            <div className="size-2 bg-green-500 rounded-full mr-2"></div>
+            線上
           </Badge>
         </div>
       </div>
