@@ -23,7 +23,7 @@ export const Chat: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { sendMessage } = useChat();
+  const { setMessages } = useChat();
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
