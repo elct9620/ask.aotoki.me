@@ -1,6 +1,7 @@
 "use client";
 
 import { FC } from "hono/jsx";
+import { useState } from "react";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
@@ -8,7 +9,6 @@ import { ChatSidebar } from "./components/ChatSidebar";
 import { EmptyState } from "./components/EmptyState";
 import { LoadingIndicator } from "./components/LoadingIndicator";
 import { Message } from "./types";
-import { useState } from "react";
 
 const suggestedQuestions = [
   "什麼是 Clean Architecture？",
@@ -41,10 +41,10 @@ export const Chat: FC = () => {
       content: question,
       timestamp: new Date(),
     };
-    
-    setMessages(prev => [...prev, userMessage]);
+
+    setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
-    
+
     // Simulate AI response
     setTimeout(() => {
       const responseIndex = Math.floor(Math.random() * mockResponses.length);
@@ -54,17 +54,17 @@ export const Chat: FC = () => {
         content: mockResponses[responseIndex],
         timestamp: new Date(),
       };
-      
-      setMessages(prev => [...prev, aiMessage]);
+
+      setMessages((prev) => [...prev, aiMessage]);
       setIsLoading(false);
     }, 1500);
   };
 
   const handleSubmit = (e: Event) => {
     e.preventDefault();
-    
+
     if (!input.trim()) return;
-    
+
     // Add the user message
     const userMessage: Message = {
       id: `user-${Date.now()}`,
@@ -72,11 +72,11 @@ export const Chat: FC = () => {
       content: input,
       timestamp: new Date(),
     };
-    
-    setMessages(prev => [...prev, userMessage]);
+
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
-    
+
     // Simulate AI response
     setTimeout(() => {
       const responseIndex = Math.floor(Math.random() * mockResponses.length);
@@ -86,8 +86,8 @@ export const Chat: FC = () => {
         content: mockResponses[responseIndex],
         timestamp: new Date(),
       };
-      
-      setMessages(prev => [...prev, aiMessage]);
+
+      setMessages((prev) => [...prev, aiMessage]);
       setIsLoading(false);
     }, 1500);
   };
