@@ -62,6 +62,9 @@ importers:
       hono-agents:
         specifier: ^0.0.85
         version: 0.0.85(agents@0.0.95(@cloudflare/workers-types@4.20250607.0)(react@19.1.0))(hono@4.7.11)
+      marked:
+        specifier: ^15.0.12
+        version: 15.0.12
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
@@ -1632,6 +1635,11 @@ packages:
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
+
+  marked@15.0.12:
+    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
+    engines: {node: '>= 18'}
+    hasBin: true
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -3653,6 +3661,8 @@ snapshots:
   make-dir@4.0.0:
     dependencies:
       semver: 7.7.2
+
+  marked@15.0.12: {}
 
   math-intrinsics@1.1.0: {}
 
