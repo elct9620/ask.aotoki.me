@@ -64,7 +64,7 @@ export const Chat: FC = () => {
         id: userMessage.id,
         role: userMessage.role,
         content: userMessage.content,
-      }
+      },
     ]);
 
     if (res && res.body) {
@@ -72,45 +72,47 @@ export const Chat: FC = () => {
         stream: res.body,
         onTextPart: (text) => {
           // Update the AI message content as new text arrives
-          setMessages((prev) => 
+          setMessages((prev) =>
             prev.map((msg) =>
               msg.id === aiMessageId
                 ? { ...msg, content: msg.content + text }
-                : msg
-            )
+                : msg,
+            ),
           );
-          
+
           // Make sure to scroll to bottom as new content arrives
           scrollToBottom();
         },
-      }).then(() => {
-        // Mark message as no longer streaming when complete
-        setMessages((prev) => 
-          prev.map((msg) =>
-            msg.id === aiMessageId
-              ? { ...msg, isStreaming: false }
-              : msg
-          )
-        );
-        setIsLoading(false);
-      }).catch(error => {
-        console.error("Error processing stream:", error);
-        setIsLoading(false);
-        
-        // Update the message to show error state
-        setMessages((prev) => 
-          prev.map((msg) =>
-            msg.id === aiMessageId
-              ? { 
-                  ...msg, 
-                  content: msg.content || "Sorry, there was an error generating a response.", 
-                  isStreaming: false,
-                  hasError: true
-                }
-              : msg
-          )
-        );
-      });
+      })
+        .then(() => {
+          // Mark message as no longer streaming when complete
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === aiMessageId ? { ...msg, isStreaming: false } : msg,
+            ),
+          );
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error processing stream:", error);
+          setIsLoading(false);
+
+          // Update the message to show error state
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === aiMessageId
+                ? {
+                    ...msg,
+                    content:
+                      msg.content ||
+                      "Sorry, there was an error generating a response.",
+                    isStreaming: false,
+                    hasError: true,
+                  }
+                : msg,
+            ),
+          );
+        });
     } else {
       setIsLoading(false);
       // Handle case where response doesn't have a body
@@ -121,8 +123,8 @@ export const Chat: FC = () => {
           role: "system",
           content: "Failed to get response from server.",
           timestamp: new Date(),
-          hasError: true
-        }
+          hasError: true,
+        },
       ]);
     }
   };
