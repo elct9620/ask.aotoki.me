@@ -16,6 +16,31 @@ This project is designed to deploy on Cloudflare Workers.
 
 The entry point of the application is `src/index.tsx`. Export the `fetch` and `queue` to handle Cloudflare Workers requests.
 
+```
+| apps/
+    |- ask-me/       # The main application
+        |- src/
+            |- index.tsx     # Entry point for Cloudflare Workers
+            |- client.tsx    # Client-side code for Cloudflare Workers
+            |- container.ts  # Dependency injection container
+            |- usecase/      # Use cases for the application
+                |- <usecase_name>.ts # Each use case should be in its own file
+            |- entity/       # Entities for the application
+                |- <entity_name>.ts # Each entity should be in its own file
+            |- repository/   # Repositories for the application
+                |- <repository_name>.ts # Each repository should be in its own file
+            |- service/      # Services for the application (non domain-related)
+                |- <service_name>.ts # Each service should be in its own file
+            |- handlers/     # Handlers for any type of request, such as HTTP or queue
+                |- http/
+                |- queue/
+                |- tools/
+|- packages/         # Packages used in the project
+    |- <name>/
+        |- package.json
+        |- tsconfig.json
+```
+
 ### Main
 
 - `src/handlers/`: Contains the handlers for http and queue requests.
