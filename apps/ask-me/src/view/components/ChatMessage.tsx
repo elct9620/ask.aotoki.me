@@ -1,4 +1,5 @@
 import { FC } from "hono/jsx";
+import { marked } from "marked";
 import { Message } from "../types";
 import { Card } from "./Card";
 
@@ -7,6 +8,10 @@ interface ChatMessageProps {
 }
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
+  const content = {
+    __html: marked.parse(message.content, { async: false }),
+  };
+
   return (
     <div
       className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
@@ -34,9 +39,10 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
               : "bg-gray-50"
           }`}
         >
-          <div className="prose prose-sm max-w-none">
-            <p className="whitespace-pre-wrap m-0">{message.content}</p>
-          </div>
+          <div
+            className="prose prose-sm max-w-none"
+            dangerouslySetInnerHTML={content}
+          />
         </Card>
       </div>
     </div>
