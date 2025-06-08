@@ -38,7 +38,7 @@ export const Chat: FC = () => {
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
-  
+
   // Debounced version of scrollToBottom
   const debouncedScrollToBottom = debounce(scrollToBottom, 100);
 
