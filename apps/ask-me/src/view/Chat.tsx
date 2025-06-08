@@ -1,7 +1,7 @@
 "use client";
 
 import { processDataStream } from "ai";
-import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
+import { FC, useEffect, useRef, useState } from "hono/jsx/dom";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
@@ -28,17 +28,13 @@ export const Chat: FC = () => {
 
   const { setMessages: sendMessage } = useChat();
 
-  // Scroll to bottom whenever messages change
-  const scrollToBottom = useCallback(() => {
+  const scrollToBottom = useDebounce(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
-
-  // Use our custom debounce hook
-  const debouncedScrollToBottom = useDebounce(scrollToBottom, 10);
+  }, 10);
 
   useEffect(() => {
-    debouncedScrollToBottom();
-  }, [messages, debouncedScrollToBottom]);
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
 
   const handleSendMessage = (content: string) => {
     // Add the user message
@@ -95,7 +91,7 @@ export const Chat: FC = () => {
           }
 
           // Make sure to scroll to bottom as new content arrives
-          debouncedScrollToBottom();
+          scrollToBottom();
         },
       })
         .then(() => {
