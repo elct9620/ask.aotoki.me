@@ -1,6 +1,10 @@
 "use client";
 
 import { FC } from "hono/jsx";
+import { Badge } from "./components/Badge";
+import { Button } from "./components/Button";
+import { Card } from "./components/Card";
+import { Input } from "./components/Input";
 
 const suggestedQuestions = [
   "什麼是 Clean Architecture？",
@@ -31,105 +35,6 @@ interface Message {
   content: string;
   timestamp: Date;
 }
-
-// Custom Button Component
-interface ButtonProps {
-  variant?: "primary" | "outline";
-  size?: "default" | "sm";
-  children: any;
-  className?: string;
-  type?: "button" | "submit";
-  disabled?: boolean;
-  onClick?: () => void;
-}
-
-const Button = ({
-  variant = "primary",
-  size = "default",
-  children,
-  className = "",
-  ...props
-}: ButtonProps) => {
-  const baseClasses =
-    "inline-flex items-center justify-center rounded-md font-medium transition-colors cursor-pointer border-0";
-  const variantClasses = {
-    primary: "bg-blue-500 text-white hover:bg-blue-600",
-    outline: "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50",
-  };
-  const sizeClasses = {
-    default: "px-4 py-2 text-sm",
-    sm: "px-3 py-1.5 text-sm",
-  };
-
-  return (
-    <button
-      class={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-};
-
-// Custom Input Component
-interface InputProps {
-  className?: string;
-  value?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  onChange?: (e: Event) => void;
-}
-
-const Input = ({ className = "", ...props }: InputProps) => {
-  return (
-    <input
-      class={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
-      {...props}
-    />
-  );
-};
-
-// Custom Card Component
-interface CardProps {
-  children: any;
-  className?: string;
-}
-
-const Card = ({ children, className = "" }: CardProps) => {
-  return (
-    <div
-      class={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}
-    >
-      {children}
-    </div>
-  );
-};
-
-// Custom Badge Component
-interface BadgeProps {
-  children: any;
-  variant?: "default" | "secondary";
-  className?: string;
-}
-
-const Badge = ({
-  children,
-  variant = "default",
-  className = "",
-}: BadgeProps) => {
-  const variantClasses = {
-    default: "bg-blue-500 text-white",
-    secondary: "bg-gray-100 text-gray-800",
-  };
-
-  return (
-    <span
-      class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variantClasses[variant]} ${className}`}
-    >
-      {children}
-    </span>
-  );
-};
 
 export const Chat: FC = () => {
   const messages: Message[] = [];
