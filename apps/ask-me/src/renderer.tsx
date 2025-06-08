@@ -6,6 +6,10 @@ export const renderer = jsxRenderer(({ children }) => {
     <html>
       <head>
         <ViteClient />
+        <meta
+          name="description"
+          content="向蒼時弦也提問，獲取有關過去文章的資訊，以及軟體開發為主的觀點、經驗分享。"
+        />
         <Script src="/src/client.tsx" />
         <Link href="/src/style.css" rel="stylesheet" />
         <link
