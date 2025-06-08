@@ -39,7 +39,7 @@ export const Chat: FC = () => {
         timeoutId = setTimeout(() => scrollToBottom(), 100);
       };
     })(),
-    [scrollToBottom]
+    [scrollToBottom],
   );
 
   useEffect(() => {
