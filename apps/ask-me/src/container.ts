@@ -20,7 +20,7 @@ import {
   VectorRepository,
 } from "@/usecase/interface";
 import { LanguageModel } from "ai";
-import { IEmbeddingModel, ISummaryModel } from "./service/llm";
+import { IChatModel, IEmbeddingModel, ISummaryModel } from "./service/llm";
 
 const IOpenAIProvider = Symbol("IOpenAIProvider");
 
@@ -42,6 +42,12 @@ container.register(IEmbeddingModel, {
   },
 });
 container.register<LanguageModel>(ISummaryModel, {
+  useFactory: (c) => {
+    const provider = c.resolve<OpenAIProvider>(IOpenAIProvider);
+    return provider("gpt-4.1-mini");
+  },
+});
+container.register<LanguageModel>(IChatModel, {
   useFactory: (c) => {
     const provider = c.resolve<OpenAIProvider>(IOpenAIProvider);
     return provider("gpt-4.1-mini");

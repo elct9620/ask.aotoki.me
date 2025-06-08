@@ -7,11 +7,11 @@ import {
   ToolSet,
 } from "ai";
 import { container } from "tsyringe";
-import { ISummaryModel } from "./service/llm";
+import { IChatModel } from "./service/llm";
 
 export class AskMeAgent extends AIChatAgent {
   async onChatMessage(onFinish: StreamTextOnFinishCallback<ToolSet>) {
-    const model = container.resolve<LanguageModel>(ISummaryModel);
+    const model = container.resolve<LanguageModel>(IChatModel);
 
     return createDataStreamResponse({
       execute: async (dataStream) => {
