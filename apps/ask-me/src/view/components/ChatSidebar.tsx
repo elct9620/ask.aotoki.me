@@ -17,13 +17,13 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
           Ask Aotokitsuruya
         </h1>
         <p className="text-sm leading-relaxed opacity-90">
-          您的軟體開發助手，專精於 Clean
-          Architecture、依賴管理和軟體工程最佳實踐。
+          向蒼時弦也提問，獲取有關過去文章的資訊，以及軟體開發為主的觀點、經驗分享。
         </p>
       </div>
 
       {/* Suggested Questions */}
-      <div className="flex-1 mb-8">
+      {/* Remove hidden untile the sidebar is ready */}
+      <div className="flex-1 mb-8 hidden">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <i className="fas fa-question-circle"></i>
           建議問題
