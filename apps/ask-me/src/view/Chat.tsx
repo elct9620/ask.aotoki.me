@@ -110,7 +110,10 @@ export const Chat: FC = () => {
         <ChatHeader />
 
         {/* Messages Area */}
-        <div class="flex-1 overflow-y-auto p-6 space-y-4" style="max-height: calc(100vh - 180px);">
+        <div
+          class="flex-1 overflow-y-auto p-6 space-y-4"
+          style="max-height: calc(100vh - 180px);"
+        >
           {messages.length === 0 && (
             <EmptyState
               suggestedQuestions={suggestedQuestions}
