@@ -46,15 +46,6 @@ export const Chat: FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    // Create an initial AI message with empty content
-    const aiMessageId = `ai-${Date.now()}`;
-    const initialAiMessage: Message = {
-      id: aiMessageId,
-      role: "assistant",
-      content: "",
-      timestamp: new Date(),
-    };
-
     // Send all messages, not just the latest one
     const allMessages = [...messages, userMessage].map((msg) => ({
       id: msg.id,
@@ -63,22 +54,39 @@ export const Chat: FC = () => {
     }));
 
     const res = sendMessage(allMessages);
-
-    // Add the initial empty AI message to show typing effect
-    setMessages((prev) => [...prev, initialAiMessage]);
+    
+    // Create an AI message ID for tracking
+    const aiMessageId = `ai-${Date.now()}`;
+    let isFirstTextPart = true;
 
     if (res && res.body) {
       processDataStream({
         stream: res.body,
         onTextPart: (text) => {
-          // Update the AI message content as new text arrives
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === aiMessageId
-                ? { ...msg, content: msg.content + text }
-                : msg,
-            ),
-          );
+          // On first text part, create the AI message and hide loading indicator
+          if (isFirstTextPart) {
+            setIsLoading(false);
+            // Add AI message when we have actual content
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: aiMessageId,
+                role: "assistant",
+                content: text,
+                timestamp: new Date(),
+              },
+            ]);
+            isFirstTextPart = false;
+          } else {
+            // Update the AI message content as new text arrives
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === aiMessageId
+                  ? { ...msg, content: msg.content + text }
+                  : msg,
+              ),
+            );
+          }
 
           // Make sure to scroll to bottom as new content arrives
           scrollToBottom();
