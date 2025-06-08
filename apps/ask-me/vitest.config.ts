@@ -1,9 +1,10 @@
+import { cloudflare } from "@cloudflare/vite-plugin";
 import { defineWorkersProject } from "@cloudflare/vitest-pool-workers/config";
 import path from "path";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineWorkersProject({
-  plugins: [tsconfigPaths()],
+  plugins: [cloudflare(), tsconfigPaths()],
   test: {
     alias: [
       // NOTE: Workaround for ajv exports used by MCP cannot be resolved

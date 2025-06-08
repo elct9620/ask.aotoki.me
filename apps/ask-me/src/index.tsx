@@ -14,7 +14,7 @@ const app = new Hono({ strict: false });
 app.use(renderer);
 
 app.get("/", (c) => {
-  return c.text(`Working in progress...`);
+  return c.render(<p>Working in progress...</p>);
 });
 
 app.mount("/sse", AskMCP.serveSSE("/sse").fetch, { replaceRequest: false });
