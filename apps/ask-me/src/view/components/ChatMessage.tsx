@@ -50,7 +50,11 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
           }`}
         >
           <div
-            className="prose prose-sm max-w-none"
+            className={`prose prose-sm max-w-none ${
+              message.role === "user"
+                ? "prose-p:text-white prose-a:text-white"
+                : ""
+            }`}
             dangerouslySetInnerHTML={content}
           />
         </Card>
