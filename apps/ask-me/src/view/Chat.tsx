@@ -17,7 +17,6 @@ const suggestedQuestions = [
   "RSpec 與 Cucumber 的比較？",
 ];
 
-
 export const Chat: FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
