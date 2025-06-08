@@ -34,19 +34,19 @@ export const Chat: FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSuggestedQuestion = (question: string) => {
+  const handleSendMessage = (content: string) => {
     // Add the user message
     const userMessage: Message = {
       id: `user-${Date.now()}`,
       role: "user",
-      content: question,
+      content,
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    const res = sendMessage(question);
+    const res = sendMessage(content);
     if (res && res.body) {
       let fullText = "";
 
@@ -69,44 +69,17 @@ export const Chat: FC = () => {
     }
   };
 
+  const handleSuggestedQuestion = (question: string) => {
+    handleSendMessage(question);
+  };
+
   const handleSubmit = (e: Event) => {
     e.preventDefault();
 
     if (!input.trim()) return;
 
-    // Add the user message
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      role: "user",
-      content: input,
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
+    handleSendMessage(input);
     setInput("");
-    setIsLoading(true);
-
-    const res = sendMessage(input);
-    if (res && res.body) {
-      let fullText = "";
-
-      processDataStream({
-        stream: res.body,
-        onTextPart: (text) => {
-          fullText += text;
-        },
-      }).then(() => {
-        const aiMessage: Message = {
-          id: `ai-${Date.now()}`,
-          role: "assistant",
-          content: fullText,
-          timestamp: new Date(),
-        };
-
-        setMessages((prev) => [...prev, aiMessage]);
-        setIsLoading(false);
-      });
-    }
   };
 
   const handleInputChange = (e: Event) => {
