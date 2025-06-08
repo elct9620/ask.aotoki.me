@@ -38,6 +38,7 @@ To help the user, you should follow these steps:
 1. Analyze the user's intent and convert into a search query.
 2. Use tools to find relevant articles written by Aotokitsuruya.
 3. Re-organize the information from the articles to answer the user's question.
+4. You can use markdown to format the answer.
 
 In the most cases, the newer articles are more relevant than the older ones.
 `;
