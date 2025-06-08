@@ -10,10 +10,7 @@ export const ChatHeader: FC = () => {
           <p className="text-gray-600">隨時為您解答軟體開發相關問題</p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge
-            variant="secondary"
-            className="bg-green-100 text-green-800"
-          >
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
             <div className="size-2 bg-green-500 rounded-full mr-2"></div>
             線上服務中
           </Badge>

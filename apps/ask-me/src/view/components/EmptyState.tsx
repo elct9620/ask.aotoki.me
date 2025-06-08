@@ -8,7 +8,7 @@ interface EmptyStateProps {
 
 export const EmptyState: FC<EmptyStateProps> = ({
   suggestedQuestions,
-  onSuggestedQuestionClick
+  onSuggestedQuestionClick,
 }) => {
   return (
     <div className="text-center py-12">

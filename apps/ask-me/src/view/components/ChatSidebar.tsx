@@ -7,7 +7,7 @@ interface ChatSidebarProps {
 
 export const ChatSidebar: FC<ChatSidebarProps> = ({
   suggestedQuestions,
-  onSuggestedQuestionClick
+  onSuggestedQuestionClick,
 }) => {
   return (
     <div className="w-80 bg-[#0f2540] text-white p-6 flex flex-col">

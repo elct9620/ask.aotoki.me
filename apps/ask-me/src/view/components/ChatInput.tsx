@@ -13,7 +13,7 @@ export const ChatInput: FC<ChatInputProps> = ({
   input,
   isLoading,
   onSubmit,
-  onChange
+  onChange,
 }) => {
   return (
     <div className="border-t border-gray-200 p-6">

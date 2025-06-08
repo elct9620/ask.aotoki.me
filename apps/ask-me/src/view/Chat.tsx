@@ -1,12 +1,12 @@
 "use client";
 
 import { FC } from "hono/jsx";
-import { ChatSidebar } from "./components/ChatSidebar";
 import { ChatHeader } from "./components/ChatHeader";
-import { EmptyState } from "./components/EmptyState";
-import { ChatMessage } from "./components/ChatMessage";
-import { LoadingIndicator } from "./components/LoadingIndicator";
 import { ChatInput } from "./components/ChatInput";
+import { ChatMessage } from "./components/ChatMessage";
+import { ChatSidebar } from "./components/ChatSidebar";
+import { EmptyState } from "./components/EmptyState";
+import { LoadingIndicator } from "./components/LoadingIndicator";
 import { Message } from "./types";
 
 const suggestedQuestions = [
@@ -52,7 +52,7 @@ export const Chat: FC = () => {
   return (
     <div class="flex min-h-screen">
       {/* Left Sidebar */}
-      <ChatSidebar 
+      <ChatSidebar
         suggestedQuestions={suggestedQuestions}
         onSuggestedQuestionClick={handleSuggestedQuestion}
       />
@@ -65,7 +65,7 @@ export const Chat: FC = () => {
         {/* Messages Area */}
         <div class="flex-1 overflow-y-auto p-6 space-y-4">
           {messages.length === 0 && (
-            <EmptyState 
+            <EmptyState
               suggestedQuestions={suggestedQuestions}
               onSuggestedQuestionClick={handleSuggestedQuestion}
             />
@@ -79,7 +79,7 @@ export const Chat: FC = () => {
         </div>
 
         {/* Input Area */}
-        <ChatInput 
+        <ChatInput
           input={input}
           isLoading={isLoading}
           onSubmit={handleSubmit}
