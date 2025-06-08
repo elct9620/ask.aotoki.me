@@ -10,7 +10,7 @@ import { useCallback } from "hono/jsx/dom";
  */
 export const useDebounce = <T extends (...args: any[]) => void>(
   callback: T,
-  delay: number
+  delay: number,
 ): T => {
   const debouncedCallback = useCallback(
     (() => {
@@ -20,7 +20,7 @@ export const useDebounce = <T extends (...args: any[]) => void>(
         timeoutId = setTimeout(() => callback(...args), delay);
       }) as T;
     })(),
-    [callback, delay]
+    [callback, delay],
   );
 
   return debouncedCallback;

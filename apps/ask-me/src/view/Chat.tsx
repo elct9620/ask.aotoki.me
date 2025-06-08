@@ -2,7 +2,6 @@
 
 import { processDataStream } from "ai";
 import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
-import { useDebounce } from "./hooks/useDebounce";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
@@ -10,6 +9,7 @@ import { ChatSidebar } from "./components/ChatSidebar";
 import { EmptyState } from "./components/EmptyState";
 import { LoadingIndicator } from "./components/LoadingIndicator";
 import { useChat } from "./hooks/useChat";
+import { useDebounce } from "./hooks/useDebounce";
 import { Message } from "./types";
 
 const suggestedQuestions = [
