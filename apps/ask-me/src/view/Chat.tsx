@@ -59,13 +59,14 @@ export const Chat: FC = () => {
     // Add the initial empty AI message to show typing effect
     setMessages((prev) => [...prev, initialAiMessage]);
 
-    const res = sendMessage([
-      {
-        id: userMessage.id,
-        role: userMessage.role,
-        content: userMessage.content,
-      },
-    ]);
+    // Send all messages, not just the latest one
+    const allMessages = [...messages, userMessage].map(msg => ({
+      id: msg.id,
+      role: msg.role,
+      content: msg.content,
+    }));
+    
+    const res = sendMessage(allMessages);
 
     if (res && res.body) {
       processDataStream({
