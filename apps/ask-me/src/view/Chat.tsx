@@ -2,6 +2,7 @@
 
 import { processDataStream } from "ai";
 import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
+import { useDebounce } from "./hooks/useDebounce";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
@@ -32,17 +33,8 @@ export const Chat: FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Debounced version of scrollToBottom with useCallback
-  const debouncedScrollToBottom = useCallback(
-    (() => {
-      let timeoutId: ReturnType<typeof setTimeout> | null = null;
-      return () => {
-        if (timeoutId) clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => scrollToBottom(), 10);
-      };
-    })(),
-    [scrollToBottom],
-  );
+  // Use our custom debounce hook
+  const debouncedScrollToBottom = useDebounce(scrollToBottom, 10);
 
   useEffect(() => {
     debouncedScrollToBottom();
