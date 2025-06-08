@@ -17,7 +17,6 @@ const suggestedQuestions = [
   "RSpec 與 Cucumber 的比較？",
 ];
 
-const mockResponses = ["開發中，敬請期待！"];
 
 export const Chat: FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -48,19 +47,27 @@ export const Chat: FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const responseIndex = Math.floor(Math.random() * mockResponses.length);
-      const aiMessage: Message = {
-        id: `ai-${Date.now()}`,
-        role: "assistant",
-        content: mockResponses[responseIndex],
-        timestamp: new Date(),
-      };
+    const res = sendMessage(question);
+    if (res && res.body) {
+      let fullText = "";
 
-      setMessages((prev) => [...prev, aiMessage]);
-      setIsLoading(false);
-    }, 1500);
+      processDataStream({
+        stream: res.body,
+        onTextPart: (text) => {
+          fullText += text;
+        },
+      }).then(() => {
+        const aiMessage: Message = {
+          id: `ai-${Date.now()}`,
+          role: "assistant",
+          content: fullText,
+          timestamp: new Date(),
+        };
+
+        setMessages((prev) => [...prev, aiMessage]);
+        setIsLoading(false);
+      });
+    }
   };
 
   const handleSubmit = (e: Event) => {
@@ -75,6 +82,10 @@ export const Chat: FC = () => {
       content: input,
       timestamp: new Date(),
     };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
 
     const res = sendMessage(input);
     if (res && res.body) {
@@ -97,24 +108,6 @@ export const Chat: FC = () => {
         setIsLoading(false);
       });
     }
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setIsLoading(true);
-
-    // Simulate AI response
-    setTimeout(() => {
-      const responseIndex = Math.floor(Math.random() * mockResponses.length);
-      const aiMessage: Message = {
-        id: `ai-${Date.now()}`,
-        role: "assistant",
-        content: mockResponses[responseIndex],
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, aiMessage]);
-      setIsLoading(false);
-    }, 1500);
   };
 
   const handleInputChange = (e: Event) => {
