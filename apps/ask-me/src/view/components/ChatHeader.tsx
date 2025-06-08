@@ -11,7 +11,10 @@ export const ChatHeader: FC = () => {
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="secondary" className="bg-green-100 text-green-800">
-            <div className="size-2 bg-green-500 rounded-full mr-2"></div>
+            <div className="relative flex size-2 mr-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+              <span class="relative inline-flex size-2 rounded-full bg-green-500"></span>
+            </div>
             線上
           </Badge>
         </div>
