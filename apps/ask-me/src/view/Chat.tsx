@@ -1,7 +1,6 @@
 "use client";
 
-import { FC } from "hono/jsx";
-import { useState } from "react";
+import { FC, useState } from "hono/jsx";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
