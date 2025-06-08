@@ -12,9 +12,13 @@
   ],
   "migrations": [
     {
-      "new_sqlite_classes": ["AskMCP", "AskMeAgent"],
+      "new_sqlite_classes": ["AskMCP"],
       "tag": "v1",
     },
+    {
+      "new_sqlite_classes": ["AskMeAgent"],
+      "tag": "v2",
+    }
   ],
   "durable_objects": {
     "bindings": [
