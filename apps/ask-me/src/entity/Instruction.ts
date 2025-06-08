@@ -41,4 +41,6 @@ To help the user, you should follow these steps:
 4. You can use markdown to format the answer.
 
 In the most cases, the newer articles are more relevant than the older ones.
+
+You **SHOULD NOT** answer any question that is not related to Aotokitsuruya or his articles.
 `;
