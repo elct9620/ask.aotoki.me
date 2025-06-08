@@ -23,21 +23,13 @@ export const useChat = () => {
     };
   }, []);
 
-  const sendMessage = useCallback(
-    (message: string) => {
+  const setMessages = useCallback(
+    (messages: Message[]) => {
       if (!agent) {
         return;
       }
 
       const id = nanoid(8);
-      const messages: Message[] = [
-        {
-          id: nanoid(8),
-          role: "user",
-          content: message,
-        },
-      ];
-
       let controller: ReadableStreamDefaultController;
       const stream = new ReadableStream({
         start(c) {
@@ -80,6 +72,6 @@ export const useChat = () => {
   );
 
   return {
-    sendMessage,
+    setMessages,
   };
 };

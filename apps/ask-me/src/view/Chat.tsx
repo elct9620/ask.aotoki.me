@@ -53,11 +53,7 @@ export const Chat: FC = () => {
       role: "assistant",
       content: "",
       timestamp: new Date(),
-      isStreaming: true,
     };
-
-    // Add the initial empty AI message to show typing effect
-    setMessages((prev) => [...prev, initialAiMessage]);
 
     // Send all messages, not just the latest one
     const allMessages = [...messages, userMessage].map((msg) => ({
@@ -67,6 +63,9 @@ export const Chat: FC = () => {
     }));
 
     const res = sendMessage(allMessages);
+
+    // Add the initial empty AI message to show typing effect
+    setMessages((prev) => [...prev, initialAiMessage]);
 
     if (res && res.body) {
       processDataStream({
@@ -121,7 +120,7 @@ export const Chat: FC = () => {
         ...prev,
         {
           id: `error-${Date.now()}`,
-          role: "system",
+          role: "assistant",
           content: "Failed to get response from server.",
           timestamp: new Date(),
           hasError: true,
