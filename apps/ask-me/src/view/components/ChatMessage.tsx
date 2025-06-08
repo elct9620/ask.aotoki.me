@@ -29,8 +29,8 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
         </div>
         <Card
           className={`p-4 ${
-            message.role === "user" 
-              ? "bg-[#51a8dd] text-white border-[#51a8dd]" 
+            message.role === "user"
+              ? "bg-[#51a8dd] text-white border-[#51a8dd]"
               : "bg-gray-50"
           }`}
         >
