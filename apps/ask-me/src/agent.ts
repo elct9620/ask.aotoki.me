@@ -73,6 +73,7 @@ export class AskMeAgent extends AIChatAgent {
               execute: queryToolHandler,
             }),
           },
+          maxSteps: 10,
           messages: this.messages,
           onFinish,
         });
