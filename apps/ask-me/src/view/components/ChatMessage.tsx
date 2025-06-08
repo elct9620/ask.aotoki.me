@@ -1,8 +1,9 @@
 "use client";
 
 import createDOMPurify from "dompurify";
-import { FC } from "hono/jsx";
+import { FC, useEffect } from "hono/jsx";
 import { marked } from "marked";
+import Prism from "prismjs";
 import { Message } from "../types";
 import { Card } from "./Card";
 
@@ -11,6 +12,10 @@ interface ChatMessageProps {
 }
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
+  useEffect(() => {
+    Prism.highlightAll();
+  });
+
   const domPurify = createDOMPurify(window);
   const content = {
     __html: domPurify.sanitize(marked.parse(message.content, { async: false })),

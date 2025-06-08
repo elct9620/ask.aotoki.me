@@ -40,6 +40,7 @@
     "@cloudflare/vite-plugin": "^1.5.0",
     "@cloudflare/vitest-pool-workers": "^0.8.36",
     "@types/node": "^22.15.30",
+    "@types/prismjs": "^1.26.5",
     "@vitest/coverage-istanbul": "~3.1.4",
     "experimental": "link:@cloudflare/workers-types/experimental",
     "typescript": "^5.8.3",
