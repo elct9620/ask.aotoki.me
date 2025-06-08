@@ -12,7 +12,7 @@
   ],
   "migrations": [
     {
-      "new_sqlite_classes": ["AskMCP"],
+      "new_sqlite_classes": ["AskMCP", "AskMeAgent"],
       "tag": "v1",
     },
   ],
@@ -22,6 +22,10 @@
         "class_name": "AskMCP",
         "name": "MCP_OBJECT",
       },
+      {
+        "class_name": "AskMeAgent",
+        "name": "AGENT_OBJECT",
+      }
     ],
   },
   "r2_buckets": [
