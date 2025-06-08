@@ -61,6 +61,37 @@ The `src/usecase/` and `src/entity/` cannot have dependencies. They should be pu
 
 We will resolve dependencies in the `src/handlers/http/` and `src/handlers/queue/` files then new usecases use resolved dependencies.
 
+## JSX
+
+We use `hono/jsx` instead of React for JSX. The `hono/jsx` is a lightweight JSX library that works well with Cloudflare Workers.
+
+When working with JSX, use the `hono/jsx` library to create elements. The available hooks is below:
+
+- `useState()`
+- `useEffect()`
+- `useRef()`
+- `useCallback()`
+- `use()`
+- `startTransition()`
+- `useTransition()`
+- `useDeferredValue()`
+- `useMemo()`
+- `useLayoutEffect()`
+- `useReducer()`
+- `useDebugValue()`
+- `createElement()`
+- `memo()`
+- `isValidElement()`
+- `useId()`
+- `createRef()`
+- `forwardRef()`
+- `useImperativeHandle()`
+- `useSyncExternalStore()`
+- `useInsertionEffect()`
+- `useFormStatus()`
+- `useActionState()`
+- `useOptimistic()`
+
 ## Testing
 
 Keep tests coverage above 90%. Use `pnpm test:coverage` to check the coverage report.
