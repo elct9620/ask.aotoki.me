@@ -60,12 +60,12 @@ export const Chat: FC = () => {
     setMessages((prev) => [...prev, initialAiMessage]);
 
     // Send all messages, not just the latest one
-    const allMessages = [...messages, userMessage].map(msg => ({
+    const allMessages = [...messages, userMessage].map((msg) => ({
       id: msg.id,
       role: msg.role,
       content: msg.content,
     }));
-    
+
     const res = sendMessage(allMessages);
 
     if (res && res.body) {
