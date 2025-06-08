@@ -28,7 +28,7 @@
       },
       {
         "class_name": "AskMeAgent",
-        "name": "AGENT_OBJECT",
+        "name": "ASK_ME_AGENT",
       }
     ],
   },

@@ -13,8 +13,8 @@ import { agentsMiddleware } from "hono-agents";
 
 const app = new Hono({ strict: false });
 
-app.use(agentsMiddleware());
 app.use(renderer);
+app.use("*", agentsMiddleware());
 
 app.get("/", (c) => {
   return c.render(<App />);
