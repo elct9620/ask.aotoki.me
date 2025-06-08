@@ -90,6 +90,9 @@ importers:
       experimental:
         specifier: link:@cloudflare/workers-types/experimental
         version: link:@cloudflare/workers-types/experimental
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
       vite:
         specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.30)(jiti@2.4.2)(lightningcss@1.30.1)

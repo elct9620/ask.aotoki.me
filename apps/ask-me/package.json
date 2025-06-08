@@ -38,6 +38,7 @@
     "@types/node": "^22.15.30",
     "@vitest/coverage-istanbul": "~3.1.4",
     "experimental": "link:@cloudflare/workers-types/experimental",
+    "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-ssr-components": "^0.2.0",
     "vite-tsconfig-paths": "^5.1.4",

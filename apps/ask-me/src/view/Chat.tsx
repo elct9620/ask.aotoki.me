@@ -1,5 +1,6 @@
 "use client";
 
+import { processDataStream } from "ai";
 import { FC, useEffect, useRef, useState } from "hono/jsx/dom";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
@@ -24,7 +25,7 @@ export const Chat: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useChat();
+  const { sendMessage } = useChat();
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
@@ -74,6 +75,28 @@ export const Chat: FC = () => {
       content: input,
       timestamp: new Date(),
     };
+
+    const res = sendMessage(input);
+    if (res && res.body) {
+      let fullText = "";
+
+      processDataStream({
+        stream: res.body,
+        onTextPart: (text) => {
+          fullText += text;
+        },
+      }).then(() => {
+        const aiMessage: Message = {
+          id: `ai-${Date.now()}`,
+          role: "assistant",
+          content: fullText,
+          timestamp: new Date(),
+        };
+
+        setMessages((prev) => [...prev, aiMessage]);
+        setIsLoading(false);
+      });
+    }
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
