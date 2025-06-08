@@ -25,22 +25,22 @@ export const Chat: FC = () => {
 
   const { setMessages: sendMessage } = useChat();
 
-  // Debounce function to limit how often scrollToBottom is called
-  const debounce = (func: Function, delay: number) => {
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-    return (...args: any[]) => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  };
-
   // Scroll to bottom whenever messages change
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Debounced version of scrollToBottom
-  const debouncedScrollToBottom = debounce(scrollToBottom, 100);
+  // Debounced version of scrollToBottom with useCallback
+  const debouncedScrollToBottom = useCallback(
+    (() => {
+      let timeoutId: ReturnType<typeof setTimeout> | null = null;
+      return () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => scrollToBottom(), 100);
+      };
+    })(),
+    [scrollToBottom]
+  );
 
   useEffect(() => {
     debouncedScrollToBottom();
