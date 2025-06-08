@@ -3,7 +3,6 @@
 import createDOMPurify from "dompurify";
 import { FC, useEffect } from "hono/jsx";
 import { marked } from "marked";
-import Prism from "prismjs";
 import { Message } from "../types";
 import { Card } from "./Card";
 
@@ -13,7 +12,9 @@ interface ChatMessageProps {
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
   useEffect(() => {
-    Prism.highlightAll();
+    if (window && window.Prism) {
+      window.Prism.highlightAll();
+    }
   });
 
   const domPurify = createDOMPurify(window);

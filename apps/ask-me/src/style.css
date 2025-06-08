@@ -1,3 +1,2 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-@import "../node_modules/prismjs/themes/prism-twilight.css";
