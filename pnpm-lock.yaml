@@ -59,6 +59,9 @@ importers:
       hono-agents:
         specifier: ^0.0.85
         version: 0.0.85(agents@0.0.95(@cloudflare/workers-types@4.20250607.0)(react@19.1.0))(hono@4.7.11)
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
       tailwindcss:
         specifier: ^4.1.8
         version: 4.1.8

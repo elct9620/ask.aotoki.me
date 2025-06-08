@@ -7,6 +7,7 @@ import { ChatMessage } from "./components/ChatMessage";
 import { ChatSidebar } from "./components/ChatSidebar";
 import { EmptyState } from "./components/EmptyState";
 import { LoadingIndicator } from "./components/LoadingIndicator";
+import { useChat } from "./hooks/useChat";
 import { Message } from "./types";
 
 const suggestedQuestions = [
@@ -22,6 +23,8 @@ export const Chat: FC = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useChat();
 
   // Scroll to bottom whenever messages change
   const scrollToBottom = () => {
