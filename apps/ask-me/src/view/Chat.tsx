@@ -115,14 +115,13 @@ export const Chat: FC = () => {
       />
 
       {/* Main Chat Area */}
-      <div class="flex-1 bg-white flex flex-col">
+      <div class="flex-1 bg-white flex flex-col max-h-screen">
         {/* Chat Header */}
         <ChatHeader />
 
         {/* Messages Area */}
         <div
           class="flex-1 overflow-y-auto p-6 space-y-4"
-          style="max-height: calc(100vh - 180px);"
         >
           {messages.length === 0 && (
             <EmptyState
