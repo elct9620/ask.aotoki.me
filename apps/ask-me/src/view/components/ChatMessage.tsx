@@ -1,3 +1,6 @@
+"use client";
+
+import createDOMPurify from "dompurify";
 import { FC } from "hono/jsx";
 import { marked } from "marked";
 import { Message } from "../types";
@@ -8,8 +11,9 @@ interface ChatMessageProps {
 }
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
+  const domPurify = createDOMPurify(window);
   const content = {
-    __html: marked.parse(message.content, { async: false }),
+    __html: domPurify.sanitize(marked.parse(message.content, { async: false })),
   };
 
   return (
