@@ -15,6 +15,8 @@ const suggestedQuestions = [
   "Golang 的 Clean Architecture 實踐？",
   "Rails 的 Clean Architecture 實踐？",
   "RSpec 與 Cucumber 的比較？",
+  "撰寫測試的技巧",
+  "軟體架構的思考",
 ];
 
 export const Chat: FC = () => {

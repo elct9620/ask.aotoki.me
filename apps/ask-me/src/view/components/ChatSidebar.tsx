@@ -22,8 +22,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
       </div>
 
       {/* Suggested Questions */}
-      {/* Remove hidden untile the sidebar is ready */}
-      <div className="flex-1 mb-8 hidden">
+      <div className="flex-1 mb-8">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <i className="fas fa-question-circle"></i>
           建議問題
