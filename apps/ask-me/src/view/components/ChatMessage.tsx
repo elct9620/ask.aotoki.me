@@ -28,7 +28,11 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
           )}
         </div>
         <Card
-          className={`p-4 ${message.role === "user" ? "bg-[#51a8dd] text-white border-[#51a8dd]" : "bg-gray-50"}`}
+          className={`p-4 ${
+            message.role === "user" 
+              ? "bg-[#51a8dd] text-white border-[#51a8dd]" 
+              : "bg-gray-50"
+          }`}
         >
           <div className="prose prose-sm max-w-none">
             <p className="whitespace-pre-wrap m-0">{message.content}</p>

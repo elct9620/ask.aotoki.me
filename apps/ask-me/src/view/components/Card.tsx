@@ -11,7 +11,7 @@ export const Card: FC<CardProps> = ({
 }: CardProps) => {
   return (
     <div
-      class={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}
+      class={`rounded-lg shadow-sm border ${className}`}
     >
       {children}
     </div>
