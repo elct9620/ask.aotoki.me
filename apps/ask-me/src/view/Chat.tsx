@@ -99,6 +99,9 @@ export const Chat: FC = () => {
               ),
             );
           }
+
+          // Make sure to scroll to bottom as new content arrives
+          debouncedScrollToBottom();
         },
       })
         .then(() => {
