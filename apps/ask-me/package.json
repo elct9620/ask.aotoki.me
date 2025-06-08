@@ -31,6 +31,7 @@
     "hono-agents": "^0.0.85",
     "marked": "^15.0.12",
     "nanoid": "^5.1.5",
+    "prismjs": "^1.30.0",
     "tailwindcss": "^4.1.8",
     "tsyringe": "^4.10.0",
     "zod": "^3.25.56"

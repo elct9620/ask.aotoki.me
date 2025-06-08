@@ -74,6 +74,9 @@ importers:
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
+      prismjs:
+        specifier: ^1.30.0
+        version: 1.30.0
       tailwindcss:
         specifier: ^4.1.8
         version: 4.1.8
@@ -1869,6 +1872,10 @@ packages:
 
   printable-characters@1.0.42:
     resolution: {integrity: sha512-dKp+C4iXWK4vVYZmYSd0KBH5F/h1HoZRsbJ82AVKRO3PEo8L4lBS/vLwhVtpwwuYcoIsVY+1JYKR268yn480uQ==}
+
+  prismjs@1.30.0:
+    resolution: {integrity: sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==}
+    engines: {node: '>=6'}
 
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
@@ -3878,6 +3885,8 @@ snapshots:
   prettier@3.5.3: {}
 
   printable-characters@1.0.42: {}
+
+  prismjs@1.30.0: {}
 
   proxy-addr@2.0.7:
     dependencies:
