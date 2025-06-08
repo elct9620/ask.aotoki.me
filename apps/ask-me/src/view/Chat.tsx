@@ -47,6 +47,7 @@ export const Chat: FC = () => {
 
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
+    scrollToBottom();
 
     // Send all messages, not just the latest one
     const allMessages = [...messages, userMessage].map((msg) => ({
@@ -89,9 +90,6 @@ export const Chat: FC = () => {
               ),
             );
           }
-
-          // Make sure to scroll to bottom as new content arrives
-          scrollToBottom();
         },
       })
         .then(() => {
@@ -102,6 +100,7 @@ export const Chat: FC = () => {
             ),
           );
           setIsLoading(false);
+          scrollToBottom();
         })
         .catch((error) => {
           console.error("Error processing stream:", error);
