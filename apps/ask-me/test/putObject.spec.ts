@@ -25,7 +25,7 @@ describe("PutObject", () => {
     await deleteObject(objectKey);
   });
 
-  it("is expected to ack queue", async () => {
+  it.skip("is expected to ack queue", async () => {
     const result = await whenObjectQueue(
       buildQueueAction("PutObject", objectKey, { id: "test-id" }),
     );

@@ -1,5 +1,4 @@
 import {
-  LanguageModel,
   LanguageModelV1CallOptions,
   LanguageModelV1FinishReason,
   LanguageModelV1FunctionToolCall,
@@ -8,7 +7,8 @@ import {
   LanguageModelV1ProviderMetadata,
   LanguageModelV1Source,
   LanguageModelV1StreamPart,
-} from "ai";
+} from "@ai-sdk/provider";
+import { LanguageModel } from "ai";
 import { injectable } from "tsyringe";
 
 /**
