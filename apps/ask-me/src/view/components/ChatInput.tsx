@@ -16,8 +16,8 @@ export const ChatInput: FC<ChatInputProps> = ({
   onChange,
 }) => {
   return (
-    <div className="border-t border-gray-200 p-6">
-      <form onSubmit={onSubmit} className="flex gap-3">
+    <div className="border-t border-gray-200 p-4 lg:p-6">
+      <form onSubmit={onSubmit} className="flex gap-2 lg:gap-3">
         <Input
           value={input}
           onChange={onChange}
@@ -29,9 +29,9 @@ export const ChatInput: FC<ChatInputProps> = ({
           <i className="fas fa-paper-plane"></i>
         </Button>
       </form>
-      <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between mt-3 text-xs text-gray-500">
         <span>按 Enter 發送訊息</span>
-        <span>由 AI 技術驅動</span>
+        <span className="mt-1 lg:mt-0">由 AI 技術驅動</span>
       </div>
     </div>
   );

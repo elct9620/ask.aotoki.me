@@ -24,6 +24,7 @@ export const Chat: FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { setMessages: sendMessage } = useChat();
@@ -156,18 +157,36 @@ export const Chat: FC = () => {
     setInput(target.value);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <div class="flex min-h-screen">
+      {/* Overlay for mobile when sidebar is open */}
+      {isSidebarOpen && (
+        <div 
+          class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
+          onClick={closeSidebar}
+        ></div>
+      )}
+
       {/* Left Sidebar */}
       <ChatSidebar
         suggestedQuestions={suggestedQuestions}
         onSuggestedQuestionClick={handleSuggestedQuestion}
+        isOpen={isSidebarOpen}
+        onClose={closeSidebar}
       />
 
       {/* Main Chat Area */}
-      <div class="flex-1 bg-white flex flex-col max-h-screen">
+      <div class="flex-1 bg-white flex flex-col max-h-screen w-full">
         {/* Chat Header */}
-        <ChatHeader />
+        <ChatHeader onMenuClick={toggleSidebar} />
 
         {/* Messages Area */}
         <div class="flex-1 overflow-y-auto p-6 space-y-4">

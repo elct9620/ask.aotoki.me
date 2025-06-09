@@ -3,14 +3,31 @@ import { FC } from "hono/jsx";
 interface ChatSidebarProps {
   suggestedQuestions: string[];
   onSuggestedQuestionClick: (question: string) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export const ChatSidebar: FC<ChatSidebarProps> = ({
   suggestedQuestions,
   onSuggestedQuestionClick,
+  isOpen,
+  onClose,
 }) => {
   return (
-    <div className="w-80 bg-[#0f2540] text-white p-6 flex flex-col max-h-screen overflow-y-auto">
+    <div 
+      className={`fixed lg:static lg:w-80 w-72 bg-[#0f2540] text-white p-6 flex flex-col h-full z-50 transition-transform duration-300 ${
+        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      }`}
+    >
+      <div className="lg:hidden absolute right-4 top-4">
+        <button 
+          onClick={onClose}
+          className="text-white hover:text-gray-300"
+          aria-label="Close sidebar"
+        >
+          <i className="fas fa-times text-xl"></i>
+        </button>
+      </div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <i className="fas fa-robot text-xl"></i>
