@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
 import { version } from "../package.json";
-import { AskTool, askToolHandler } from "./handlers/tools/ask";
+import { AskTool, askToolHandler } from "./handlers/mcp/ask";
 
 export class AskMCP extends McpAgent {
   server: McpServer = new McpServer({
