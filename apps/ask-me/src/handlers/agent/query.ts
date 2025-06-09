@@ -16,9 +16,7 @@ export const QueryTool = {
   }),
 };
 
-export async function queryToolHandler(input: {
-  query: string;
-}) {
+export async function queryToolHandler(input: { query: string }) {
   try {
     const vectorRepository =
       container.resolve<VectorRepository>(IVectorRepository);
