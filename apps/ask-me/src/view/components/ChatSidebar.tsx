@@ -15,7 +15,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
 }) => {
   return (
     <div
-      className={`fixed lg:static lg:w-80 w-72 bg-[#0f2540] text-white p-6 flex flex-col h-full z-50 transition-transform duration-300 ${
+      className={`fixed lg:static lg:w-80 w-72 bg-[#0f2540] text-white p-6 flex flex-col min-h-full z-50 transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       }`}
     >
@@ -29,7 +29,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
         </button>
       </div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <h1 className="text-xl lg:text-2xl font-bold mb-4 flex items-center gap-2">
           <i className="fas fa-robot text-xl"></i>
           Ask Aotokitsuruya
         </h1>
@@ -44,7 +44,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
           <i className="fas fa-question-circle"></i>
           建議問題
         </h2>
-        <div className="space-y-2">
+        <div className="space-y-2 overflow-y-auto max-h-[calc(100vh-200px)]">
           {suggestedQuestions.map((question, index) => (
             <button
               key={index}

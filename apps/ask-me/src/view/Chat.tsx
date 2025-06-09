@@ -1,7 +1,7 @@
 "use client";
 
 import { processDataStream } from "ai";
-import { FC, useEffect, useRef, useState } from "hono/jsx/dom";
+import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
@@ -157,24 +157,16 @@ export const Chat: FC = () => {
     setInput(target.value);
   };
 
-  const toggleSidebar = () => {
+  const toggleSidebar = useCallback(() => {
     setIsSidebarOpen(!isSidebarOpen);
-  };
+  }, [isSidebarOpen]);
 
-  const closeSidebar = () => {
+  const closeSidebar = useCallback(() => {
     setIsSidebarOpen(false);
-  };
+  }, [setIsSidebarOpen]);
 
   return (
     <div class="flex min-h-screen">
-      {/* Overlay for mobile when sidebar is open */}
-      {isSidebarOpen && (
-        <div
-          class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={closeSidebar}
-        ></div>
-      )}
-
       {/* Left Sidebar */}
       <ChatSidebar
         suggestedQuestions={suggestedQuestions}
