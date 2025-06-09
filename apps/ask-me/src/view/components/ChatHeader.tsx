@@ -10,7 +10,7 @@ export const ChatHeader: FC<ChatHeaderProps> = ({ onMenuClick }) => {
     <div className="border-b border-gray-200 p-4 lg:p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <button 
+          <button
             onClick={onMenuClick}
             className="lg:hidden mr-4 text-gray-700 hover:text-gray-900"
             aria-label="Menu"

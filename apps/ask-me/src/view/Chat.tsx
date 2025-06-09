@@ -169,8 +169,8 @@ export const Chat: FC = () => {
     <div class="flex min-h-screen">
       {/* Overlay for mobile when sidebar is open */}
       {isSidebarOpen && (
-        <div 
-          class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
+        <div
+          class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={closeSidebar}
         ></div>
       )}

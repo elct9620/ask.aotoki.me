@@ -14,13 +14,13 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
   onClose,
 }) => {
   return (
-    <div 
+    <div
       className={`fixed lg:static lg:w-80 w-72 bg-[#0f2540] text-white p-6 flex flex-col h-full z-50 transition-transform duration-300 ${
-        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       }`}
     >
       <div className="lg:hidden absolute right-4 top-4">
-        <button 
+        <button
           onClick={onClose}
           className="text-white hover:text-gray-300"
           aria-label="Close sidebar"
