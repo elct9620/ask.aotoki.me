@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ask-me",
   "main": "./src/index.tsx",
-  "compatibility_date": "2025-03-10",
+  "compatibility_date": "2025-05-25",
   "compatibility_flags": ["nodejs_compat"],
   "routes": [
     {
