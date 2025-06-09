@@ -20,8 +20,9 @@ export class RefreshVector {
 
     const fullVector = await this.vectorFactory.createFull(article);
     const summaryVector = await this.vectorFactory.createSummary(article);
+    const topicsVector = await this.vectorFactory.createTopics(article);
 
-    let vectors: Vector[] = [summaryVector];
+    let vectors: Vector[] = [summaryVector, ...topicsVector];
 
     // If the full vector is created successfully, add it to the list
     if (fullVector) {
