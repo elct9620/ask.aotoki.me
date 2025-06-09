@@ -1,7 +1,6 @@
 import { McpArticleListPresenter } from "@/presenters/McpArticleListPresenter";
 import {
   ArticleRepository,
-  IArticleListPresenter,
   IArticleRepository,
   IVectorRepository,
   VectorRepository,
@@ -28,9 +27,13 @@ export async function askToolHandler(input: {
       container.resolve<VectorRepository>(IVectorRepository);
     const articleRepository =
       container.resolve<ArticleRepository>(IArticleRepository);
-    const usecase = new QueryArticle(vectorRepository, articleRepository, presenter);
+    const usecase = new QueryArticle(
+      vectorRepository,
+      articleRepository,
+      presenter,
+    );
     await usecase.execute(query);
-    
+
     return presenter.toMCP();
   } catch (error) {
     return {

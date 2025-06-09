@@ -1,7 +1,6 @@
 import { AgentArticleListPresenter } from "@/presenters/AgentArticleListPresenter";
 import {
   ArticleRepository,
-  IArticleListPresenter,
   IArticleRepository,
   IVectorRepository,
   VectorRepository,
@@ -20,15 +19,19 @@ export const QueryTool = {
 
 export async function queryToolHandler(input: { query: string }) {
   const presenter = new AgentArticleListPresenter();
-  
+
   try {
     const vectorRepository =
       container.resolve<VectorRepository>(IVectorRepository);
     const articleRepository =
       container.resolve<ArticleRepository>(IArticleRepository);
-    const usecase = new QueryArticle(vectorRepository, articleRepository, presenter);
+    const usecase = new QueryArticle(
+      vectorRepository,
+      articleRepository,
+      presenter,
+    );
     await usecase.execute(input.query);
-    
+
     return presenter.toAgent();
   } catch (error) {
     return {
