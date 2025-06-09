@@ -1,4 +1,4 @@
-import { VectorType } from "@/entity/Vector";
+import { MaxTopicVectorCount, VectorType } from "@/entity/Vector";
 import { VectorIdEncoder, VectorRepository } from "./interface";
 
 export class ClearVector {
@@ -13,6 +13,10 @@ export class ClearVector {
       `${encodedKey}#${VectorType.FULL}`,
       `${encodedKey}#${VectorType.SUMMARY}`,
     ];
+
+    for (let i = 0; i < MaxTopicVectorCount; i++) {
+      ids.push(`${encodedKey}#${VectorType.TOPIC}#${i}`);
+    }
 
     await this.vectorRepository.deleteAll(ids);
   }
