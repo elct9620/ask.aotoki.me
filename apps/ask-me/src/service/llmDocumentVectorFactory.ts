@@ -1,6 +1,11 @@
 import { Article } from "@/entity/Article";
-import { SegmentInstruction, SummaryInstruction } from "@/entity/Instruction";
-import { Vector, VectorType } from "@/entity/Vector";
+import { SubTopicInstruction, SummaryInstruction } from "@/entity/Instruction";
+import {
+  MaxTopicVectorCount,
+  TopicVector,
+  Vector,
+  VectorType,
+} from "@/entity/Vector";
 import {
   DocumentVectorFactory,
   IVectorIdEncoder,
@@ -9,11 +14,13 @@ import {
 import {
   APICallError,
   embed,
+  generateObject,
   generateText,
   type EmbeddingModel,
   type LanguageModel,
 } from "ai";
 import { inject, injectable } from "tsyringe";
+import { z } from "zod";
 import { IEmbeddingModel, ISummaryModel } from "./llm";
 
 /**
@@ -118,44 +125,43 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   }
 
   /**
-   * Create segment document vectors containing chunks of content
+   * Create sub-topic vectors for an article
    *
    * @param article Article object to segment
-   * @returns Array of segment vectors
+   * @returns Array of sub-topic vectors
    */
-  async createSegments(article: Article): Promise<Vector[]> {
+  async createTopics(article: Article): Promise<Vector[]> {
     const baseKey = this.vectorIdEncoder.encode(article.id);
 
     // Generate segments using the language model
-    const { text: segmentText } = await generateText({
+    const {
+      object: { topics },
+    } = await generateObject({
       model: this.summaryModel,
-      system: SegmentInstruction,
+      system: SubTopicInstruction,
       prompt: article.content,
+      schema: z.object({
+        topics: z
+          .array(z.string().describe("The sub-topic of article"))
+          .max(3)
+          .min(1),
+      }),
     });
 
-    // Split the returned text into segments (assuming one segment per line)
-    const segments = segmentText
-      .split("\n")
-      .filter((segment) => segment.trim().length > 0);
+    const topicCount = Math.min(topics.length, MaxTopicVectorCount);
 
     // Create a vector for each segment
     const vectors: Vector[] = [];
-    for (let i = 0; i < segments.length; i++) {
-      const segment = segments[i];
+    for (let i = 0; i < topicCount; i++) {
+      const topic = topics[i].trim();
       // Create a unique ID for each segment
-      const vectorId = `${baseKey}-segment-${i + 1}`;
-      const vector = new Vector(vectorId, VectorType.SEGMENT);
+      const vector = new TopicVector(baseKey, i);
 
       // Set metadata from article
       this.setVectorMetadata(vector, article);
-      // Add segment-specific metadata
-      vector.setMetadata("segmentIndex", i + 1);
-      vector.setMetadata("segmentTotal", segments.length);
-
-      // Create embedding for this segment
       const { embedding } = await embed({
         model: this.embeddingModel,
-        value: segment,
+        value: topic,
       });
 
       vector.update(embedding);

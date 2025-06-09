@@ -23,6 +23,7 @@ export const IDocumentVectorFactory = Symbol("IDocumentVectorFactory");
 export interface DocumentVectorFactory {
   createFull(article: Article): Promise<Vector | null>;
   createSummary(article: Article): Promise<Vector>;
+  createTopics(article: Article): Promise<Vector[]>;
 }
 
 export const IArticleListPresenter = Symbol("IArticleListPresenter");

@@ -1,9 +1,11 @@
 export enum VectorType {
   FULL = "full",
   SUMMARY = "summary",
+  TOPIC = "topic",
 }
 
 export const VectorDimensions = 1536; // OpenAI's text-embedding-small model outputs 1536-dimensional vectors
+export const MaxTopicVectorCount = 3; // Maximum number of topic vectors per article
 
 export class Vector {
   private _vector: number[] = [];
@@ -42,5 +44,18 @@ export class Vector {
 
   get objectKey(): string | null {
     return this._metadata["objectKey"];
+  }
+}
+
+export class TopicVector extends Vector {
+  constructor(
+    key: string,
+    public readonly index: number,
+  ) {
+    super(key, VectorType.TOPIC);
+  }
+
+  get id() {
+    return `${this.key}#${this.type}-${this.index}`;
   }
 }
