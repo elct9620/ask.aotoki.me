@@ -119,24 +119,25 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
 
   /**
    * Create segment document vectors containing chunks of content
-   * 
+   *
    * @param article Article object to segment
    * @returns Array of segment vectors
    */
   async createSegments(article: Article): Promise<Vector[]> {
     const baseKey = this.vectorIdEncoder.encode(article.id);
-    
+
     // Generate segments using the language model
     const { text: segmentText } = await generateText({
       model: this.summaryModel,
       system: SegmentInstruction,
       prompt: article.content,
     });
-    
+
     // Split the returned text into segments (assuming one segment per line)
-    const segments = segmentText.split('\n')
-      .filter(segment => segment.trim().length > 0);
-    
+    const segments = segmentText
+      .split("\n")
+      .filter((segment) => segment.trim().length > 0);
+
     // Create a vector for each segment
     const vectors: Vector[] = [];
     for (let i = 0; i < segments.length; i++) {
@@ -144,23 +145,23 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
       // Create a unique ID for each segment
       const vectorId = `${baseKey}-segment-${i + 1}`;
       const vector = new Vector(vectorId, VectorType.SEGMENT);
-      
+
       // Set metadata from article
       this.setVectorMetadata(vector, article);
       // Add segment-specific metadata
-      vector.setMetadata('segmentIndex', i + 1);
-      vector.setMetadata('segmentTotal', segments.length);
-      
+      vector.setMetadata("segmentIndex", i + 1);
+      vector.setMetadata("segmentTotal", segments.length);
+
       // Create embedding for this segment
       const { embedding } = await embed({
         model: this.embeddingModel,
         value: segment,
       });
-      
+
       vector.update(embedding);
       vectors.push(vector);
     }
-    
+
     return vectors;
   }
 }
