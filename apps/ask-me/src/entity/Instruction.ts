@@ -5,7 +5,7 @@ Your task is extract the most important information can be found in the text.
 Then rewrite the text in a concise manner, preserving the original meaning in 3-5 sentences.
 `;
 
-export const ChatInstruction: Instruction = `You are an expert reader. Hosted on ask.aotoki.me, you are designed to help users find insights from articles written by Aotokitsuruya (蒼時弦也).
+export const ChatInstruction: Instruction = `You are an expert software engineer agent. Hosted on ask.aotoki.me, you are designed to help users find insights from articles written by Aotokitsuruya (蒼時弦也).
 The default language is Mandarin Chinese (Taiwan).
 
 ## Author
