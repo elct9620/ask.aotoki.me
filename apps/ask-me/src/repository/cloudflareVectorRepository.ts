@@ -1,4 +1,4 @@
-import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
+import { Vector, VectorType } from "@/entity/Vector";
 import { IEmbeddingModel } from "@/service/llm";
 import { VectorRepository } from "@/usecase/interface";
 import { embed, type EmbeddingModel } from "ai";
@@ -24,7 +24,7 @@ export class CloudflareVectorRepository implements VectorRepository {
    * @param topK Maximum number of results to return (default: 5)
    * @returns Promise resolving to array of document vectors matching the query
    */
-  async query(query: string, topK: number = 5): Promise<DocumentVector[]> {
+  async query(query: string, topK: number = 5): Promise<Vector[]> {
     try {
       // Convert query to embedding
       const { embedding } = await embed({
@@ -39,11 +39,11 @@ export class CloudflareVectorRepository implements VectorRepository {
         returnMetadata: "all",
       });
 
-      // Convert results to DocumentVector objects
+      // Convert results to Vector objects
       return results.matches.map((match) => {
         const [id, type] = match.id.split("#");
 
-        const vector = new DocumentVector(id, type as DocumentVectorType);
+        const vector = new Vector(id, type as VectorType);
 
         // Add vector values if available
         if (match.values) {
@@ -70,7 +70,7 @@ export class CloudflareVectorRepository implements VectorRepository {
    * @param vectors Array of document vectors to upsert
    * @returns Promise that resolves when all vectors are upserted
    */
-  async upsertAll(vectors: DocumentVector[]): Promise<void> {
+  async upsertAll(vectors: Vector[]): Promise<void> {
     // Skip if there are no vectors to upsert
     if (vectors.length === 0) return;
 

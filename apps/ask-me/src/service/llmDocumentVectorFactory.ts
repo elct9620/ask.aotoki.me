@@ -1,6 +1,6 @@
 import { Article } from "@/entity/Article";
-import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
 import { SummaryInstruction } from "@/entity/Instruction";
+import { Vector, VectorType } from "@/entity/Vector";
 import {
   DocumentVectorFactory,
   IVectorIdEncoder,
@@ -17,7 +17,7 @@ import { inject, injectable } from "tsyringe";
 import { IEmbeddingModel, ISummaryModel } from "./llm";
 
 /**
- * Implementation of DocumentVectorFactory that will use LLMs to generate vectors
+ * Implementation of VectorFactory that will use LLMs to generate vectors
  * Currently returns mock objects for future implementation
  */
 @injectable()
@@ -36,7 +36,7 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
    * @param vector The vector to update with metadata
    * @param article The source article for metadata
    */
-  private setVectorMetadata(vector: DocumentVector, article: Article): void {
+  private setVectorMetadata(vector: Vector, article: Article): void {
     vector.setMetadata("title", article.title);
     vector.setMetadata("objectKey", article.objectKey);
 
@@ -57,13 +57,13 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
    * Create a full document vector containing detailed content
    *
    * @param article Article object containing the content
-   * @returns A DocumentVector with full content
+   * @returns A Vector with full content
    */
-  async createFull(article: Article): Promise<DocumentVector | null> {
+  async createFull(article: Article): Promise<Vector | null> {
     const encodedKey = this.vectorIdEncoder.encode(article.id);
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
-    const vector = new DocumentVector(encodedKey, DocumentVectorType.FULL);
+    const vector = new Vector(encodedKey, VectorType.FULL);
 
     // Set metadata from article
     this.setVectorMetadata(vector, article);
@@ -90,13 +90,13 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
    * Create a summary document vector containing condensed content
    *
    * @param article Article object containing the content
-   * @returns A DocumentVector with summary content
+   * @returns A Vector with summary content
    */
-  async createSummary(article: Article): Promise<DocumentVector> {
+  async createSummary(article: Article): Promise<Vector> {
     const encodedKey = this.vectorIdEncoder.encode(article.id);
     // This is a placeholder implementation
     // In the future, this would call an LLM to generate vectors
-    const vector = new DocumentVector(encodedKey, DocumentVectorType.SUMMARY);
+    const vector = new Vector(encodedKey, VectorType.SUMMARY);
 
     // Set metadata from article
     this.setVectorMetadata(vector, article);

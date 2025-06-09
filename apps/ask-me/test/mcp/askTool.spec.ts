@@ -1,5 +1,5 @@
 import { Article, ArticleLanguage } from "@/entity/Article";
-import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
+import { Vector, VectorType } from "@/entity/Vector";
 import { askToolHandler } from "@/handlers/mcp/ask";
 import { IArticleRepository, IVectorRepository } from "@/usecase/interface";
 import { container } from "tsyringe";
@@ -52,7 +52,7 @@ describe("AskTool Handler", () => {
     mockArticleRepository.addMockArticle("article1", testArticle);
 
     // Setup vector repository to return a document vector pointing to our article
-    const vector = new DocumentVector("vector1", DocumentVectorType.FULL);
+    const vector = new Vector("vector1", VectorType.FULL);
     vector.setMetadata("objectKey", "article1");
     mockVectorRepository.queryResults = [vector];
 

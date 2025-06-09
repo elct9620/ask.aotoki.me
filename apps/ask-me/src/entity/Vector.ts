@@ -1,17 +1,17 @@
-export enum DocumentVectorType {
+export enum VectorType {
   FULL = "full",
   SUMMARY = "summary",
 }
 
 export const VectorDimensions = 1536; // OpenAI's text-embedding-small model outputs 1536-dimensional vectors
 
-export class DocumentVector {
+export class Vector {
   private _vector: number[] = [];
   private _metadata: Record<string, any> = {};
 
   constructor(
     public readonly key: string,
-    public readonly type: DocumentVectorType,
+    public readonly type: VectorType,
   ) {}
 
   get id() {

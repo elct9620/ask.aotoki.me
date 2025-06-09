@@ -6,7 +6,7 @@ import {
   IVectorRepository,
   VectorRepository,
 } from "@/usecase/interface";
-import { RefreshDocumentVector } from "@/usecase/refreshDocumentVector";
+import { RefreshVector } from "@/usecase/refreshVector";
 import { QueueMessage } from "@ask-me/queue-router";
 import { container } from "tsyringe";
 
@@ -25,7 +25,7 @@ export async function handlePutObject(
     const articleRepository =
       container.resolve<ArticleRepository>(IArticleRepository);
 
-    const usecase = new RefreshDocumentVector(
+    const usecase = new RefreshVector(
       vectorFactory,
       vectoreRepository,
       articleRepository,

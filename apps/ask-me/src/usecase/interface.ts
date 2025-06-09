@@ -1,10 +1,10 @@
 import { Article } from "@/entity/Article";
-import { DocumentVector } from "@/entity/DocumentVector";
+import { Vector } from "@/entity/Vector";
 
 export const IVectorRepository = Symbol("IVectorRepository");
 export interface VectorRepository {
-  query(query: string, topK?: number): Promise<DocumentVector[]>;
-  upsertAll(vectors: DocumentVector[]): Promise<void>;
+  query(query: string, topK?: number): Promise<Vector[]>;
+  upsertAll(vectors: Vector[]): Promise<void>;
   deleteAll(ids: string[]): Promise<void>;
 }
 
@@ -19,10 +19,10 @@ export interface VectorIdEncoder {
   encode(id: string): string;
 }
 
-export const IDocumentVectorFactory = Symbol("IFullDocumentVectorFactory");
+export const IDocumentVectorFactory = Symbol("IDocumentVectorFactory");
 export interface DocumentVectorFactory {
-  createFull(article: Article): Promise<DocumentVector | null>;
-  createSummary(article: Article): Promise<DocumentVector>;
+  createFull(article: Article): Promise<Vector | null>;
+  createSummary(article: Article): Promise<Vector>;
 }
 
 export const IArticleListPresenter = Symbol("IArticleListPresenter");

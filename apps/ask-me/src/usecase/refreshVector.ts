@@ -1,11 +1,11 @@
-import { DocumentVector } from "@/entity/DocumentVector";
+import { Vector } from "@/entity/Vector";
 import {
   ArticleRepository,
   DocumentVectorFactory,
   VectorRepository,
 } from "./interface";
 
-export class RefreshDocumentVector {
+export class RefreshVector {
   constructor(
     private readonly vectorFactory: DocumentVectorFactory,
     private readonly vectoreRepository: VectorRepository,
@@ -21,7 +21,7 @@ export class RefreshDocumentVector {
     const fullVector = await this.vectorFactory.createFull(article);
     const summaryVector = await this.vectorFactory.createSummary(article);
 
-    let vectors: DocumentVector[] = [summaryVector];
+    let vectors: Vector[] = [summaryVector];
 
     // If the full vector is created successfully, add it to the list
     if (fullVector) {

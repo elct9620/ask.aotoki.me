@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
 
-import { ClearDocumentVector } from "@/usecase/clearDocumentVector";
+import { ClearVector } from "@/usecase/clearVector";
 import {
   IVectorIdEncoder,
   IVectorRepository,
@@ -18,7 +18,7 @@ export async function handleDeleteObject(
   const vectorRepository =
     container.resolve<VectorRepository>(IVectorRepository);
   const vectorIdEncoder = container.resolve<VectorIdEncoder>(IVectorIdEncoder);
-  const usecase = new ClearDocumentVector(vectorIdEncoder, vectorRepository);
+  const usecase = new ClearVector(vectorIdEncoder, vectorRepository);
 
   try {
     await usecase.execute(message.body.object.key);
