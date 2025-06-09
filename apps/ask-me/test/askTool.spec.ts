@@ -1,6 +1,6 @@
 import { Article, ArticleLanguage } from "@/entity/Article";
 import { DocumentVector, DocumentVectorType } from "@/entity/DocumentVector";
-import { askToolHandler } from "@/handlers/tools/ask";
+import { askToolHandler } from "@/handlers/mcp/ask";
 import { IArticleRepository, IVectorRepository } from "@/usecase/interface";
 import { container } from "tsyringe";
 import { beforeEach, describe, expect, it, vi } from "vitest";
