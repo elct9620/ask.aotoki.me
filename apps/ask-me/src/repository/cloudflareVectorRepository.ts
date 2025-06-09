@@ -34,7 +34,7 @@ export class CloudflareVectorRepository implements VectorRepository {
 
       // Query the vector database
       const results = await this.vectorize.query(embedding, {
-        topK,
+        topK: topK * 2,
         returnValues: true,
         returnMetadata: "all",
       });
