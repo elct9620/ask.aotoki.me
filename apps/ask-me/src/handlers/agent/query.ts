@@ -1,5 +1,7 @@
+import { AgentArticleListPresenter } from "@/presenters/AgentArticleListPresenter";
 import {
   ArticleRepository,
+  IArticleListPresenter,
   IArticleRepository,
   IVectorRepository,
   VectorRepository,
@@ -17,30 +19,17 @@ export const QueryTool = {
 };
 
 export async function queryToolHandler(input: { query: string }) {
+  const presenter = new AgentArticleListPresenter();
+  
   try {
     const vectorRepository =
       container.resolve<VectorRepository>(IVectorRepository);
     const articleRepository =
       container.resolve<ArticleRepository>(IArticleRepository);
-    const usecase = new QueryArticle(vectorRepository, articleRepository);
-    const articles = await usecase.execute(input.query);
-
-    if (articles.length === 0) {
-      return {
-        isError: false,
-        content: [
-          { type: "text", text: "No articles found for the given query." },
-        ],
-      };
-    }
-
-    return {
-      isError: false,
-      content: articles.map((article) => ({
-        type: "text",
-        text: JSON.stringify(article),
-      })),
-    };
+    const usecase = new QueryArticle(vectorRepository, articleRepository, presenter);
+    await usecase.execute(input.query);
+    
+    return presenter.toAgent();
   } catch (error) {
     return {
       isError: true,

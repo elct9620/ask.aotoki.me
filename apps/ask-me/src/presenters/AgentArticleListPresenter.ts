@@ -46,7 +46,14 @@ export class AgentArticleListPresenter implements ArticleListPresenter {
       isError: false,
       content: this.articles.map((article) => ({
         type: "text",
-        text: JSON.stringify(article),
+        text: JSON.stringify({
+          title: article.title,
+          content: article.content,
+          permalink: article.permalink,
+          series: article.series,
+          tags: article.tags,
+          publishedAt: article.publishedAt,
+        }),
       })),
     };
   }

@@ -1,5 +1,7 @@
+import { McpArticleListPresenter } from "@/presenters/McpArticleListPresenter";
 import {
   ArticleRepository,
+  IArticleListPresenter,
   IArticleRepository,
   IVectorRepository,
   VectorRepository,
@@ -19,31 +21,17 @@ export async function askToolHandler(input: {
   query: string;
 }): Promise<CallToolResult> {
   const { query } = input;
+  const presenter = new McpArticleListPresenter();
 
   try {
     const vectorRepository =
       container.resolve<VectorRepository>(IVectorRepository);
     const articleRepository =
       container.resolve<ArticleRepository>(IArticleRepository);
-    const usecase = new QueryArticle(vectorRepository, articleRepository);
-    const articles = await usecase.execute(query);
-
-    if (articles.length === 0) {
-      return {
-        isError: false,
-        content: [
-          { type: "text", text: "No articles found for the given query." },
-        ],
-      };
-    }
-
-    return {
-      isError: false,
-      content: articles.map((article) => ({
-        type: "text",
-        text: JSON.stringify(article),
-      })),
-    };
+    const usecase = new QueryArticle(vectorRepository, articleRepository, presenter);
+    await usecase.execute(query);
+    
+    return presenter.toMCP();
   } catch (error) {
     return {
       isError: true,
