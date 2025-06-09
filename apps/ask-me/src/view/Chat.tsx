@@ -37,125 +37,137 @@ export const Chat: FC = () => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  const handleSendMessage = (content: string) => {
-    // Add the user message
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      role: "user",
-      content,
-      timestamp: new Date(),
-    };
+  const handleSendMessage = useCallback(
+    (content: string) => {
+      // Add the user message
+      const userMessage: Message = {
+        id: `user-${Date.now()}`,
+        role: "user",
+        content,
+        timestamp: new Date(),
+      };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setIsLoading(true);
-    scrollToBottom();
+      setMessages((prev) => [...prev, userMessage]);
+      setIsLoading(true);
+      scrollToBottom();
 
-    // Send all messages, not just the latest one
-    const allMessages = [...messages, userMessage].map((msg) => ({
-      id: msg.id,
-      role: msg.role,
-      content: msg.content,
-    }));
+      // Send all messages, not just the latest one
+      const allMessages = [...messages, userMessage].map((msg) => ({
+        id: msg.id,
+        role: msg.role,
+        content: msg.content,
+      }));
 
-    const res = sendMessage(allMessages);
+      const res = sendMessage(allMessages);
 
-    // Create an AI message ID for tracking
-    const aiMessageId = `ai-${Date.now()}`;
-    let isFirstTextPart = true;
+      // Create an AI message ID for tracking
+      const aiMessageId = `ai-${Date.now()}`;
+      let isFirstTextPart = true;
 
-    if (res && res.body) {
-      processDataStream({
-        stream: res.body,
-        onTextPart: (text) => {
-          // On first text part, create the AI message and hide loading indicator
-          if (isFirstTextPart) {
+      if (res && res.body) {
+        processDataStream({
+          stream: res.body,
+          onTextPart: (text) => {
+            // On first text part, create the AI message and hide loading indicator
+            if (isFirstTextPart) {
+              setIsLoading(false);
+              // Add AI message when we have actual content
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: aiMessageId,
+                  role: "assistant",
+                  content: text,
+                  timestamp: new Date(),
+                },
+              ]);
+              isFirstTextPart = false;
+            } else {
+              // Update the AI message content as new text arrives
+              setMessages((prev) =>
+                prev.map((msg) =>
+                  msg.id === aiMessageId
+                    ? { ...msg, content: msg.content + text }
+                    : msg,
+                ),
+              );
+            }
+          },
+        })
+          .then(() => {
+            // Mark message as no longer streaming when complete
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === aiMessageId ? { ...msg, isStreaming: false } : msg,
+              ),
+            );
             setIsLoading(false);
-            // Add AI message when we have actual content
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: aiMessageId,
-                role: "assistant",
-                content: text,
-                timestamp: new Date(),
-              },
-            ]);
-            isFirstTextPart = false;
-          } else {
-            // Update the AI message content as new text arrives
+            scrollToBottom();
+          })
+          .catch((error) => {
+            console.error("Error processing stream:", error);
+            setIsLoading(false);
+
+            // Update the message to show error state
             setMessages((prev) =>
               prev.map((msg) =>
                 msg.id === aiMessageId
-                  ? { ...msg, content: msg.content + text }
+                  ? {
+                      ...msg,
+                      content:
+                        msg.content ||
+                        "Sorry, there was an error generating a response.",
+                      isStreaming: false,
+                      hasError: true,
+                    }
                   : msg,
               ),
             );
-          }
-        },
-      })
-        .then(() => {
-          // Mark message as no longer streaming when complete
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === aiMessageId ? { ...msg, isStreaming: false } : msg,
-            ),
-          );
-          setIsLoading(false);
-          scrollToBottom();
-        })
-        .catch((error) => {
-          console.error("Error processing stream:", error);
-          setIsLoading(false);
+          });
+      } else {
+        setIsLoading(false);
+        // Handle case where response doesn't have a body
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `error-${Date.now()}`,
+            role: "assistant",
+            content: "Failed to get response from server.",
+            timestamp: new Date(),
+            hasError: true,
+          },
+        ]);
+      }
+    },
+    [messages, sendMessage, scrollToBottom],
+  );
 
-          // Update the message to show error state
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === aiMessageId
-                ? {
-                    ...msg,
-                    content:
-                      msg.content ||
-                      "Sorry, there was an error generating a response.",
-                    isStreaming: false,
-                    hasError: true,
-                  }
-                : msg,
-            ),
-          );
-        });
-    } else {
-      setIsLoading(false);
-      // Handle case where response doesn't have a body
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `error-${Date.now()}`,
-          role: "assistant",
-          content: "Failed to get response from server.",
-          timestamp: new Date(),
-          hasError: true,
-        },
-      ]);
-    }
-  };
+  const handleSuggestedQuestion = useCallback(
+    (question: string) => {
+      handleSendMessage(question);
+    },
+    [handleSendMessage],
+  );
 
-  const handleSuggestedQuestion = (question: string) => {
-    handleSendMessage(question);
-  };
+  const handleSubmit = useCallback(
+    (e: Event) => {
+      e.preventDefault();
 
-  const handleSubmit = (e: Event) => {
-    e.preventDefault();
+      if (!input.trim()) return;
 
-    if (!input.trim()) return;
+      handleSendMessage(input);
+      setInput("");
+    },
+    [input, handleSendMessage],
+  );
 
-    handleSendMessage(input);
-    setInput("");
-  };
-
-  const handleInputChange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    setInput(target.value);
-  };
+  const handleInputChange = useCallback(
+    (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      setInput(target.value);
+    },
+    [setInput],
+  );
 
   const toggleSidebar = useCallback(() => {
     setIsSidebarOpen(!isSidebarOpen);
