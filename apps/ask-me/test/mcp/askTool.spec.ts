@@ -4,8 +4,8 @@ import { askToolHandler } from "@/handlers/mcp/ask";
 import { IArticleRepository, IVectorRepository } from "@/usecase/interface";
 import { container } from "tsyringe";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { MockArticleRepository } from "./mocks/mockArticleRepository";
-import { MockVectorRepository } from "./mocks/mockVectorRepository";
+import { MockArticleRepository } from "../mocks/mockArticleRepository";
+import { MockVectorRepository } from "../mocks/mockVectorRepository";
 
 describe("AskTool Handler", () => {
   let mockVectorRepository: MockVectorRepository;

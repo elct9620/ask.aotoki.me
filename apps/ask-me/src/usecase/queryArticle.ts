@@ -1,9 +1,14 @@
-import { ArticleRepository, VectorRepository } from "./interface";
+import {
+  ArticleListPresenter,
+  ArticleRepository,
+  VectorRepository,
+} from "./interface";
 
 export class QueryArticle {
   constructor(
     private readonly vectorRepository: VectorRepository,
     private readonly articleRepository: ArticleRepository,
+    private readonly articleListPresenter: ArticleListPresenter,
   ) {}
 
   async execute(query: string) {
@@ -25,13 +30,8 @@ export class QueryArticle {
       return [];
     }
 
-    return articles.map((article) => ({
-      title: article.title,
-      content: article.content,
-      permalink: article.permalink,
-      series: article.series,
-      tags: article.tags,
-      publishedAt: article.publishedAt,
-    }));
+    articles.forEach((article) => {
+      this.articleListPresenter.addArticle(article);
+    });
   }
 }

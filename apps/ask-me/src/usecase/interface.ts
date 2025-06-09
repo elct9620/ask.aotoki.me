@@ -24,3 +24,8 @@ export interface DocumentVectorFactory {
   createFull(article: Article): Promise<DocumentVector | null>;
   createSummary(article: Article): Promise<DocumentVector>;
 }
+
+export const IArticleListPresenter = Symbol("IArticleListPresenter");
+export interface ArticleListPresenter {
+  addArticle(article: Article): void;
+}
