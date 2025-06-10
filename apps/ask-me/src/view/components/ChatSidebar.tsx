@@ -59,7 +59,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
 
       <div className="mt-auto pt-4 border-t border-[#1a3a5c]">
         <a
-          href="https://github.com/aotokitsuruya/ask-me"
+          href="https://github.com/elct9620/ask.aotoki.me"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors"
