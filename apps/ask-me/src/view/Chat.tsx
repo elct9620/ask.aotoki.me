@@ -178,7 +178,7 @@ export const Chat: FC = () => {
   }, [setIsSidebarOpen]);
 
   return (
-    <div class="flex min-h-screen">
+    <div class="flex h-screen max-h-dvh">
       {/* Left Sidebar */}
       <ChatSidebar
         suggestedQuestions={suggestedQuestions}
