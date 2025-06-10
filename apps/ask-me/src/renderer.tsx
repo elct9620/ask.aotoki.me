@@ -5,19 +5,14 @@ export const renderer = jsxRenderer(({ children }) => {
   return (
     <html>
       <head>
-        {/* This is a workaround for Vite SSR to inject the client script only in production mode */}
-        {import.meta.env.MODE == "test" ? null : <ViteClient />}
+        <ViteClient />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
           content="向蒼時弦也提問，獲取有關過去文章的資訊，以及軟體開發為主的觀點、經驗分享。"
         />
-        <Script src="/src/client.tsx" prod={import.meta.env.PROD} />
-        <Link
-          href="/src/style.css"
-          rel="stylesheet"
-          prod={import.meta.env.PROD}
-        />
+        <Script src="/src/client.tsx" />
+        <Link href="/src/style.css" rel="stylesheet" />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-twilight.min.css"
