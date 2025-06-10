@@ -20,7 +20,7 @@ export const Button: FC<ButtonProps> = ({
   const baseClasses =
     "inline-flex items-center justify-center rounded-md font-medium transition-colors cursor-pointer border-0";
   const variantClasses = {
-    primary: "bg-blue-500 text-white hover:bg-blue-600",
+    primary: "bg-[#51a8dd] text-white hover:bg-[#7bbce5]",
     outline: "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50",
   };
   const sizeClasses = {
