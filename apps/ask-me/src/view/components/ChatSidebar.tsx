@@ -56,6 +56,18 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
           ))}
         </div>
       </div>
+      
+      <div className="mt-auto pt-4 border-t border-[#1a3a5c]">
+        <a 
+          href="https://github.com/aotokitsuruya/ask-me" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors"
+        >
+          <i className="fab fa-github text-lg"></i>
+          <span>GitHub</span>
+        </a>
+      </div>
     </div>
   );
 };
