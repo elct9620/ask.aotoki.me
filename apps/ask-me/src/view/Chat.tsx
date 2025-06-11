@@ -10,6 +10,7 @@ import { EmptyState } from "./components/EmptyState";
 import { LoadingIndicator } from "./components/LoadingIndicator";
 import { useChat } from "./hooks/useChat";
 import { useDebounce } from "./hooks/useDebounce";
+import { usePrism } from "./hooks/usePrism";
 import { Message } from "./types";
 
 const suggestedQuestions = [
@@ -27,17 +28,22 @@ export const Chat: FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const { highlightAll } = usePrism();
   const { setMessages: sendMessage } = useChat();
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const debouncedScrollToBottom = useDebounce(scrollToBottom, 10);
+  const debouncedScrollToBottom = useDebounce(scrollToBottom, 50);
 
   useEffect(() => {
     debouncedScrollToBottom();
   }, [messages, debouncedScrollToBottom]);
+
+  useEffect(() => {
+    highlightAll();
+  });
 
   const handleSendMessage = useCallback(
     (content: string) => {
@@ -133,7 +139,6 @@ export const Chat: FC = () => {
             id: `error-${Date.now()}`,
             role: "assistant",
             content: "Failed to get response from server.",
-            timestamp: new Date(),
             hasError: true,
           },
         ]);
