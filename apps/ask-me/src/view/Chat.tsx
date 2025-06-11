@@ -1,6 +1,5 @@
 "use client";
 
-import { processDataStream } from "ai";
 import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
@@ -29,7 +28,7 @@ export const Chat: FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { highlightAll } = usePrism();
-  const { setMessages: sendMessage } = useChat();
+  const { sendMessages } = useChat();
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -54,6 +53,10 @@ export const Chat: FC = () => {
       setIsLoading(true);
       debouncedScrollToBottom();
 
+      // Create an AI message ID for tracking
+      const aiMessageId = `ai-${Date.now()}`;
+      let isFirstTextPart = true;
+
       // Send all messages, not just the latest one
       const allMessages = [...messages, userMessage].map((msg) => ({
         id: msg.id,
@@ -61,15 +64,10 @@ export const Chat: FC = () => {
         content: msg.content,
       }));
 
-      const res = sendMessage(allMessages);
-
-      // Create an AI message ID for tracking
-      const aiMessageId = `ai-${Date.now()}`;
-      let isFirstTextPart = true;
-
-      if (res && res.body) {
-        processDataStream({
-          stream: res.body,
+      // Process the response using the hook
+      sendMessages(
+        allMessages,
+        {
           onTextPart: (text) => {
             // On first text part, create the AI message and hide loading indicator
             if (isFirstTextPart) {
@@ -94,9 +92,11 @@ export const Chat: FC = () => {
                 ),
               );
             }
+
+            // Make sure to scroll to bottom as new content arrives
+            debouncedScrollToBottom();
           },
-        })
-          .then(() => {
+          onComplete: () => {
             // Mark message as no longer streaming when complete
             setMessages((prev) =>
               prev.map((msg) =>
@@ -106,8 +106,8 @@ export const Chat: FC = () => {
             setIsLoading(false);
             highlightAll();
             debouncedScrollToBottom();
-          })
-          .catch((error) => {
+          },
+          onError: (error) => {
             console.error("Error processing stream:", error);
             setIsLoading(false);
 
@@ -126,8 +126,9 @@ export const Chat: FC = () => {
                   : msg,
               ),
             );
-          });
-      } else {
+          }
+        }
+      ).catch(() => {
         setIsLoading(false);
         // Handle case where response doesn't have a body
         setMessages((prev) => [
@@ -139,7 +140,7 @@ export const Chat: FC = () => {
             hasError: true,
           },
         ]);
-      }
+      });
     },
     [messages, sendMessage, debouncedScrollToBottom],
   );

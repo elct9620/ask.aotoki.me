@@ -1,10 +1,17 @@
 "use client";
 
 import { Message } from "@ai-sdk/ui-utils";
+import { processDataStream } from "ai";
 import { OutgoingMessage } from "agents/ai-types";
 import { AgentClient } from "agents/client";
 import { useCallback, useEffect, useState } from "hono/jsx";
 import { nanoid } from "nanoid";
+
+interface SendMessagesOptions {
+  onTextPart?: (text: string) => void;
+  onComplete?: () => void;
+  onError?: (error: Error) => void;
+}
 
 export const useChat = () => {
   const [agent, setAgent] = useState<AgentClient | null>(null);
@@ -23,10 +30,13 @@ export const useChat = () => {
     };
   }, []);
 
-  const setMessages = useCallback(
-    (messages: Message[]) => {
+  const sendMessages = useCallback(
+    async (
+      messages: Message[],
+      { onTextPart, onComplete, onError }: SendMessagesOptions = {}
+    ) => {
       if (!agent) {
-        return;
+        return false;
       }
 
       const id = nanoid(8);
@@ -66,12 +76,29 @@ export const useChat = () => {
         }),
       );
 
-      return new Response(stream);
+      const response = new Response(stream);
+
+      // Process the data stream if handlers are provided
+      if (onTextPart || onComplete || onError) {
+        try {
+          await processDataStream({
+            stream: response.body!,
+            onTextPart: onTextPart,
+          });
+          onComplete?.();
+          return true;
+        } catch (error) {
+          onError?.(error instanceof Error ? error : new Error(String(error)));
+          return false;
+        }
+      }
+
+      return response;
     },
     [agent],
   );
 
   return {
-    setMessages,
+    sendMessages,
   };
 };
