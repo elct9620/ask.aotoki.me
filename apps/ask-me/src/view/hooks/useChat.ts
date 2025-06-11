@@ -30,7 +30,7 @@ export const useChat = () => {
     };
   }, []);
 
-  const sendMessages = useCallback(
+  const setMessages = useCallback(
     async (
       messages: Message[],
       { onTextPart, onComplete, onError }: SendMessagesOptions = {},
@@ -99,6 +99,6 @@ export const useChat = () => {
   );
 
   return {
-    sendMessages,
+    setMessages,
   };
 };

@@ -28,7 +28,7 @@ export const Chat: FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { highlightAll } = usePrism();
-  const { sendMessages } = useChat();
+  const { setMessages: sendMessages } = useChat();
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -139,7 +139,7 @@ export const Chat: FC = () => {
         ]);
       });
     },
-    [messages, sendMessage, debouncedScrollToBottom],
+    [messages, sendMessages, debouncedScrollToBottom],
   );
 
   const handleSuggestedQuestion = useCallback(
