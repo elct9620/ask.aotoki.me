@@ -28,7 +28,7 @@ export const Chat: FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { highlightAll } = usePrism();
+  const { highlightAll } = usePrism(100);
   const { setMessages: sendMessage } = useChat();
 
   const scrollToBottom = useCallback(() => {
