@@ -99,7 +99,9 @@ export const Chat: FC = () => {
           {
             id: nanoid(8),
             role: "assistant",
-            content: prevStreamingContent || "Sorry, there was an error generating a response.",
+            content:
+              prevStreamingContent ||
+              "Sorry, there was an error generating a response.",
             hasError: true,
           },
         ]);
@@ -222,13 +224,13 @@ export const Chat: FC = () => {
           ))}
 
           {streamingContent && (
-            <ChatMessage 
-              key="streaming-message" 
+            <ChatMessage
+              key="streaming-message"
               message={{
                 id: "streaming-message",
                 role: "assistant",
                 content: streamingContent,
-              }} 
+              }}
             />
           )}
 
