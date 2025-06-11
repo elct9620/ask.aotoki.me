@@ -1,8 +1,8 @@
 "use client";
 
-import createDOMPurify from "dompurify";
 import { FC, useEffect } from "hono/jsx";
 import { marked } from "marked";
+import { useDomPurify } from "../hooks/useDomPurify";
 import { Message } from "../types";
 import { Card } from "./Card";
 
@@ -17,9 +17,10 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
     }
   });
 
-  const domPurify = createDOMPurify(window);
+  const { sanitize } = useDomPurify();
+
   const content = {
-    __html: domPurify.sanitize(marked.parse(message.content, { async: false })),
+    __html: sanitize(marked.parse(message.content, { async: false })),
   };
 
   return (
