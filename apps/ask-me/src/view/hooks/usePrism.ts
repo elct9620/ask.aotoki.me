@@ -10,7 +10,7 @@ export function usePrism() {
     }
   }, []);
 
-  const highlightAll = useDebounce(prismHighlightAll, 100);
+  const highlightAll = useDebounce(prismHighlightAll, 10);
 
   return {
     highlightAll,
