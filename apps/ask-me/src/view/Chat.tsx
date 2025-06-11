@@ -29,13 +29,16 @@ export const Chat: FC = () => {
 
   const { setMessages: sendMessage } = useChat();
 
-  const scrollToBottom = useDebounce(() => {
+  const scrollToBottom = useCallback(() => {
+    console.log("Scrolling to bottom of messages");
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 10);
+  }, []);
+
+  const debouncedScrollToBottom = useDebounce(scrollToBottom, 100);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
+    debouncedScrollToBottom();
+  }, [messages, debouncedScrollToBottom]);
 
   const handleSendMessage = useCallback(
     (content: string) => {
@@ -49,7 +52,7 @@ export const Chat: FC = () => {
 
       setMessages((prev) => [...prev, userMessage]);
       setIsLoading(true);
-      scrollToBottom();
+      debouncedScrollToBottom();
 
       // Send all messages, not just the latest one
       const allMessages = [...messages, userMessage].map((msg) => ({
@@ -102,7 +105,7 @@ export const Chat: FC = () => {
               ),
             );
             setIsLoading(false);
-            scrollToBottom();
+            debouncedScrollToBottom();
           })
           .catch((error) => {
             console.error("Error processing stream:", error);
@@ -139,7 +142,7 @@ export const Chat: FC = () => {
         ]);
       }
     },
-    [messages, sendMessage, scrollToBottom],
+    [messages, sendMessage, debouncedScrollToBottom],
   );
 
   const handleSuggestedQuestion = useCallback(
