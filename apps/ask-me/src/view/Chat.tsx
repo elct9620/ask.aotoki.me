@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useEffect, useRef, useState, useMemo } from "hono/jsx/dom";
+import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
 import { nanoid } from "nanoid";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
@@ -26,7 +26,9 @@ export const Chat: FC = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [streamingMessage, setStreamingMessage] = useState<Message | null>(null);
+  const [streamingMessage, setStreamingMessage] = useState<Message | null>(
+    null,
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { highlightAll } = usePrism();
@@ -70,7 +72,7 @@ export const Chat: FC = () => {
         onTextPart: (text) => {
           // Hide loading indicator when streaming starts
           setIsLoading(false);
-          
+
           if (!streamingMessage) {
             // Create a new streaming message on first part
             setStreamingMessage({
@@ -81,8 +83,8 @@ export const Chat: FC = () => {
             });
           } else {
             // Update the streaming message content as new text arrives
-            setStreamingMessage(prev => 
-              prev ? { ...prev, content: prev.content + text } : prev
+            setStreamingMessage((prev) =>
+              prev ? { ...prev, content: prev.content + text } : prev,
             );
           }
 
@@ -92,13 +94,13 @@ export const Chat: FC = () => {
         onComplete: () => {
           // Add completed message to message list and clear streaming state
           if (streamingMessage) {
-            setMessages(prev => [
-              ...prev, 
-              { ...streamingMessage, isStreaming: false }
+            setMessages((prev) => [
+              ...prev,
+              { ...streamingMessage, isStreaming: false },
             ]);
             setStreamingMessage(null);
           }
-          
+
           setIsLoading(false);
           highlightAll();
           debouncedScrollToBottom();
@@ -109,14 +111,16 @@ export const Chat: FC = () => {
 
           // Add error message if we have a streaming message
           if (streamingMessage) {
-            setMessages(prev => [
+            setMessages((prev) => [
               ...prev,
               {
                 ...streamingMessage,
-                content: streamingMessage.content || "Sorry, there was an error generating a response.",
+                content:
+                  streamingMessage.content ||
+                  "Sorry, there was an error generating a response.",
                 isStreaming: false,
                 hasError: true,
-              }
+              },
             ]);
             setStreamingMessage(null);
           }
@@ -200,7 +204,7 @@ export const Chat: FC = () => {
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
-          
+
           {streamingMessage && (
             <ChatMessage key={streamingMessage.id} message={streamingMessage} />
           )}
