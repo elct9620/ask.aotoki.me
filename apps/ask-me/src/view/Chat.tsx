@@ -26,9 +26,7 @@ export const Chat: FC = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [streamingMessage, setStreamingMessage] = useState<Message | null>(
-    null,
-  );
+  const [streamingContent, setStreamingContent] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { highlightAll } = usePrism();
@@ -46,24 +44,17 @@ export const Chat: FC = () => {
 
   // Create callbacks for handling streaming
   const handleTextPart = useCallback(
-    (text: string, aiMessageId: string) => {
+    (text: string) => {
       // Hide loading indicator when streaming starts
       setIsLoading(false);
 
-      setStreamingMessage((prevMessage) => {
-        if (!prevMessage) {
-          // Create a new streaming message on first part
-          return {
-            id: aiMessageId,
-            role: "assistant",
-            content: text,
-          };
+      setStreamingContent((prevContent) => {
+        if (!prevContent) {
+          // First part of the streaming response
+          return text;
         } else {
-          // Update the streaming message content as new text arrives
-          return {
-            ...prevMessage,
-            content: prevMessage.content + text,
-          };
+          // Append new text to existing content
+          return prevContent + text;
         }
       });
 
@@ -75,15 +66,20 @@ export const Chat: FC = () => {
 
   const handleComplete = useCallback(() => {
     // Add completed message to message list and clear streaming state
-    setStreamingMessage((prevStreamingMessage) => {
-      if (prevStreamingMessage) {
+    setStreamingContent((prevStreamingContent) => {
+      if (prevStreamingContent) {
+        // Create a new message with the completed content
         setMessages((prevMessages) => [
           ...prevMessages,
-          { ...prevStreamingMessage },
+          {
+            id: nanoid(8),
+            role: "assistant",
+            content: prevStreamingContent,
+          },
         ]);
         return null;
       }
-      return prevStreamingMessage;
+      return prevStreamingContent;
     });
 
     setIsLoading(false);
@@ -91,25 +87,25 @@ export const Chat: FC = () => {
     debouncedScrollToBottom();
   }, [debouncedScrollToBottom, highlightAll]);
 
-  const handleError = useCallback((error: Error, aiMessageId: string) => {
+  const handleError = useCallback((error: Error) => {
     console.error("Error processing stream:", error);
     setIsLoading(false);
 
-    setStreamingMessage((prevStreamingMessage) => {
-      if (prevStreamingMessage) {
+    setStreamingContent((prevStreamingContent) => {
+      if (prevStreamingContent) {
+        // Create error message from streaming content
         setMessages((prevMessages) => [
           ...prevMessages,
           {
-            ...prevStreamingMessage,
-            content:
-              prevStreamingMessage.content ||
-              "Sorry, there was an error generating a response.",
+            id: nanoid(8),
+            role: "assistant",
+            content: prevStreamingContent || "Sorry, there was an error generating a response.",
             hasError: true,
           },
         ]);
         return null;
       }
-      return prevStreamingMessage;
+      return prevStreamingContent;
     });
   }, []);
 
@@ -126,9 +122,6 @@ export const Chat: FC = () => {
       setIsLoading(true);
       debouncedScrollToBottom();
 
-      // Create an AI message ID for streaming
-      const aiMessageId = nanoid(8);
-
       // Send all messages, not just the latest one
       const allMessages = [...messages, userMessage].map((msg) => ({
         id: msg.id,
@@ -138,9 +131,9 @@ export const Chat: FC = () => {
 
       // Process the response using the hook
       sendMessages(allMessages, {
-        onTextPart: (text) => handleTextPart(text, aiMessageId),
+        onTextPart: handleTextPart,
         onComplete: handleComplete,
-        onError: (error) => handleError(error, aiMessageId),
+        onError: handleError,
       }).catch(() => {
         setIsLoading(false);
         // Handle case where response doesn't have a body
@@ -228,8 +221,15 @@ export const Chat: FC = () => {
             <ChatMessage key={message.id} message={message} />
           ))}
 
-          {streamingMessage && (
-            <ChatMessage key={streamingMessage.id} message={streamingMessage} />
+          {streamingContent && (
+            <ChatMessage 
+              key="streaming-message" 
+              message={{
+                id: "streaming-message",
+                role: "assistant",
+                content: streamingContent,
+              }} 
+            />
           )}
 
           {isLoading && <LoadingIndicator />}
