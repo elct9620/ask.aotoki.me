@@ -30,7 +30,6 @@ export const Chat: FC = () => {
   const { setMessages: sendMessage } = useChat();
 
   const scrollToBottom = useCallback(() => {
-    console.log("Scrolling to bottom of messages");
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
