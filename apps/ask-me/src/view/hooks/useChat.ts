@@ -1,9 +1,9 @@
 "use client";
 
 import { Message } from "@ai-sdk/ui-utils";
-import { processDataStream } from "ai";
 import { OutgoingMessage } from "agents/ai-types";
 import { AgentClient } from "agents/client";
+import { processDataStream } from "ai";
 import { useCallback, useEffect, useState } from "hono/jsx";
 import { nanoid } from "nanoid";
 
@@ -33,7 +33,7 @@ export const useChat = () => {
   const sendMessages = useCallback(
     async (
       messages: Message[],
-      { onTextPart, onComplete, onError }: SendMessagesOptions = {}
+      { onTextPart, onComplete, onError }: SendMessagesOptions = {},
     ) => {
       if (!agent) {
         return false;

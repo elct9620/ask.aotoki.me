@@ -65,70 +65,67 @@ export const Chat: FC = () => {
       }));
 
       // Process the response using the hook
-      sendMessages(
-        allMessages,
-        {
-          onTextPart: (text) => {
-            // On first text part, create the AI message and hide loading indicator
-            if (isFirstTextPart) {
-              setIsLoading(false);
-              // Add AI message when we have actual content
-              setMessages((prev) => [
-                ...prev,
-                {
-                  id: aiMessageId,
-                  role: "assistant",
-                  content: text,
-                },
-              ]);
-              isFirstTextPart = false;
-            } else {
-              // Update the AI message content as new text arrives
-              setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === aiMessageId
-                    ? { ...msg, content: msg.content + text }
-                    : msg,
-                ),
-              );
-            }
-
-            // Make sure to scroll to bottom as new content arrives
-            debouncedScrollToBottom();
-          },
-          onComplete: () => {
-            // Mark message as no longer streaming when complete
-            setMessages((prev) =>
-              prev.map((msg) =>
-                msg.id === aiMessageId ? { ...msg, isStreaming: false } : msg,
-              ),
-            );
+      sendMessages(allMessages, {
+        onTextPart: (text) => {
+          // On first text part, create the AI message and hide loading indicator
+          if (isFirstTextPart) {
             setIsLoading(false);
-            highlightAll();
-            debouncedScrollToBottom();
-          },
-          onError: (error) => {
-            console.error("Error processing stream:", error);
-            setIsLoading(false);
-
-            // Update the message to show error state
+            // Add AI message when we have actual content
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: aiMessageId,
+                role: "assistant",
+                content: text,
+              },
+            ]);
+            isFirstTextPart = false;
+          } else {
+            // Update the AI message content as new text arrives
             setMessages((prev) =>
               prev.map((msg) =>
                 msg.id === aiMessageId
-                  ? {
-                      ...msg,
-                      content:
-                        msg.content ||
-                        "Sorry, there was an error generating a response.",
-                      isStreaming: false,
-                      hasError: true,
-                    }
+                  ? { ...msg, content: msg.content + text }
                   : msg,
               ),
             );
           }
-        }
-      ).catch(() => {
+
+          // Make sure to scroll to bottom as new content arrives
+          debouncedScrollToBottom();
+        },
+        onComplete: () => {
+          // Mark message as no longer streaming when complete
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === aiMessageId ? { ...msg, isStreaming: false } : msg,
+            ),
+          );
+          setIsLoading(false);
+          highlightAll();
+          debouncedScrollToBottom();
+        },
+        onError: (error) => {
+          console.error("Error processing stream:", error);
+          setIsLoading(false);
+
+          // Update the message to show error state
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === aiMessageId
+                ? {
+                    ...msg,
+                    content:
+                      msg.content ||
+                      "Sorry, there was an error generating a response.",
+                    isStreaming: false,
+                    hasError: true,
+                  }
+                : msg,
+            ),
+          );
+        },
+      }).catch(() => {
         setIsLoading(false);
         // Handle case where response doesn't have a body
         setMessages((prev) => [
