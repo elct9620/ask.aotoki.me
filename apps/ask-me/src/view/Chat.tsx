@@ -72,6 +72,7 @@ export const Chat: FC = () => {
         onTextPart: (text) => {
           // Hide loading indicator when streaming starts
           setIsLoading(false);
+          console.log(text);
 
           if (!streamingMessage) {
             // Create a new streaming message on first part
@@ -79,7 +80,6 @@ export const Chat: FC = () => {
               id: aiMessageId,
               role: "assistant",
               content: text,
-              isStreaming: true,
             });
           } else {
             // Update the streaming message content as new text arrives
@@ -94,10 +94,7 @@ export const Chat: FC = () => {
         onComplete: () => {
           // Add completed message to message list and clear streaming state
           if (streamingMessage) {
-            setMessages((prev) => [
-              ...prev,
-              { ...streamingMessage, isStreaming: false },
-            ]);
+            setMessages((prev) => [...prev, { ...streamingMessage }]);
             setStreamingMessage(null);
           }
 
@@ -118,7 +115,6 @@ export const Chat: FC = () => {
                 content:
                   streamingMessage.content ||
                   "Sorry, there was an error generating a response.",
-                isStreaming: false,
                 hasError: true,
               },
             ]);
