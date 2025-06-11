@@ -33,7 +33,7 @@ export const Chat: FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const debouncedScrollToBottom = useDebounce(scrollToBottom, 100);
+  const debouncedScrollToBottom = useDebounce(scrollToBottom, 10);
 
   useEffect(() => {
     debouncedScrollToBottom();
@@ -46,7 +46,6 @@ export const Chat: FC = () => {
         id: `user-${Date.now()}`,
         role: "user",
         content,
-        timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, userMessage]);
@@ -80,7 +79,6 @@ export const Chat: FC = () => {
                   id: aiMessageId,
                   role: "assistant",
                   content: text,
-                  timestamp: new Date(),
                 },
               ]);
               isFirstTextPart = false;
