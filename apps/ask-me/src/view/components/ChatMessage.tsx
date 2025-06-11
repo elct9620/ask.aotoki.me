@@ -1,8 +1,7 @@
 "use client";
 
 import { FC, useEffect } from "hono/jsx";
-import { marked } from "marked";
-import { useDomPurify } from "../hooks/useDomPurify";
+import { useMarkdown } from "../hooks/useMarkdown";
 import { Message } from "../types";
 import { Card } from "./Card";
 
@@ -17,11 +16,7 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
     }
   });
 
-  const { sanitize } = useDomPurify();
-
-  const content = {
-    __html: sanitize(marked.parse(message.content, { async: false })),
-  };
+  const { render } = useMarkdown();
 
   return (
     <div
@@ -58,7 +53,7 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
                 ? "prose-p:text-white prose-a:text-white"
                 : ""
             }`}
-            dangerouslySetInnerHTML={content}
+            dangerouslySetInnerHTML={render(message.content)}
           />
         </Card>
       </div>
