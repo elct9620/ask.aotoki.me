@@ -1,4 +1,4 @@
-import { useState, useCallback } from "hono/jsx/dom";
+import { useCallback, useState } from "hono/jsx/dom";
 
 /**
  * A custom hook for toggle state management
@@ -9,7 +9,7 @@ export function useToggle(initialState = false) {
   const [state, setState] = useState(initialState);
 
   const toggle = useCallback(() => {
-    setState(prevState => !prevState);
+    setState((prevState) => !prevState);
   }, []);
 
   const on = useCallback(() => {
@@ -24,6 +24,6 @@ export function useToggle(initialState = false) {
     state,
     toggle,
     on,
-    off
+    off,
   };
 }

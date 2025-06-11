@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
-import { useToggle } from "./hooks/useToggle";
 import { nanoid } from "nanoid";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
@@ -12,6 +11,7 @@ import { LoadingIndicator } from "./components/LoadingIndicator";
 import { useChat } from "./hooks/useChat";
 import { useDebounce } from "./hooks/useDebounce";
 import { usePrism } from "./hooks/usePrism";
+import { useToggle } from "./hooks/useToggle";
 import { Message } from "./types";
 
 const suggestedQuestions = [
@@ -26,7 +26,11 @@ export const Chat: FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { state: isSidebarOpen, toggle: toggleSidebar, off: closeSidebar } = useToggle(false);
+  const {
+    state: isSidebarOpen,
+    toggle: toggleSidebar,
+    off: closeSidebar,
+  } = useToggle(false);
   const [streamingContent, setStreamingContent] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -187,7 +191,6 @@ export const Chat: FC = () => {
     },
     [setInput],
   );
-
 
   return (
     <div class="flex h-screen max-h-dvh">
