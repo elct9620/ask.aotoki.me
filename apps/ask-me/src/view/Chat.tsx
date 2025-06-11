@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
+import { FC, useCallback, useEffect, useRef, useState, useMemo } from "hono/jsx/dom";
 import { nanoid } from "nanoid";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
@@ -44,6 +44,68 @@ export const Chat: FC = () => {
     debouncedScrollToBottom();
   }, [messages, debouncedScrollToBottom]);
 
+  // Create callbacks for handling streaming
+  const handleTextPart = useCallback((text: string, aiMessageId: string) => {
+    // Hide loading indicator when streaming starts
+    setIsLoading(false);
+    
+    setStreamingMessage(prevMessage => {
+      if (!prevMessage) {
+        // Create a new streaming message on first part
+        return {
+          id: aiMessageId,
+          role: "assistant",
+          content: text,
+        };
+      } else {
+        // Update the streaming message content as new text arrives
+        return {
+          ...prevMessage,
+          content: prevMessage.content + text,
+        };
+      }
+    });
+    
+    // Make sure to scroll to bottom as new content arrives
+    debouncedScrollToBottom();
+  }, [debouncedScrollToBottom]);
+  
+  const handleComplete = useCallback(() => {
+    // Add completed message to message list and clear streaming state
+    setStreamingMessage(prevStreamingMessage => {
+      if (prevStreamingMessage) {
+        setMessages(prevMessages => [...prevMessages, { ...prevStreamingMessage }]);
+        return null;
+      }
+      return prevStreamingMessage;
+    });
+    
+    setIsLoading(false);
+    highlightAll();
+    debouncedScrollToBottom();
+  }, [debouncedScrollToBottom, highlightAll]);
+  
+  const handleError = useCallback((error: Error, aiMessageId: string) => {
+    console.error("Error processing stream:", error);
+    setIsLoading(false);
+    
+    setStreamingMessage(prevStreamingMessage => {
+      if (prevStreamingMessage) {
+        setMessages(prevMessages => [
+          ...prevMessages,
+          {
+            ...prevStreamingMessage,
+            content: prevStreamingMessage.content || 
+              "Sorry, there was an error generating a response.",
+            hasError: true,
+          },
+        ]);
+        return null;
+      }
+      return prevStreamingMessage;
+    });
+  }, []);
+
   const handleSendMessage = useCallback(
     (content: string) => {
       // Add the user message
@@ -69,58 +131,9 @@ export const Chat: FC = () => {
 
       // Process the response using the hook
       sendMessages(allMessages, {
-        onTextPart: (text) => {
-          // Hide loading indicator when streaming starts
-          setIsLoading(false);
-          console.log(text);
-
-          if (!streamingMessage) {
-            // Create a new streaming message on first part
-            setStreamingMessage({
-              id: aiMessageId,
-              role: "assistant",
-              content: text,
-            });
-          } else {
-            // Update the streaming message content as new text arrives
-            setStreamingMessage((prev) =>
-              prev ? { ...prev, content: prev.content + text } : prev,
-            );
-          }
-
-          // Make sure to scroll to bottom as new content arrives
-          debouncedScrollToBottom();
-        },
-        onComplete: () => {
-          // Add completed message to message list and clear streaming state
-          if (streamingMessage) {
-            setMessages((prev) => [...prev, { ...streamingMessage }]);
-            setStreamingMessage(null);
-          }
-
-          setIsLoading(false);
-          highlightAll();
-          debouncedScrollToBottom();
-        },
-        onError: (error) => {
-          console.error("Error processing stream:", error);
-          setIsLoading(false);
-
-          // Add error message if we have a streaming message
-          if (streamingMessage) {
-            setMessages((prev) => [
-              ...prev,
-              {
-                ...streamingMessage,
-                content:
-                  streamingMessage.content ||
-                  "Sorry, there was an error generating a response.",
-                hasError: true,
-              },
-            ]);
-            setStreamingMessage(null);
-          }
-        },
+        onTextPart: (text) => handleTextPart(text, aiMessageId),
+        onComplete: handleComplete,
+        onError: (error) => handleError(error, aiMessageId),
       }).catch(() => {
         setIsLoading(false);
         // Handle case where response doesn't have a body
@@ -135,7 +148,14 @@ export const Chat: FC = () => {
         ]);
       });
     },
-    [messages, sendMessages, debouncedScrollToBottom],
+    [
+      messages, 
+      sendMessages, 
+      debouncedScrollToBottom, 
+      handleTextPart, 
+      handleComplete, 
+      handleError
+    ],
   );
 
   const handleSuggestedQuestion = useCallback(
