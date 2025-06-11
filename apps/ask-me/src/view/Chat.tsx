@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
+import { FC, useCallback, useEffect, useRef, useState, useMemo } from "hono/jsx/dom";
 import { nanoid } from "nanoid";
 import { ChatHeader } from "./components/ChatHeader";
 import { ChatInput } from "./components/ChatInput";
@@ -26,6 +26,7 @@ export const Chat: FC = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [streamingMessage, setStreamingMessage] = useState<Message | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { highlightAll } = usePrism();
@@ -54,9 +55,8 @@ export const Chat: FC = () => {
       setIsLoading(true);
       debouncedScrollToBottom();
 
-      // Create an AI message ID for tracking
+      // Create an AI message ID for streaming
       const aiMessageId = nanoid(8);
-      let isFirstTextPart = true;
 
       // Send all messages, not just the latest one
       const allMessages = [...messages, userMessage].map((msg) => ({
@@ -68,27 +68,21 @@ export const Chat: FC = () => {
       // Process the response using the hook
       sendMessages(allMessages, {
         onTextPart: (text) => {
-          // On first text part, create the AI message and hide loading indicator
-          if (isFirstTextPart) {
-            setIsLoading(false);
-            // Add AI message when we have actual content
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: aiMessageId,
-                role: "assistant",
-                content: text,
-              },
-            ]);
-            isFirstTextPart = false;
+          // Hide loading indicator when streaming starts
+          setIsLoading(false);
+          
+          if (!streamingMessage) {
+            // Create a new streaming message on first part
+            setStreamingMessage({
+              id: aiMessageId,
+              role: "assistant",
+              content: text,
+              isStreaming: true,
+            });
           } else {
-            // Update the AI message content as new text arrives
-            setMessages((prev) =>
-              prev.map((msg) =>
-                msg.id === aiMessageId
-                  ? { ...msg, content: msg.content + text }
-                  : msg,
-              ),
+            // Update the streaming message content as new text arrives
+            setStreamingMessage(prev => 
+              prev ? { ...prev, content: prev.content + text } : prev
             );
           }
 
@@ -96,12 +90,15 @@ export const Chat: FC = () => {
           debouncedScrollToBottom();
         },
         onComplete: () => {
-          // Mark message as no longer streaming when complete
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === aiMessageId ? { ...msg, isStreaming: false } : msg,
-            ),
-          );
+          // Add completed message to message list and clear streaming state
+          if (streamingMessage) {
+            setMessages(prev => [
+              ...prev, 
+              { ...streamingMessage, isStreaming: false }
+            ]);
+            setStreamingMessage(null);
+          }
+          
           setIsLoading(false);
           highlightAll();
           debouncedScrollToBottom();
@@ -110,21 +107,19 @@ export const Chat: FC = () => {
           console.error("Error processing stream:", error);
           setIsLoading(false);
 
-          // Update the message to show error state
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === aiMessageId
-                ? {
-                    ...msg,
-                    content:
-                      msg.content ||
-                      "Sorry, there was an error generating a response.",
-                    isStreaming: false,
-                    hasError: true,
-                  }
-                : msg,
-            ),
-          );
+          // Add error message if we have a streaming message
+          if (streamingMessage) {
+            setMessages(prev => [
+              ...prev,
+              {
+                ...streamingMessage,
+                content: streamingMessage.content || "Sorry, there was an error generating a response.",
+                isStreaming: false,
+                hasError: true,
+              }
+            ]);
+            setStreamingMessage(null);
+          }
         },
       }).catch(() => {
         setIsLoading(false);
@@ -205,6 +200,10 @@ export const Chat: FC = () => {
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
+          
+          {streamingMessage && (
+            <ChatMessage key={streamingMessage.id} message={streamingMessage} />
+          )}
 
           {isLoading && <LoadingIndicator />}
           <div ref={messagesEndRef} />
