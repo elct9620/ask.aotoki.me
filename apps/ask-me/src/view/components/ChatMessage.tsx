@@ -2,6 +2,7 @@
 
 import { FC, useEffect } from "hono/jsx";
 import { useMarkdown } from "../hooks/useMarkdown";
+import { usePrism } from "../hooks/usePrism";
 import { Message } from "../types";
 import { Card } from "./Card";
 
@@ -10,13 +11,12 @@ interface ChatMessageProps {
 }
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
-  useEffect(() => {
-    if (window && window.Prism) {
-      window.Prism.highlightAll();
-    }
-  });
-
+  const { highlightAll } = usePrism();
   const { render } = useMarkdown();
+
+  useEffect(() => {
+    highlightAll();
+  }, [message]);
 
   return (
     <div
