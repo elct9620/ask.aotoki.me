@@ -45,7 +45,7 @@ export const Chat: FC = () => {
     (content: string) => {
       // Add the user message
       const userMessage: Message = {
-        id: `user-${nanoid(8)}`,
+        id: nanoid(8),
         role: "user",
         content,
       };
@@ -55,7 +55,7 @@ export const Chat: FC = () => {
       debouncedScrollToBottom();
 
       // Create an AI message ID for tracking
-      const aiMessageId = `ai-${nanoid(8)}`;
+      const aiMessageId = nanoid(8);
       let isFirstTextPart = true;
 
       // Send all messages, not just the latest one
@@ -132,7 +132,7 @@ export const Chat: FC = () => {
         setMessages((prev) => [
           ...prev,
           {
-            id: `error-${nanoid(8)}`,
+            id: nanoid(8),
             role: "assistant",
             content: "Failed to get response from server.",
             hasError: true,
