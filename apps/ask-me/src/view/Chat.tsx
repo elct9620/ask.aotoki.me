@@ -28,22 +28,18 @@ export const Chat: FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { highlightAll } = usePrism(100);
+  const { highlightAll } = usePrism();
   const { setMessages: sendMessage } = useChat();
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const debouncedScrollToBottom = useDebounce(scrollToBottom, 50);
+  const debouncedScrollToBottom = useDebounce(scrollToBottom, 10);
 
   useEffect(() => {
     debouncedScrollToBottom();
   }, [messages, debouncedScrollToBottom]);
-
-  useEffect(() => {
-    highlightAll();
-  });
 
   const handleSendMessage = useCallback(
     (content: string) => {
@@ -108,6 +104,7 @@ export const Chat: FC = () => {
               ),
             );
             setIsLoading(false);
+            highlightAll();
             debouncedScrollToBottom();
           })
           .catch((error) => {
