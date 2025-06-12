@@ -21,6 +21,7 @@ export async function handleDeleteObject(
   const usecase = new ClearVector(vectorIdEncoder, vectorRepository);
 
   try {
+    console.log("Handling deleteObject for key:", message.body.object.key);
     await usecase.execute(message.body.object.key);
     message.ack();
   } catch (error) {

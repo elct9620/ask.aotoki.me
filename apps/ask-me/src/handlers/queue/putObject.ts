@@ -31,6 +31,7 @@ export async function handlePutObject(
       articleRepository,
     );
 
+    console.log("Handling putObject for key:", message.body.object.key);
     await usecase.execute(message.body.object.key);
     message.ack();
   } catch (error) {
