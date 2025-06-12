@@ -60,18 +60,24 @@ export class CloudflareVectorRepository implements VectorRepository {
         // Store the score/ranking from the query results
         return {
           vector,
-          score: match.score || -index // If score is unavailable, use negative index to preserve order
+          score: match.score || -index, // If score is unavailable, use negative index to preserve order
         };
       });
 
       // Deduplicate vectors by objectKey, keeping the highest scored occurrence of each objectKey
-      const uniqueVectorsMap = new Map<string, { vector: Vector; score: number }>();
+      const uniqueVectorsMap = new Map<
+        string,
+        { vector: Vector; score: number }
+      >();
 
       for (const { vector, score } of vectors) {
         const objectKey = vector.objectKey;
         if (objectKey !== null) {
           // If we haven't seen this objectKey or this instance has a better score, keep it
-          if (!uniqueVectorsMap.has(objectKey) || uniqueVectorsMap.get(objectKey)!.score < score) {
+          if (
+            !uniqueVectorsMap.has(objectKey) ||
+            uniqueVectorsMap.get(objectKey)!.score < score
+          ) {
             uniqueVectorsMap.set(objectKey, { vector, score });
           }
         }
@@ -81,7 +87,7 @@ export class CloudflareVectorRepository implements VectorRepository {
       return Array.from(uniqueVectorsMap.values())
         .sort((a, b) => b.score - a.score)
         .slice(0, topK)
-        .map(item => item.vector);
+        .map((item) => item.vector);
     } catch (error) {
       throw new Error(`Failed to query vectors: ${error}`);
     }
