@@ -63,20 +63,20 @@ export class CloudflareVectorRepository implements VectorRepository {
       // Deduplicate vectors by objectKey, keeping only the first occurrence of each objectKey
       const uniqueVectors: Vector[] = [];
       const seenObjectKeys = new Set<string>();
-      
+
       for (const vector of vectors) {
         const objectKey = vector.objectKey;
         if (objectKey !== null && !seenObjectKeys.has(objectKey)) {
           seenObjectKeys.add(objectKey);
           uniqueVectors.push(vector);
-          
+
           // Limit to topK unique vectors
           if (uniqueVectors.length >= topK) {
             break;
           }
         }
       }
-      
+
       return uniqueVectors;
     } catch (error) {
       throw new Error(`Failed to query vectors: ${error}`);
