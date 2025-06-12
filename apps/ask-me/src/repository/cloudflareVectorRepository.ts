@@ -22,7 +22,7 @@ export class CloudflareVectorRepository implements VectorRepository {
    *
    * @param query Text query to search for
    * @param topK Maximum number of results to return (default: 5)
-   * @returns Promise resolving to array of document vectors matching the query
+   * @returns Promise resolving to array of document vectors matching the query, deduplicated by objectKey
    */
   async query(query: string, topK: number = 5): Promise<Vector[]> {
     try {
@@ -40,7 +40,7 @@ export class CloudflareVectorRepository implements VectorRepository {
       });
 
       // Convert results to Vector objects
-      return results.matches.map((match) => {
+      const vectors = results.matches.map((match) => {
         const [id, type] = match.id.split("#");
 
         const vector = new Vector(id, type as VectorType);
@@ -59,6 +59,25 @@ export class CloudflareVectorRepository implements VectorRepository {
 
         return vector;
       });
+
+      // Deduplicate vectors by objectKey, keeping only the first occurrence of each objectKey
+      const uniqueVectors: Vector[] = [];
+      const seenObjectKeys = new Set<string>();
+      
+      for (const vector of vectors) {
+        const objectKey = vector.objectKey;
+        if (objectKey !== null && !seenObjectKeys.has(objectKey)) {
+          seenObjectKeys.add(objectKey);
+          uniqueVectors.push(vector);
+          
+          // Limit to topK unique vectors
+          if (uniqueVectors.length >= topK) {
+            break;
+          }
+        }
+      }
+      
+      return uniqueVectors;
     } catch (error) {
       throw new Error(`Failed to query vectors: ${error}`);
     }

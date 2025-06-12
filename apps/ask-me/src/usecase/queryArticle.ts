@@ -19,13 +19,12 @@ export class QueryArticle {
 
     const articleIds = vectors
       .map((vector) => vector.objectKey)
-      .filter((id) => id !== null);
+      .filter((id) => id !== null) as string[];
     if (articleIds.length === 0) {
       return [];
     }
 
-    const uniqueArticleIds = Array.from(new Set(articleIds));
-    const articles = await this.articleRepository.findByIds(uniqueArticleIds);
+    const articles = await this.articleRepository.findByIds(articleIds);
     if (articles.length === 0) {
       return [];
     }
