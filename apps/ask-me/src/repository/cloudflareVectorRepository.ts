@@ -39,8 +39,8 @@ export class CloudflareVectorRepository implements VectorRepository {
         returnMetadata: "all",
       });
 
-      // Convert results to Vector objects
-      const vectors = results.matches.map((match) => {
+      // Convert results to Vector objects and track their scores
+      const vectors = results.matches.map((match, index) => {
         const [id, type] = match.id.split("#");
 
         const vector = new Vector(id, type as VectorType);
@@ -57,27 +57,31 @@ export class CloudflareVectorRepository implements VectorRepository {
           }
         }
 
-        return vector;
+        // Store the score/ranking from the query results
+        return {
+          vector,
+          score: match.score || -index // If score is unavailable, use negative index to preserve order
+        };
       });
 
-      // Deduplicate vectors by objectKey, keeping only the first occurrence of each objectKey
-      const uniqueVectors: Vector[] = [];
-      const seenObjectKeys = new Set<string>();
+      // Deduplicate vectors by objectKey, keeping the highest scored occurrence of each objectKey
+      const uniqueVectorsMap = new Map<string, { vector: Vector; score: number }>();
 
-      for (const vector of vectors) {
+      for (const { vector, score } of vectors) {
         const objectKey = vector.objectKey;
-        if (objectKey !== null && !seenObjectKeys.has(objectKey)) {
-          seenObjectKeys.add(objectKey);
-          uniqueVectors.push(vector);
-
-          // Limit to topK unique vectors
-          if (uniqueVectors.length >= topK) {
-            break;
+        if (objectKey !== null) {
+          // If we haven't seen this objectKey or this instance has a better score, keep it
+          if (!uniqueVectorsMap.has(objectKey) || uniqueVectorsMap.get(objectKey)!.score < score) {
+            uniqueVectorsMap.set(objectKey, { vector, score });
           }
         }
       }
 
-      return uniqueVectors;
+      // Sort by score (descending) and take top K
+      return Array.from(uniqueVectorsMap.values())
+        .sort((a, b) => b.score - a.score)
+        .slice(0, topK)
+        .map(item => item.vector);
     } catch (error) {
       throw new Error(`Failed to query vectors: ${error}`);
     }
