@@ -20,9 +20,9 @@
     "@ai-sdk/provider": "^1.1.3",
     "@ai-sdk/ui-utils": "^1.2.11",
     "@ask-me/queue-router": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.12.2",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.1.8",
+    "@tailwindcss/vite": "^4.1.10",
     "agents": "^0.0.95",
     "ai": "^4.3.16",
     "ajv": "^6.12.6",
@@ -31,14 +31,14 @@
     "hono-agents": "^0.0.85",
     "marked": "^15.0.12",
     "nanoid": "^5.1.5",
-    "tailwindcss": "^4.1.8",
+    "tailwindcss": "^4.1.10",
     "tsyringe": "^4.10.0",
-    "zod": "^3.25.56"
+    "zod": "^3.25.64"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.5.0",
-    "@cloudflare/vitest-pool-workers": "^0.8.36",
-    "@types/node": "^22.15.30",
+    "@cloudflare/vite-plugin": "^1.6.0",
+    "@cloudflare/vitest-pool-workers": "^0.8.38",
+    "@types/node": "^22.15.31",
     "@types/prismjs": "^1.26.5",
     "@vitest/coverage-istanbul": "~3.1.4",
     "experimental": "link:@cloudflare/workers-types/experimental",
@@ -47,6 +47,6 @@
     "vite-ssr-components": "^0.2.1",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "~3.1.4",
-    "wrangler": "^4.19.1"
+    "wrangler": "^4.20.0"
   }
 }
