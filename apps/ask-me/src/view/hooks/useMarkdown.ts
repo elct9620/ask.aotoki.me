@@ -1,5 +1,3 @@
-"use client";
-
 import createDOMPurify from "dompurify";
 import { useCallback } from "hono/jsx";
 import { marked } from "marked";

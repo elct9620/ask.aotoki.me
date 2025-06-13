@@ -1,5 +1,3 @@
-"use client";
-
 import { FC, memo } from "hono/jsx";
 import { useMarkdown } from "../hooks/useMarkdown";
 import { Message } from "../types";

@@ -1,5 +1,3 @@
-"use client";
-
 import { Message } from "@ai-sdk/ui-utils";
 import { OutgoingMessage } from "agents/ai-types";
 import { AgentClient } from "agents/client";

@@ -1,5 +1,3 @@
-"use client";
-
 import { FC, useCallback, useEffect, useRef, useState } from "hono/jsx/dom";
 import { nanoid } from "nanoid";
 import { ChatHeader } from "./components/ChatHeader";

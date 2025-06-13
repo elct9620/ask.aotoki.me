@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback } from "hono/jsx";
 import { useDebounce } from "./useDebounce";
 
