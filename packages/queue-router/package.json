@@ -18,7 +18,7 @@
     "@cloudflare/workers-types": "^4.20250607.0",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
-    "vitest": "~3.1.4"
+    "vitest": "~3.2.3"
   },
   "peerDependencies": {
     "@cloudflare/workers-types": "^4.0.0"
