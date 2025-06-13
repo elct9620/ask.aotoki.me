@@ -1,3 +1,4 @@
+import { Article } from "@/entity/Article";
 import {
   ArticleListPresenter,
   ArticleRepository,
@@ -24,13 +25,18 @@ export class QueryArticle {
       return [];
     }
 
-    const articles = await this.articleRepository.findByIds(articleIds);
+    const articles: Article[] =
+      await this.articleRepository.findByIds(articleIds);
     if (articles.length === 0) {
       return [];
     }
 
-    articles.forEach((article) => {
-      this.articleListPresenter.addArticle(article);
-    });
+    const currentTime = new Date().getTime();
+
+    articles
+      .filter((article) => article.isPublishBefore(currentTime))
+      .forEach((article) => {
+        this.articleListPresenter.addArticle(article);
+      });
   }
 }

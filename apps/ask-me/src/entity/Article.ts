@@ -50,4 +50,8 @@ export class Article {
     this._permalink = permalink;
     this._publishedAt = timestamp;
   }
+
+  isPublishBefore(timestamp: number): boolean {
+    return this._publishedAt !== null && timestamp >= this._publishedAt;
+  }
 }
