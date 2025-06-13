@@ -1,4 +1,5 @@
 import { FC } from "hono/jsx";
+import Logo from "../logo.svg";
 
 interface ChatSidebarProps {
   suggestedQuestions: string[];
@@ -30,8 +31,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
       </div>
       <div className="mb-8">
         <h1 className="text-xl lg:text-2xl font-bold mb-4 flex items-center gap-2">
-          <i className="fas fa-robot text-xl"></i>
-          Ask Aotokitsuruya
+          <img src={Logo} alt="Aotokitsuruya Logo" class="max-w-full" />
         </h1>
         <p className="text-sm leading-relaxed opacity-90">
           向蒼時弦也提問，獲取有關過去文章的資訊，以及軟體開發為主的觀點、經驗分享。
