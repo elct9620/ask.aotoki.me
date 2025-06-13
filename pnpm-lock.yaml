@@ -109,8 +109,8 @@ importers:
         specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.31)(jiti@2.4.2)(lightningcss@1.30.1)
       vite-ssr-components:
-        specifier: ^0.2.1
-        version: 0.2.1
+        specifier: ^0.3.0
+        version: 0.3.0
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.31)(jiti@2.4.2)(lightningcss@1.30.1))
@@ -2313,8 +2313,8 @@ packages:
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
 
-  vite-ssr-components@0.2.1:
-    resolution: {integrity: sha512-z2Iyz9U7YyOtSH+XdlW2WlYLNP2bcHzdETA2LvtOOjQEsWgbn05cHph5kIuC7Kw76JZPNlreqlFZsPbtPf/yUg==}
+  vite-ssr-components@0.3.0:
+    resolution: {integrity: sha512-1GHYrn0XKe6ix6u6GZDQFagVFqqW5PbBn+eemAC61tEksMIw3JR016tIqhbuqtDOssSHGVhH+l6xEPtkb2RGHw==}
     engines: {node: '>=18.0.0'}
 
   vite-tsconfig-paths@5.1.4:
@@ -4476,7 +4476,7 @@ snapshots:
       - tsx
       - yaml
 
-  vite-ssr-components@0.2.1:
+  vite-ssr-components@0.3.0:
     dependencies:
       '@babel/parser': 7.27.5
       '@babel/traverse': 7.27.4
