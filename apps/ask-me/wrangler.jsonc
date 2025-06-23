@@ -18,7 +18,7 @@
     {
       "new_sqlite_classes": ["AskMeAgent"],
       "tag": "v2",
-    }
+    },
   ],
   "durable_objects": {
     "bindings": [
@@ -29,7 +29,7 @@
       {
         "class_name": "AskMeAgent",
         "name": "ASK_ME_AGENT",
-      }
+      },
     ],
   },
   "r2_buckets": [
@@ -48,7 +48,7 @@
     ],
   },
   "ai": {
-    "binding": "AI"
+    "binding": "AI",
   },
   "vectorize": [
     {

@@ -21,7 +21,7 @@ import {
 } from "ai";
 import { inject, injectable } from "tsyringe";
 import { z } from "zod";
-import { IEmbeddingModel, ISummaryModel } from "./llm";
+import { IInternalEmbeddingModel, IInternalSummaryModel } from "./llm";
 
 /**
  * Implementation of VectorFactory that will use LLMs to generate vectors
@@ -32,9 +32,9 @@ export class LlmDocumentVectorFactory implements DocumentVectorFactory {
   constructor(
     @inject(IVectorIdEncoder)
     private readonly vectorIdEncoder: VectorIdEncoder,
-    @inject(IEmbeddingModel)
+    @inject(IInternalEmbeddingModel)
     private readonly embeddingModel: EmbeddingModel<string>,
-    @inject(ISummaryModel)
+    @inject(IInternalSummaryModel)
     private readonly summaryModel: LanguageModel,
   ) {}
   /**
