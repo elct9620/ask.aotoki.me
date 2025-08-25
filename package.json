@@ -17,7 +17,7 @@
   "devDependencies": {
     "@vitest/coverage-istanbul": "~3.1.4",
     "@vitest/ui": "~3.1.4",
-    "prettier": "3.5.3",
+    "prettier": "3.6.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "vitest": "~3.1.4"
   }
