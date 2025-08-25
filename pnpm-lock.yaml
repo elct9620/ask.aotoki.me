@@ -69,8 +69,8 @@ importers:
         specifier: ^0.0.102
         version: 0.0.102(agents@0.0.95(@cloudflare/workers-types@4.20250823.0)(react@19.1.0))(hono@4.9.4)
       marked:
-        specifier: ^15.0.12
-        version: 15.0.12
+        specifier: ^16.2.0
+        version: 16.2.0
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
@@ -1802,9 +1802,9 @@ packages:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
 
-  marked@15.0.12:
-    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
-    engines: {node: '>= 18'}
+  marked@16.2.0:
+    resolution: {integrity: sha512-LbbTuye+0dWRz2TS9KJ7wsnD4KAtpj0MVkWc90XvBa6AslXsT0hTBVH5k32pcSyHH1fst9XEFJunXHktVy0zlg==}
+    engines: {node: '>= 20'}
     hasBin: true
 
   math-intrinsics@1.1.0:
@@ -3950,7 +3950,7 @@ snapshots:
     dependencies:
       semver: 7.7.2
 
-  marked@15.0.12: {}
+  marked@16.2.0: {}
 
   math-intrinsics@1.1.0: {}
 
