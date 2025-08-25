@@ -23,7 +23,7 @@
     "@modelcontextprotocol/sdk": "^1.12.3",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.10",
-    "agents": "^0.0.95",
+    "agents": "^0.0.113",
     "ai": "^4.3.16",
     "ajv": "^6.12.6",
     "dompurify": "^3.2.6",
