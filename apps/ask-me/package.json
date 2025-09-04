@@ -29,7 +29,7 @@
     "dompurify": "^3.2.6",
     "hono": "^4.9.6",
     "hono-agents": "^0.0.102",
-    "marked": "^15.0.12",
+    "marked": "^16.2.1",
     "nanoid": "^5.1.5",
     "tailwindcss": "^4.1.10",
     "tsyringe": "^4.10.0",
